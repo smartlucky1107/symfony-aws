@@ -1,22 +1,27 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
-class IndexController extends AbstractController
+final class IndexController
 {
+    private string $baseUrl;
+
+    public function __construct(ParameterBagInterface $parameterBag)
+    {
+        $this->baseUrl = $parameterBag->get('frontend_base_url');
+    }
+
     /**
      * @Route("/", name="index")
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function index()
+    public function index(): RedirectResponse
     {
-        return $this->redirect('https://swapcoin.today/');
-//        return $this->render('index/index.html.twig', [
-//            'controller_name' => 'IndexController',
-//        ]);
+        return new RedirectResponse($this->baseUrl);
     }
 }

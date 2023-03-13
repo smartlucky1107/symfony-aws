@@ -1,4 +1,4 @@
-FROM php:7.2-fpm
+FROM php:7.4-fpm
 
 RUN apt-get update && apt-get install -y \
         libfreetype6-dev \
@@ -14,12 +14,12 @@ RUN apt-get update && apt-get install -y \
         vim \
         git \
         libxml2-dev \
-    && pecl install xdebug \
+    && pecl install xdebug-2.9.0 \
     && docker-php-ext-enable xdebug \
     && docker-php-ext-install pdo_mysql \
     && docker-php-ext-install mysqli \
     && docker-php-ext-install dom \
-    && docker-php-ext-configure zip --with-libzip \
+    && docker-php-ext-configure zip \
     && docker-php-ext-install zip \
     && pecl install redis \
     && docker-php-ext-enable redis \
@@ -33,11 +33,11 @@ RUN apt-get update && apt-get install -y \
 #\
     && docker-php-ext-install -j$(nproc) exif \
     && docker-php-ext-configure gd \
-        --with-gd \
-        --with-freetype-dir=/usr/include/ \
-        --with-jpeg-dir=/usr/include/ \
-        --with-xpm-dir=/usr/lib/x86_64-linux-gnu/ \
-        --with-webp-dir \
+        --enable-gd \
+        --with-freetype=/usr/include/ \
+        --with-jpeg=/usr/include/ \
+        --with-xpm=/usr/lib/x86_64-linux-gnu/ \
+        --with-webp \
     && docker-php-ext-install gd \
     && docker-php-ext-enable gd
 
@@ -62,7 +62,7 @@ RUN echo "extension=mongodb.so" >> /usr/local/etc/php/conf.d/mongodb.ini
 #    echo 'pdo_mysql.default_socket="/tmp/mysql.sock"' >> /usr/local/etc/php/conf.d/docker-php-ext-pdo_mysql.ini
 
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" && \
-    php composer-setup.php --version=1.10.13 && \
+    php composer-setup.php && \
     php -r "unlink('composer-setup.php');" && \
     mv composer.phar /usr/local/bin/composer
 
