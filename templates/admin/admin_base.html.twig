@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Swapcoin Manager | {% block title %}{% endblock %}</title>
+
+    <link href="/admin/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/admin/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="/admin/css/animate.css" rel="stylesheet">
+    <link href="/admin/css/style.css" rel="stylesheet">
+
+    <link href="/admin/css/plugins/footable/footable.core.css" rel="stylesheet">
+    <link href="/admin/css/dropzone/dropzone.min.css" rel="stylesheet">
+    <link href="/admin/css/ng-dropzone/ng-dropzone.min.css" rel="stylesheet">
+</head>
+<body>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.8/angular.min.js"></script>
+    <script src="//www.google.com/recaptcha/api.js?render=explicit&onload=vcRecaptchaApiLoaded" async defer></script>
+    <script src="https://rawgit.com/VividCortex/angular-recaptcha/master/release/angular-recaptcha.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@7"></script>
+
+    <style>
+        .ibox-title {
+            padding: 15px 15px 8px 15px;
+        }
+    </style>
+
+    <div id="wrapper">
+        <nav class="navbar-default navbar-static-side" role="navigation">
+            <div class="sidebar-collapse">
+                <ul class="nav metismenu" id="side-menu">
+                    {% block leftMenu %}
+                        {#<li class="nav-header">#}
+                            {#
+                            <div class="profile-element text-center">
+                                <img class="rounded-circle" src="/admin/img/tokeneo_small.png"/>
+                            </div>
+                            #}
+                            {#
+                            <div class="dropdown profile-element">
+                                <img alt="image" class="rounded-circle" src="/admin/img/tokeneo_small.png"/>
+                                <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                    <span class="block m-t-xs font-bold">Tokeneo</span>
+                                    <span class="text-muted text-xs block">Administrator<b class="caret"></b></span>
+                                </a>
+                                <ul class="dropdown-menu animated fadeInRight m-t-xs">
+                                    <li><a class="dropdown-item" href="">{{ 'Profile'|trans }}</a></li>
+                                    <li class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" href="">{{ 'Logout'|trans }}</a></li>
+                                </ul>
+                            </div>
+                            #}
+                            {#
+                            <div class="logo-element">
+                                TEO
+                            </div>
+                            #}
+                            {#
+                            <div class="dropdown profile-element">
+                                <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                    <span class="block m-t-xs font-bold">Example user</span>
+                                    <span class="text-muted text-xs block">menu <b class="caret"></b></span>
+                                </a>
+                                <ul class="dropdown-menu animated fadeInRight m-t-xs">
+                                    <li><a class="dropdown-item" href="login.html">Logout</a></li>
+                                </ul>
+                            </div>
+                            <div class="logo-element">
+                                IN+
+                            </div>
+                            #}
+                        {#</li>#}
+
+                        {% set currentRoute = app.request.attributes.get('_route') %}
+                        <li class="{{ is_route_active('admin_dashboard', currentRoute) }}">
+                            <a href="{{ path('admin_dashboard') }}"><i class="fa fa-th-large"></i> <span class="nav-label">{{ 'Dashboard'|trans }}</span></a>
+                        </li>
+
+                        <li class="{{ is_route_active(['admin_users', 'admin_user'], currentRoute) }}">
+                            <a href="{{ path('admin_users') }}"><i class="fa fa-users"></i> <span class="nav-label">{{ 'Users'|trans }}</span></a>
+                        </li>
+
+                        <li class="{{ is_route_active(['admin_wallets', 'admin_wallet'], currentRoute) }}">
+                            <a href="{{ path('admin_wallets') }}"><i class="fa fa-briefcase"></i> <span class="nav-label">{{ 'Wallets'|trans }}</span></a>
+                        </li>
+
+                        <li class="{{ is_route_active(['admin_orders', 'admin_order'], currentRoute) }}">
+                            <a href="{{ path('admin_orders') }}">
+                                <i class="fa fa-envelope-o"></i>
+                                <span class="nav-label">{{ 'Orders'|trans }}</span>
+                                {#<span class="label label-primary float-right">4312</span>#}
+                            </a>
+                        </li>
+
+                        <li class="{{ is_route_active(['admin_checkout_orders', 'admin_checkout_order'], currentRoute) }}">
+                            <a href="{{ path('admin_checkout_orders') }}">
+                                <i class="fa fa-envelope-o"></i>
+                                <span class="nav-label">{{ 'Checkout Orders'|trans }}</span>
+                                {#<span class="label label-primary float-right">4312</span>#}
+                            </a>
+                        </li>
+
+                        <li class="{{ is_route_active(['admin_workspaces', 'admin_workspace', 'admin_employees', 'admin_employee', 'admin_pos_orders', 'admin_pos_order'], currentRoute) }}">
+                            <a href="">
+                                <i class="fa fa-fax"></i> <span class="nav-label">{{ 'POS'|trans }}</span> <span class="fa arrow"></span>
+                            </a>
+                            <ul class="nav nav-second-level">
+                                <li class="{{ is_route_active(['admin_workspaces', 'admin_workspace'], currentRoute) }}"><a href="{{ path('admin_workspaces') }}">{{ 'Workspaces'|trans }}</a></li>
+                            </ul>
+                            <ul class="nav nav-second-level">
+                                <li class="{{ is_route_active(['admin_employees', 'admin_employee'], currentRoute) }}"><a href="{{ path('admin_employees') }}">{{ 'Employees'|trans }}</a></li>
+                            </ul>
+                            <ul class="nav nav-second-level">
+                                <li class="{{ is_route_active(['admin_pos_orders', 'admin_pos_order'], currentRoute) }}"><a href="{{ path('admin_pos_orders') }}">{{ 'POS Orders'|trans }}</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="{{ is_route_active(['admin_trades', 'admin_trade'], currentRoute) }}">
+                            <a href="{{ path('admin_trades') }}">
+                                <i class="fa fa-exchange"></i>
+                                <span class="nav-label">{{ 'Trades'|trans }}</span>
+                                {#<span class="label label-info float-right">4312</span>#}
+                            </a>
+                        </li>
+
+                        <li class="{{ is_route_active(['admin_withdrawals', 'admin_withdrawal'], currentRoute) }}">
+                            <a href="{{ path('admin_withdrawals') }}">
+                                <i class="fa fa-credit-card"></i>
+                                <span class="nav-label">{{ 'Withdrawals'|trans }}</span>
+                                {#<span class="label label-danger float-right">17</span>#}
+                            </a>
+                        </li>
+
+                        <li class="{{ is_route_active(['admin_internal_transfers', 'admin_internal_transfer'], currentRoute) }}">
+                            <a href="{{ path('admin_internal_transfers') }}">
+                                <i class="fa fa-paper-plane-o"></i>
+                                <span class="nav-label">{{ 'Internal transfers'|trans }}</span>
+                                {#<span class="label label-danger float-right">17</span>#}
+                            </a>
+                        </li>
+
+                        <li class="{{ is_route_active(['admin_deposits', 'admin_deposit'], currentRoute) }}">
+                            <a href="{{ path('admin_deposits') }}">
+                                <i class="fa fa-money"></i> <span class="nav-label">{{ 'Deposits'|trans }}</span>
+                            </a>
+                        </li>
+                        <li class="{{ is_route_active(['admin_deposit_requests'], currentRoute) }}">
+                            <a href="{{ path('admin_deposit_requests') }}">
+                                <i class="fa fa-bullseye"></i>
+                                <span class="nav-label">{{ 'Deposit requests'|trans }}</span>
+                                {#<span class="label label-danger float-right">17</span>#}
+                            </a>
+                        </li>
+                        <li class="{{ is_route_active(['admin_new_deposit'], currentRoute) }}">
+                            <a href="{{ path('admin_new_deposit') }}"><i class="fa fa-bullseye"></i><span class="nav-label">{{ 'New deposit'|trans }}</span></a>
+                        </li>
+
+                        {#
+                        <li class="{{ is_route_active(['admin_deposits', 'admin_deposit', 'admin_new_deposit', 'admin_deposit_requests'], currentRoute) }}">
+                            <a href="{{ path('admin_deposits') }}">
+                                <i class="fa fa-money"></i> <span class="nav-label">{{ 'Deposits'|trans }}</span> <span class="fa arrow"></span>
+                            </a>
+                            <ul class="nav nav-second-level">
+                                <li class="{{ is_route_active(['admin_deposits', 'admin_deposit'], currentRoute) }}"><a href="{{ path('admin_deposits') }}">{{ 'Deposits'|trans }}</a></li>
+                                <li class="{{ is_route_active(['admin_deposit_requests'], currentRoute) }}"><a href="{{ path('admin_deposit_requests') }}">{{ 'Deposit requests'|trans }}</a></li>
+                                <li class="{{ is_route_active(['admin_new_deposit'], currentRoute) }}"><a href="{{ path('admin_new_deposit') }}">{{ 'New deposit'|trans }}</a></li>
+                            </ul>
+                        </li>
+                        #}
+
+                        <li class="{{ is_route_active(['admin_currency_pairs'], currentRoute) }}">
+                            <a href="{{ path('admin_currency_pairs') }}"><i class="fa fa-btc"></i><span class="nav-label">{{ 'Currency pairs'|trans }}</span></a>
+                        </li>
+
+                        <li class="{{ is_route_active(['admin_currencies'], currentRoute) }}">
+                            <a href="{{ path('admin_currencies') }}"><i class="fa fa-usd"></i><span class="nav-label">{{ 'Currencies'|trans }}</span></a>
+                        </li>
+
+                        <li class="{{ is_route_active(['admin_voter_roles', 'admin_system_tags'], currentRoute) }}">
+                            <a href="">
+                                <i class="fa fa-laptop"></i> <span class="nav-label">{{ 'Configuration'|trans }}</span> <span class="fa arrow"></span>
+                            </a>
+                            <ul class="nav nav-second-level">
+                                <li class="{{ is_route_active('admin_voter_roles', currentRoute) }}"><a href="{{ path('admin_voter_roles') }}">{{ 'Voter roles'|trans }}</a></li>
+                            </ul>
+                            <ul class="nav nav-second-level">
+                                <li class="{{ is_route_active('admin_system_tags', currentRoute) }}"><a href="{{ path('admin_system_tags') }}">{{ 'System tags'|trans }}</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="{{ is_route_active('admin_liquidity_reports', currentRoute) }}">
+                            <a href="{{ path('admin_liquidity_reports') }}"><i class="fa fa-database"></i> <span class="nav-label">{{ 'Liquidity reports'|trans }}</span></a>
+                        </li>
+
+                        <li class="{{ is_route_active('admin_liquidity_transactions', currentRoute) }}">
+                            <a href="{{ path('admin_liquidity_transactions') }}"><i class="fa fa-database"></i> <span class="nav-label">{{ 'Liquidity transactions'|trans }}</span></a>
+                        </li>
+
+                        <li class="{{ is_route_active('admin_statements', currentRoute) }}">
+                            <a href="{{ path('admin_statements') }}"><i class="fa fa-database"></i> <span class="nav-label">{{ 'Statements'|trans }}</span></a>
+                        </li>
+
+                        <li class="{{ is_route_active(['admin_liquidity_orderbook', 'admin_orderbook'], currentRoute) }}">
+                            <a href="">
+                                <i class="fa fa-laptop"></i> <span class="nav-label">{{ 'Liquidity'|trans }}</span> <span class="fa arrow"></span>
+                            </a>
+                            <ul class="nav nav-second-level">
+                                <li class="{{ is_route_active('admin_liquidity_orderbook', currentRoute) }}"><a href="{{ path('admin_liquidity_orderbook') }}">{{ 'Liquidity orderbook'|trans }}</a></li>
+                            </ul>
+                            <ul class="nav nav-second-level">
+                                <li class="{{ is_route_active('admin_orderbook', currentRoute) }}"><a href="{{ path('admin_orderbook') }}">{{ 'Orderbook'|trans }}</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="{{ is_route_active('admin_giif', currentRoute) }}">
+                            <a href="{{ path('admin_giif') }}"><i class="fa fa-cubes"></i> <span class="nav-label">{{ 'Giif'|trans }}</span></a>
+                        </li>
+
+                        <li>
+                            <a href="{{ path('admin_logout') }}">
+                                <i class="fa fa-sign-out"></i>
+                                <span class="nav-label">Log out</span>
+                            </a>
+                        </li>
+                    {% endblock %}
+                </ul>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="gray-bg">
+            <div class="row border-bottom">
+                <nav class="navbar navbar-static-top white-bg" role="navigation" style="margin-bottom: 0">
+                    <div class="navbar-header">
+                        <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
+
+                        {#<form role="search" class="navbar-form-custom" method="post" action="#">
+                            <div class="form-group">
+                                <input type="text" placeholder="Search for something..." class="form-control" name="top-search" id="top-search">
+                            </div>
+                        </form>#}
+                    </div>
+                    <ul class="nav navbar-top-links navbar-right">
+                        <li>
+                            <a href="{{ path('admin_dashboard') }}">
+                                <i class="fa fa-th-large"></i> {{ 'Dashboard'|trans }}
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            {% block body %}{% endblock %}
+            <div class="footer">
+                <div class="pull-right">
+                    <strong>Swapcoin</strong> Manager
+                </div>
+                <div>
+                    <strong>Copyright</strong> Swapcoin &copy; 2021
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Mainly scripts -->
+    <script src="/admin/js/cookies.js"></script>
+    <script src="/admin/js/cookieWriter.js"></script>
+
+    <script src="/admin/js/jquery-3.1.1.min.js"></script>
+    <script src="/admin/js/popper.min.js"></script>
+    <script src="/admin/js/bootstrap.min.js"></script>
+    <script src="/admin/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="/admin/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+    <!-- Custom and plugin javascript -->
+    <script src="/admin/js/inspinia.js"></script>
+    <script src="/admin/js/plugins/pace/pace.min.js"></script>
+
+    <script src="/admin/js/swangular.js"></script>
+    <script src="/admin/js/angular-websocket.min.js"></script>
+
+    <script src="/admin/js/dropzone.min.js"></script>
+    <script src="/admin/js/ng-dropzone/ng-dropzone.min.js"></script>
+    <script>
+        Dropzone.autoDiscover = false;
+    </script>
+
+    <!--  FOSJsRoutingBundle  -->
+    <script src="{{ asset('bundles/fosjsrouting/js/router.min.js') }}"></script>
+    <script src="{{ path('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}"></script>
+
+    <script src="/admin/app/routingModule.js"></script>
+    <script src="/admin/app/apiRoutes.js"></script>
+    <script src="/admin/app/Common/ServiceCookieStorage.js"></script>
+    <script src="/admin/app/apiModule.js"></script>
+    <script src="/admin/app/Common/CommonDirectives.js"></script>
+    <script src="/admin/app/Common/ControllerBridge.js"></script>
+
+    {% block js %}{% endblock %}
+</body>
+</html>

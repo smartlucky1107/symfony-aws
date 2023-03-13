@@ -1,0 +1,528 @@
+{% extends 'admin/admin_base.html.twig' %}
+
+{% block title %}{{ 'User'|trans }}{% endblock %}
+
+{% block body %}
+    {% include 'admin/admin/partial/breadcrumbs.html.twig' with {
+        'title': 'User details',
+        'items': [
+            { 'title': 'Users', 'url': path('admin_users') }
+        ],
+        'currentTitle': user.getFullName() ~ ' [ID: ' ~ user.id ~ ']'
+    } only %}
+
+    <div class="wrapper wrapper-content animated fadeInRight" id="userAppHandler">
+        <div>
+            <div class="row">
+                <div class="col-12">
+                    <div ng-controller="UserAppController">
+                        <div class="sk-spinner sk-spinner-circle" ng-if="!user">
+                            <div class="sk-circle1 sk-circle"></div>
+                            <div class="sk-circle2 sk-circle"></div>
+                            <div class="sk-circle3 sk-circle"></div>
+                            <div class="sk-circle4 sk-circle"></div>
+                            <div class="sk-circle5 sk-circle"></div>
+                            <div class="sk-circle6 sk-circle"></div>
+                            <div class="sk-circle7 sk-circle"></div>
+                            <div class="sk-circle8 sk-circle"></div>
+                            <div class="sk-circle9 sk-circle"></div>
+                            <div class="sk-circle10 sk-circle"></div>
+                            <div class="sk-circle11 sk-circle"></div>
+                            <div class="sk-circle12 sk-circle"></div>
+                        </div>
+                        <div class="row" ng-show="user">
+                            <div class="col-md-12">
+                                {% if nextPendingUser is defined and nextPendingUser %}
+                                    <a href="{{ path('admin_user', { 'userId': nextPendingUser.id }) }}" class="btn btn-success btn-outline float-right">
+                                        {{ 'Next pending user'|trans }}
+                                        <i class="fa fa-arrow-right"></i>
+                                    </a>
+                                {% endif %}
+
+                                <h2 class="no-margins">
+                                    {{ '{{ user.fullName }}' }}
+                                </h2>
+                                <h4>{{ '{{ user.email }}' }}</h4>
+                            </div>
+                            <div class="col-4">
+                                <div class="row">
+                                    <div class="col-5">
+                                        <div class="ibox">
+                                            {#
+                                            <div class="ibox-title">
+                                                <h5>{{ 'Actions'|trans }}</h5>
+                                            </div>
+                                            #}
+                                            <div class="ibox-content text-center">
+                                                <div>
+                                                    <small class="stats-label">{{ 'Trading allowed'|trans }}</small>
+
+                                                    <div ng-if="user.isTradingEnabled" class="text-navy">
+                                                        <small>{{ 'enabled'|trans }}</small>
+
+                                                        <button class="btn btn-primary btn-outline btn-xs" ng-click="toggleTradingEnabled()">
+                                                            <i class="fa fa-toggle-on"></i>
+                                                        </button>
+                                                    </div>
+                                                    <div ng-if="!user.isTradingEnabled" class="text-danger">
+                                                        <small>{{ 'disabled'|trans }}</small>
+
+                                                        <button class="btn btn-danger btn-outline btn-xs" ng-click="toggleTradingEnabled()">
+                                                            <i class="fa fa-toggle-off"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+
+                                                <div class="mt-2">
+                                                    <small class="stats-label">{{ 'Email confirmed'|trans }}</small>
+
+                                                    <div ng-if="user.isEmailConfirmed" class="text-navy">
+                                                        <small>{{ 'enabled'|trans }}</small>
+
+                                                        <button class="btn btn-primary btn-outline btn-xs" ng-click="toggleEmailConfirmed()">
+                                                            <i class="fa fa-toggle-on"></i>
+                                                        </button>
+                                                    </div>
+                                                    <div ng-if="!user.isEmailConfirmed" class="text-danger">
+                                                        <small>{{ 'disabled'|trans }}</small>
+
+                                                        <button class="btn btn-danger btn-outline btn-xs" ng-click="toggleEmailConfirmed()">
+                                                            <i class="fa fa-toggle-off"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+
+                                                <div class="mt-2">
+                                                    <small class="stats-label">{{ 'Google Authenticator'|trans }}</small>
+
+                                                    <div ng-if="user.isGAuthEnabled" class="text-navy">
+                                                        <small>{{ 'enabled'|trans }}</small>
+
+                                                        <button class="btn btn-primary btn-outline btn-xs" ng-click="disableGAuth()">
+                                                            <i class="fa fa-toggle-on"></i>
+                                                        </button>
+                                                    </div>
+                                                    <div ng-if="!user.isGAuthEnabled" class="text-danger">
+                                                        <small>{{ 'disabled'|trans }}</small>
+                                                    </div>
+                                                </div>
+
+                                                {#
+                                                <div class="mt-2">
+                                                    <small class="stats-label">{{ 'Resend confirmation'|trans }}</small>
+
+                                                    <div>
+                                                        <button class="btn btn-success btn-outline btn-xs" ng-click="resendConfirmation()">
+                                                            <i class="fa fa-paper-plane-o"></i> Resend
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                #}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-7">
+                                        <div class="ibox">
+                                            <div class="ibox-title">
+                                                <h5>{{ 'Trading volume'|trans }}</h5>
+                                            </div>
+                                            <div class="ibox-content">
+                                                <div class="row">
+                                                    <div class="col-6">
+                                                        <small class="stats-label">{{ 'Bids'|trans }}</small>
+                                                        <h4>0 <small class="text-muted">USD</small></h4>
+                                                        <div class="progress progress-mini">
+                                                            <div style="width: 70%;" class="progress-bar-info"></div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <small class="stats-label">{{ 'Offers'|trans }}</small>
+                                                        <h4>0 <small class="text-muted">USD</small></h4>
+                                                        <div class="progress progress-mini">
+                                                            <div style="width: 30%;" class="progress-bar-info"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="ibox">
+                                    <div class="ibox-title">
+                                        <h5>{{ 'Tags'|trans }}</h5>
+                                    </div>
+                                    <div class="ibox-content">
+                                        <div class="row">
+                                            <div class="col-lg-8">
+                                                <select class="form-control" ng-model="selectedTag">
+                                                    <option ng-repeat="tag in tags" value="{{ '{{ tag }}' }}">{{ '{{ tag }}' }}</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <button class="btn btn-success btn-outline btn-sm" type="button" ng-click="assignTag(selectedTag)"><i class="fa fa-check"></i> {{ 'Assign'|trans }}</button>
+                                            </div>
+                                        </div>
+
+                                        <hr />
+
+                                        <span class="label label-warning m-1" ng-repeat="tag in user.tags" ng-click="unassignTag(tag)">{{ '{{ tag }}' }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="ibox">
+                                    <div class="ibox-title">
+                                        <h5>{{ 'Duplicates'|trans }}</h5>
+                                    </div>
+                                    <div class="ibox-content">
+                                        {% if duplicates is defined and duplicates|length > 0 %}
+                                            {% for duplicateUser in duplicates %}
+                                                <a href="{{ path('admin_user', { 'userId': duplicateUser.id }) }}" class="btn btn-success btn-outline btn-sm">
+                                                    {{ duplicateUser.fullName }}
+                                                </a>
+                                            {% endfor %}
+                                        {% else %}
+                                            <small class="text-muted">Not found</small>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="tabs-container">
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li><a class="nav-link active show" data-toggle="tab" href="#personalDetails">{{ 'Verification'|trans }}</a></li>
+                            <li><a class="nav-link" data-toggle="tab" href="#banks">{{ 'Banks'|trans }}</a></li>
+                            <li><a class="nav-link" data-toggle="tab" href="#communication">{{ 'Communication'|trans }}</a></li>
+                            <li><a class="nav-link" data-toggle="tab" href="#walletList">{{ 'Wallets'|trans }}</a></li>
+                            <li><a class="nav-link" data-toggle="tab" href="#depositList">{{ 'Deposits'|trans }}</a></li>
+                            <li><a class="nav-link" data-toggle="tab" href="#withdrawalList">{{ 'Withdrawals'|trans }}</a></li>
+                            <li><a class="nav-link" data-toggle="tab" href="#orderList">{{ 'Opened orders'|trans }}</a></li>
+                            <li><a class="nav-link" data-toggle="tab" href="#permissions">{{ 'Permissions'|trans }}</a></li>
+                            <li><a class="nav-link" data-toggle="tab" href="#apiKeys">{{ 'Api keys'|trans }}</a></li>
+                            <li><a class="nav-link" data-toggle="tab" href="#loginHistory">{{ 'Login history'|trans }}</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div role="tabpanel" id="personalDetails" class="tab-pane active show">
+                                <div class="panel-body">
+                                    <div class="row" ng-controller="UserInfoController">
+                                        <div class="col-6">
+                                            <div class="ibox" ng-show="!isFormVisible">
+                                                <div class="ibox-title">
+                                                    <h5>{{ 'User data'|trans }}</h5>
+
+                                                    <button ng-click="removeUser()"  class="btn btn-xs btn-outline btn-danger float-right" type="button">
+                                                        <i class="fa fa-remove"></i> {{ 'Remove user'|trans }}
+                                                    </button>
+                                                </div>
+                                                <div class="ibox-content">
+                                                    <dl class="row mb-0">
+                                                        <div class="col-sm-5 text-sm-right"><dt>{{ 'E-mail'|trans }}:</dt> </div>
+                                                        <div class="col-sm-7 text-sm-left"><dd class="mb-1">{{ '{{ user.email }}' }}</dd> </div>
+                                                    </dl>
+                                                    <dl class="row mb-0">
+                                                        <div class="col-sm-5 text-sm-right"><dt>{{ 'First name'|trans }}:</dt> </div>
+                                                        <div class="col-sm-7 text-sm-left"><dd class="mb-1">{{ '{{ user.firstName }}' }}</dd> </div>
+                                                    </dl>
+                                                    <dl class="row mb-0">
+                                                        <div class="col-sm-5 text-sm-right"><dt>{{ 'Last name'|trans }}:</dt> </div>
+                                                        <div class="col-sm-7 text-sm-left"><dd class="mb-1">{{ '{{ user.lastName }}' }}</dd> </div>
+                                                    </dl>
+                                                    <dl class="row mb-0">
+                                                        <div class="col-sm-5 text-sm-right"><dt>{{ 'Street'|trans }}:</dt> </div>
+                                                        <div class="col-sm-7 text-sm-left"><dd class="mb-1">{{ '{{ user.street }}' }}</dd> </div>
+                                                    </dl>
+                                                    <dl class="row mb-0">
+                                                        <div class="col-sm-5 text-sm-right"><dt>{{ 'Building'|trans }}:</dt> </div>
+                                                        <div class="col-sm-7 text-sm-left"><dd class="mb-1">{{ '{{ user.building }}' }}</dd> </div>
+                                                    </dl>
+                                                    <dl class="row mb-0">
+                                                        <div class="col-sm-5 text-sm-right"><dt>{{ 'Apartment'|trans }}:</dt> </div>
+                                                        <div class="col-sm-7 text-sm-left"><dd class="mb-1">{{ '{{ user.apartment }}' }}</dd> </div>
+                                                    </dl>
+                                                    <dl class="row mb-0">
+                                                        <div class="col-sm-5 text-sm-right"><dt>{{ 'City'|trans }}:</dt> </div>
+                                                        <div class="col-sm-7 text-sm-left"><dd class="mb-1">{{ '{{ user.city }}' }}</dd> </div>
+                                                    </dl>
+                                                    <dl class="row mb-0">
+                                                        <div class="col-sm-5 text-sm-right"><dt>{{ 'Date of birth'|trans }}:</dt> </div>
+                                                        <div class="col-sm-7 text-sm-left"><dd class="mb-1" ng-if="user.dateOfBirth">{{ '{{ user.dateOfBirth|date:\'longDate\' }}' }}</dd> </div>
+                                                    </dl>
+                                                    <dl class="row mb-0">
+                                                        <div class="col-sm-5 text-sm-right"><dt>{{ 'State'|trans }}:</dt> </div>
+                                                        <div class="col-sm-7 text-sm-left"><dd class="mb-1">{{ '{{ user.state }}' }}</dd> </div>
+                                                    </dl>
+                                                    <dl class="row mb-0">
+                                                        <div class="col-sm-5 text-sm-right"><dt>{{ 'Postal code'|trans }}:</dt> </div>
+                                                        <div class="col-sm-7 text-sm-left"><dd class="mb-1">{{ '{{ user.postalCode }}' }}</dd> </div>
+                                                    </dl>
+                                                    <dl class="row mb-0">
+                                                        <div class="col-sm-5 text-sm-right"><dt>{{ 'Country'|trans }}:</dt> </div>
+                                                        <div class="col-sm-7 text-sm-left"><dd class="mb-1" ng-if="user.country">{{ '{{ user.country.name }}' }}</dd> </div>
+                                                    </dl>
+                                                    <dl class="row mb-0">
+                                                        <div class="col-sm-5 text-sm-right"><dt>{{ 'Phone'|trans }}:</dt> </div>
+                                                        <div class="col-sm-7 text-sm-left"><dd class="mb-1">{{ '{{ user.phone }}' }}</dd> </div>
+                                                    </dl>
+                                                    <dl class="row mb-0">
+                                                        <div class="col-sm-5 text-sm-right"><dt>{{ 'Identity expiration date'|trans }}:</dt> </div>
+                                                        <div class="col-sm-7 text-sm-left"><dd class="mb-1">{{ '{{ user.identityExpirationDate }}' }}</dd> </div>
+                                                    </dl>
+                                                    <br />
+                                                    <button class="btn btn-info btn-xs btn-block" ng-click="formToggle()" ng-class="{'active': isFormVisible}">
+                                                        <i class="fa fa-edit"></i>
+                                                        edit
+                                                    </button>
+                                                </div>
+                                            </div>
+
+                                            <div class="ibox" ng-show="isFormVisible">
+                                                <div class="ibox-content">
+                                                    <div class="row">
+                                                        <div class="col-lg-12">
+                                                            <dl class="row">
+                                                                <div class="col-sm-3 text-sm-right"><dt>{{ 'First name'|trans }}:</dt> </div>
+                                                                <div class="col-sm-9 text-sm-left">
+                                                                    <input class="form-control" ng-model="userForm.firstName" />
+                                                                </div>
+                                                            </dl>
+                                                            <dl class="row">
+                                                                <div class="col-sm-3 text-sm-right"><dt>{{ 'Last name'|trans }}:</dt> </div>
+                                                                <div class="col-sm-9 text-sm-left">
+                                                                    <input class="form-control" ng-model="userForm.lastName" />
+                                                                </div>
+                                                            </dl>
+                                                            <dl class="row">
+                                                                <div class="col-sm-3 text-sm-right"><dt>{{ 'Street'|trans }}:</dt> </div>
+                                                                <div class="col-sm-9 text-sm-left">
+                                                                    <input class="form-control" ng-model="userForm.street" />
+                                                                </div>
+                                                            </dl>
+                                                            <dl class="row">
+                                                                <div class="col-sm-3 text-sm-right"><dt>{{ 'Building'|trans }}:</dt> </div>
+                                                                <div class="col-sm-9 text-sm-left">
+                                                                    <input class="form-control" ng-model="userForm.building" />
+                                                                </div>
+                                                            </dl>
+                                                            <dl class="row">
+                                                                <div class="col-sm-3 text-sm-right"><dt>{{ 'Apartment'|trans }}:</dt> </div>
+                                                                <div class="col-sm-9 text-sm-left">
+                                                                    <input class="form-control" ng-model="userForm.apartment" />
+                                                                </div>
+                                                            </dl>
+                                                            <dl class="row">
+                                                                <div class="col-sm-3 text-sm-right"><dt>{{ 'City'|trans }}:</dt> </div>
+                                                                <div class="col-sm-9 text-sm-left">
+                                                                    <input class="form-control" ng-model="userForm.city" />
+                                                                </div>
+                                                            </dl>
+                                                            <dl class="row">
+                                                                <div class="col-sm-3 text-sm-right"><dt>{{ 'State'|trans }}:</dt> </div>
+                                                                <div class="col-sm-9 text-sm-left">
+                                                                    <input class="form-control" ng-model="userForm.state" />
+                                                                </div>
+                                                            </dl>
+                                                            <dl class="row">
+                                                                <div class="col-sm-3 text-sm-right"><dt>{{ 'Postal code'|trans }}:</dt> </div>
+                                                                <div class="col-sm-9 text-sm-left">
+                                                                    <input class="form-control" ng-model="userForm.postalCode" />
+                                                                </div>
+                                                            </dl>
+                                                            <dl class="row">
+                                                                <div class="col-sm-3 text-sm-right"><dt>{{ 'Country'|trans }}:</dt> </div>
+                                                                <div class="col-sm-9 text-sm-left">
+                                                                    <span>{{ '{{ user.country.name }}' }}</span>
+
+                                                                    <select class="form-control" ng-model="userForm.countryId" ng-show="countries">
+                                                                        <option ng-repeat="country in countries" value="{{ '{{ country.id }}' }}">{{ '{{ country.name }}' }}</option>
+                                                                    </select>
+                                                                </div>
+                                                            </dl>
+                                                            {#<dl class="row">#}
+                                                            {#<div class="col-sm-3 text-sm-right"><dt>{{ 'Country'|trans }}:</dt> </div>#}
+                                                            {#<div class="col-sm-9 text-sm-left">#}
+                                                            {#<input class="form-control" ng-model="userForm.country.name" />#}
+                                                            {#</div>#}
+                                                            {#</dl>#}
+                                                            <dl class="row">
+                                                                <div class="col-sm-3 text-sm-right"><dt>{{ 'Phone'|trans }}:</dt> </div>
+                                                                <div class="col-sm-9 text-sm-left">
+                                                                    <input class="form-control" ng-model="userForm.phone" />
+                                                                </div>
+                                                            </dl>
+                                                            <dl class="row">
+                                                                <div class="col-sm-3 text-sm-right"><dt>{{ 'Date of birth'|trans }}:</dt> </div>
+                                                                <div class="col-sm-9 text-sm-left">
+                                                                    <input class="form-control" ng-model="userForm.dateOfBirth" />
+                                                                </div>
+                                                            </dl>
+                                                            <dl class="row">
+                                                                <div class="col-sm-3 text-sm-right"><dt>{{ 'Identity expiration date'|trans }}:</dt> </div>
+                                                                <div class="col-sm-9 text-sm-left">
+                                                                    <input class="form-control" ng-model="userForm.identityExpirationDate" />
+                                                                </div>
+                                                            </dl>
+                                                        </div>
+
+                                                        <div class="col-lg-12 text-right">
+                                                            <button class="btn btn-default btn-outline" ng-click="formToggle()">Cancel</button>
+                                                            <button class="btn btn-success btn-outline" ng-click="saveForm()">
+                                                                <i class="fa fa-check"></i> Save
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="row">
+                                                <div class="col-4 text-center">
+                                                    <div class="bg-muted p-xs b-r-sm" ng-class="{'bg-primary': user.isTier1Approved }">
+                                                        <i ng-if="user.isTier1Approved" class="fa fa-check"></i>
+                                                        Tier 1
+                                                    </div>
+                                                </div>
+                                                <div class="col-4 text-center">
+                                                    <div class="bg-muted p-xs b-r-sm" ng-class="{'bg-danger': user.verificationStatus == 6, 'bg-primary': user.isTier2Approved }">
+                                                        <i ng-if="user.isTier2Approved" class="fa fa-check"></i>
+                                                        Tier 2
+                                                    </div>
+
+                                                    <div class="btn-group mt-2" ng-if="!verificationStatusLoading">
+                                                        <button ng-click="setVerificationStatus(6)"  ng-if="user.isTier1Approved" class="btn btn-outline btn-danger" type="button">
+                                                            <i class="fa fa-thumbs-o-down"></i> {{ 'Decline'|trans }}
+                                                        </button>
+                                                        <button ng-click="setVerificationStatus(5)" ng-if="user.isTier1Approved && !user.isTier2Approved" class="btn btn-outline btn-primary" type="button">
+                                                            <i class="fa fa-thumbs-o-up"></i> {{ 'Approve'|trans }}
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <div class="col-4 text-center">
+                                                    <div class="bg-muted p-xs b-r-sm" ng-class="{'bg-danger': user.verificationStatus == 9, 'bg-primary': user.isTier3Approved }">
+                                                        <i ng-if="user.isTier3Approved" class="fa fa-check"></i>
+                                                        Tier 3
+                                                    </div>
+
+                                                    <div class="btn-group mt-2" ng-if="!verificationStatusLoading">
+                                                        <button ng-click="setVerificationStatus(9)"  ng-if="user.isTier2Approved" class="btn btn-outline btn-danger" type="button">
+                                                            <i class="fa fa-thumbs-o-down"></i> {{ 'Decline'|trans }}
+                                                        </button>
+                                                        <button ng-click="setVerificationStatus(8)"  ng-if="user.isTier2Approved && !user.isTier3Approved" class="btn btn-outline btn-primary" type="button">
+                                                            <i class="fa fa-thumbs-o-up"></i> {{ 'Approve'|trans }}
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <hr />
+                                            <div>
+                                                <button ng-click="loadUserPepInfo()"  class="btn btn-outline btn-primary" type="button">
+                                                    <i class="fa fa-thumbs-o-up"></i> {{ 'Pep Info'|trans }}
+                                                </button>
+
+                                                <textarea class="form-control">{{ '{{ pepInfo }}' }}</textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div role="tabpanel" id="banks" class="tab-pane">
+                                <div class="panel-body">
+                                    {% include 'admin/admin/app-views/user_banks_view.html.twig' %}
+                                </div>
+                            </div>
+                            <div role="tabpanel" id="communication" class="tab-pane">
+                                <div class="panel-body">
+                                    {% include 'admin/admin/app-views/user_communication_view.html.twig' %}
+                                </div>
+                            </div>
+                            <div role="tabpanel" id="walletList" class="tab-pane">
+                                <div class="panel-body">
+                                    <div class="project-list">
+                                        {% if user.wallets is defined and user.wallets|length > 0 %}
+                                            <table class="table table-hover">
+                                                <tbody>
+                                                {% for wallet in user.wallets %}
+                                                    <tr>
+                                                        <td width="1">
+                                                            <a class="btn btn-success btn-outline btn-xs" href="{{ path('admin_wallet', { 'walletId': wallet.id }) }}">{{ wallet.id }}</a>
+                                                        </td>
+                                                        <td class="project-title">
+                                                            <a href="{{ path('admin_wallet', { 'walletId': wallet.id }) }}">{{ wallet.currency.fullName }} <small class="text-muted">{{ wallet.currency.shortName }}</small></a>
+                                                        </td>
+                                                        <td class="project-completion">
+                                                            <small>{{ 'Balance'|trans }} <br />{{ wallet.amountToPrecision() }} <small class="text-muted">{{ wallet.currency.shortName }}</small></small>
+                                                            <div class="progress progress-mini">
+                                                                <div style="width: {{ wallet.freeAmountPercent() }}%;" class="progress-bar"></div>
+                                                            </div>
+                                                        </td>
+                                                        <td class="project-completion">
+                                                            <small>{{ 'Pending'|trans }} <br />{{ wallet.amountPendingToPrecision() }} <small class="text-muted">{{ wallet.currency.shortName }}</small></small>
+                                                            <div class="progress progress-mini">
+                                                                <div style="width: {{ wallet.amountPendingPercentage() }}%;" class="progress-bar progress-bar-warning"></div>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div role="tabpanel" id="depositList" class="tab-pane">
+                                <div class="panel-body">
+                                    {% include 'admin/admin/app-views/user_deposits_view.html.twig' %}
+                                </div>
+                            </div>
+                            <div role="tabpanel" id="withdrawalList" class="tab-pane">
+                                <div class="panel-body">
+                                    {% include 'admin/admin/app-views/user_withdrawals_view.html.twig' %}
+                                </div>
+                            </div>
+                            <div role="tabpanel" id="orderList" class="tab-pane">
+                                <div class="panel-body">
+                                    {% include 'admin/admin/app-views/user_pending_orders_view.html.twig' %}
+                                </div>
+                            </div>
+                            <div role="tabpanel" id="permissions" class="tab-pane">
+                                <div class="panel-body">
+                                    {% include 'admin/admin/app-views/user_voter_roles_view.html.twig' %}
+                                </div>
+                            </div>
+                            <div role="tabpanel" id="apiKeys" class="tab-pane">
+                                <div class="panel-body">
+                                    {% include 'admin/admin/app-views/user_api_keys_view.html.twig' %}
+                                </div>
+                            </div>
+                            <div role="tabpanel" id="loginHistory" class="tab-pane">
+                                <div class="panel-body">
+                                    {% include 'admin/admin/app-views/user_login_history_view.html.twig' %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script>
+        let $userId = {{ user.id }};
+    </script>
+    <script src="/admin/app/Controller/UserVoterRolesController.js"></script>
+    <script src="/admin/app/Controller/UserApiKeysController.js"></script>
+    <script src="/admin/app/Controller/UserLoginHistoryController.js"></script>
+    <script src="/admin/app/Controller/UserPendingOrdersController.js"></script>
+    <script src="/admin/app/Controller/UserDepositsController.js"></script>
+    <script src="/admin/app/Controller/UserWithdrawalsController.js"></script>
+    <script src="/admin/app/Controller/UserCommunicationController.js"></script>
+    <script src="/admin/app/Controller/UserBanksController.js"></script>
+    <script src="/admin/app/Controller/UserInfoController.js"></script>
+    <script src="/admin/app/userApp.js"></script>
+{% endblock %}

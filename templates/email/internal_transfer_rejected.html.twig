@@ -1,0 +1,38 @@
+{% extends 'email/base_email.html.twig' %}
+
+{% block body %}
+    <!-- Rozpoczęcie tablicy z treścią -->
+    <table  border="0" cellpadding="0" cellspacing="0"
+            style="width:100%; font-family: sans-serif; font-size: 14px; color: #10253b; padding:15px 40px 20px 40px;">
+        <tr>
+            <td style="color:#10253b; font-size:26px;font-weight:700; padding-bottom:15px;">Hello {{ internalTransfer.wallet.user.getFullName() }},</td>
+        </tr>
+        <tr>
+            <td style="font-size:14px;">
+                Unfortunately, your last transaction on swapcoin.today is not approved.
+            </td>
+        </tr>
+        <tr>
+            <td style="padding:20px 0 20px 0;">
+                <span style="background:#de0e5c; border-radius:5px; padding:5px 10px; color:#fff">Transaction rejected</span>
+            </td>
+        </tr>
+        <tr>
+            <td style="font-size:14px;">
+                <table border="0" cellpadding="0" cellspacing="0" style="width:320px;">
+                    <tr>
+                        <td style="border-bottom:1px dashed #9da9bf;">Type of Transaction</td>
+                        <td style="border-bottom:1px dashed #9da9bf; text-align:right; font-weight:600; padding:5px;">Internal Transfer</td>
+                    </tr>
+                    <tr>
+                        <td>Transaction amount</td>
+                        <td style="text-align:right; font-weight:600; padding:5px;">
+                            {{ internalTransfer.toPrecision(internalTransfer.amount) }} {{ internalTransfer.wallet.currency.getShortName() }}
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+    <!-- Zakończenie tablicy z treścią -->
+{% endblock %}

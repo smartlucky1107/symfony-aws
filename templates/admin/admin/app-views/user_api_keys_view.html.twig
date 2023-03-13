@@ -1,0 +1,53 @@
+<div ng-controller="UserApiKeysController">
+    <div class="sk-spinner sk-spinner-circle" ng-if="isLoading">
+        <div class="sk-circle1 sk-circle"></div>
+        <div class="sk-circle2 sk-circle"></div>
+        <div class="sk-circle3 sk-circle"></div>
+        <div class="sk-circle4 sk-circle"></div>
+        <div class="sk-circle5 sk-circle"></div>
+        <div class="sk-circle6 sk-circle"></div>
+        <div class="sk-circle7 sk-circle"></div>
+        <div class="sk-circle8 sk-circle"></div>
+        <div class="sk-circle9 sk-circle"></div>
+        <div class="sk-circle10 sk-circle"></div>
+        <div class="sk-circle11 sk-circle"></div>
+        <div class="sk-circle12 sk-circle"></div>
+    </div>
+
+    <div ng-show="!isLoading">
+        <div ng-show="userId">
+            <div ng-if="userApiKeys.length === 0">
+                <small class="text-muted">{{ 'Nothing found'|trans }}</small>
+            </div>
+
+            <table class="table table-stripped" ng-show="userApiKeys.length > 0">
+                <thead>
+                <tr>
+                    <th>{{ 'Key'|trans }}</th>
+                    <th width="1">{{ 'Enabled'|trans }}</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="apiKey in userApiKeys">
+                    <td>{{ '{{ apiKey.key }}' }}</td>
+                    <td>
+                        <div ng-if="apiKey.enabled" class="text-navy text-center">
+                            <i class="fa fa-check-square-o"></i>
+                        </div>
+                        <div ng-if="!apiKey.enabled" class="text-danger text-center">
+                            <i class="fa fa-times"></i>
+                        </div>
+                    <td>
+                        <button ng-if="apiKey.enabled" ng-click="deactivate(apiKey.key)" type="button" class="btn btn-xs btn-outline btn-danger"><i class="fa fa-times"></i> {{ 'Deactivate'|trans }}</button>
+                        <small ng-if="!apiKey.enabled" class="text-muted">{{ '{{ apiKey.disabledAt|date }}' }}</small>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div ng-if="!userId" class="text-center text-muted">
+            {{ 'User api keys list not allowed. No user loaded.'|trans }}
+        </div>
+    </div>
+</div>

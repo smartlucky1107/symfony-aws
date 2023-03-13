@@ -1,0 +1,71 @@
+<div ng-controller="SystemTagListController" ng-init="search()">
+    <div class="ibox">
+        <div class="ibox-title">
+            <h5>{{ 'List of system tags'|trans }}</h5>
+        </div>
+        <div class="ibox-content">
+            <div>
+                <span ng-if="listManager.options.id" class="label label-info">ID: {{ '{{ listManager.options.id }}' }}</span>
+            </div>
+            <table class="table table-stripped">
+                <thead>
+                <tr>
+                    <th width="100px">
+                        <span ng-click="setSortBy('id')">ID</span>
+                        <i ng-if="!listManager.isSortByField('id')" class="fa fa-sort"></i>
+                        <i ng-if="listManager.isSortByField('id')" class="fa" ng-class="{'fa-sort-amount-asc': listManager.isSortBy('id', 1), 'fa-sort-amount-desc': listManager.isSortBy('id', 0)}" ></i>
+                    </th>
+                    <th>
+                        <span ng-click="setSortBy('type')">{{ 'Type'|trans }}</span>
+                        <i ng-if="!listManager.isSortByField('type')" class="fa fa-sort"></i>
+                        <i ng-if="listManager.isSortByField('type')" class="fa" ng-class="{'fa-sort-amount-asc': listManager.isSortBy('type', 1), 'fa-sort-amount-desc': listManager.isSortBy('type', 0)}" ></i>
+                    </th>
+                    <th>
+                        <span ng-click="setSortBy('activated')">{{ 'Activated'|trans }}</span>
+                        <i ng-if="!listManager.isSortByField('activated')" class="fa fa-sort"></i>
+                        <i ng-if="listManager.isSortByField('activated')" class="fa" ng-class="{'fa-sort-amount-asc': listManager.isSortBy('activated', 1), 'fa-sort-amount-desc': listManager.isSortBy('activated', 0)}" ></i>
+                    </th>
+                    <th>{{ 'Toggle'|trans }}</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="systemTag in results">
+                    <td>{{ '{{ systemTag.id }}' }}</td>
+                    <td>{{ '{{ systemTag.typeName }}' }}</td>
+                    <td>
+                        <div ng-if="systemTag.activated" class="text-navy">
+                            <i class="fa fa-check-square-o"></i>
+                        </div>
+                        <div ng-if="!systemTag.activated" class="text-danger">
+                            <i class="fa fa-minus-square-o"></i>
+                        </div>
+                    </td>
+                    <td>
+                        <button class="btn btn-success btn-outline btn-xs" ng-click="toggle(systemTag.id)">Toggle</button>
+                    </td>
+                </tr>
+                <tr ng-if="results.length === 0">
+                    <td colspan="4">
+                        {{ 'Nothing found'|trans }}
+                    </td>
+                </tr>
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td colspan="14" class="text-right">
+                        <button ng-click="changePageSize(100)" class="btn btn-info" ng-class="{'active': listManager.isPageSizeActive(100)}">100</button>
+                        <button ng-click="changePageSize(250)" class="btn btn-info" ng-class="{'active': listManager.isPageSizeActive(250)}">250</button>
+                        <button ng-click="changePageSize(500)" class="btn btn-info" ng-class="{'active': listManager.isPageSizeActive(500)}">500</button>
+                        &#160;/&#160;page
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4">
+                        <button ng-click="changePage(page.page)" ng-repeat="page in pages" class="btn btn-success" ng-class="{'active': listManager.isPageActive(page.page)}">{{ '{{ page.page }}' }}</button>
+                    </td>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>

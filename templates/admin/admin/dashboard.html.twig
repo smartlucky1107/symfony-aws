@@ -1,0 +1,394 @@
+{% extends 'admin/admin_base.html.twig' %}
+
+{% block title %}{{ 'Dashboard'|trans }}{% endblock %}
+
+{% block body %}
+    <div class="wrapper wrapper-content animated fadeInRight" id="dashboardAppHandler" ng-controller="DashboardAppController">
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="ibox">
+                    <div class="ibox-title">
+                        <h5>{{ 'Transfers in queue'|trans }}</h5>
+
+                        <button class="btn btn-success btn-outline btn-xs float-right" ng-click="pushWalletTransfers()">
+                            <i class="fa fa-bolt"></i> Push
+                        </button>
+                    </div>
+                    <div class="ibox-content">
+                        <div ng-if="!walletTransfers">
+                            <div class="sk-spinner sk-spinner-circle" >
+                                <div class="sk-circle1 sk-circle"></div>
+                                <div class="sk-circle2 sk-circle"></div>
+                                <div class="sk-circle3 sk-circle"></div>
+                                <div class="sk-circle4 sk-circle"></div>
+                                <div class="sk-circle5 sk-circle"></div>
+                                <div class="sk-circle6 sk-circle"></div>
+                                <div class="sk-circle7 sk-circle"></div>
+                                <div class="sk-circle8 sk-circle"></div>
+                                <div class="sk-circle9 sk-circle"></div>
+                                <div class="sk-circle10 sk-circle"></div>
+                                <div class="sk-circle11 sk-circle"></div>
+                                <div class="sk-circle12 sk-circle"></div>
+                            </div>
+                        </div>
+                        <div ng-show="walletTransfers">
+                            <h1 class="no-margins">{{ '{{ walletTransfers.length }}' }}</h1>
+                            {#<div class="stat-percent font-bold text-success">98% <i class="fa fa-bolt"></i></div>#}
+                            <small>waiting transfers</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="ibox">
+                    <div class="ibox-title">
+                        <h5>{{ 'Orders in queue'|trans }}</h5>
+
+                        <button class="btn btn-success btn-outline btn-xs float-right" ng-click="pushTradingTransactions()">
+                            <i class="fa fa-bolt"></i> Push
+                        </button>
+                    </div>
+                    <div class="ibox-content">
+                        <div ng-if="!tradingTransactions">
+                            <div class="sk-spinner sk-spinner-circle" >
+                                <div class="sk-circle1 sk-circle"></div>
+                                <div class="sk-circle2 sk-circle"></div>
+                                <div class="sk-circle3 sk-circle"></div>
+                                <div class="sk-circle4 sk-circle"></div>
+                                <div class="sk-circle5 sk-circle"></div>
+                                <div class="sk-circle6 sk-circle"></div>
+                                <div class="sk-circle7 sk-circle"></div>
+                                <div class="sk-circle8 sk-circle"></div>
+                                <div class="sk-circle9 sk-circle"></div>
+                                <div class="sk-circle10 sk-circle"></div>
+                                <div class="sk-circle11 sk-circle"></div>
+                                <div class="sk-circle12 sk-circle"></div>
+                            </div>
+                        </div>
+                        <div ng-show="tradingTransactions">
+                            <h1 class="no-margins">{{ '{{ tradingTransactions.length }}' }}</h1>
+                            {#<div class="stat-percent font-bold text-info">20% <i class="fa fa-level-up"></i></div>#}
+                            <small>waiting orders</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+
+            </div>
+            <div class="col-lg-3">
+                <div class="ibox">
+                    <div class="ibox-title">
+                        <h5>{{ 'Today statistics'|trans }}</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <div ng-if="!todayStatistics">
+                            <div class="sk-spinner sk-spinner-circle" >
+                                <div class="sk-circle1 sk-circle"></div>
+                                <div class="sk-circle2 sk-circle"></div>
+                                <div class="sk-circle3 sk-circle"></div>
+                                <div class="sk-circle4 sk-circle"></div>
+                                <div class="sk-circle5 sk-circle"></div>
+                                <div class="sk-circle6 sk-circle"></div>
+                                <div class="sk-circle7 sk-circle"></div>
+                                <div class="sk-circle8 sk-circle"></div>
+                                <div class="sk-circle9 sk-circle"></div>
+                                <div class="sk-circle10 sk-circle"></div>
+                                <div class="sk-circle11 sk-circle"></div>
+                                <div class="sk-circle12 sk-circle"></div>
+                            </div>
+                        </div>
+                        <div ng-show="todayStatistics">
+                            <h1 class="no-margins">{{ '{{ todayStatistics.registered }}' }}</h1>
+                            <small>registered users</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr />
+
+        <div class="row">
+            <div class="col-6">
+                <div class="ibox">
+                    <div class="ibox-title">
+                        <h5>{{ 'BITBAY Liquidity balances'|trans }}</h5>
+
+                        <button class="btn btn-success btn-outline btn-xs" ng-click="loadLiquidityBalances()">
+                            <i class="fa fa-refresh"></i> Refresh
+                        </button>
+                    </div>
+                    <div class="ibox-content">
+                        <div ng-show="liquidityBalances.bitbay">
+                            <table class="table table-stripped text-center" ng-show="liquidityBalances.bitbay.length > 0">
+                                <thead>
+                                <tr>
+                                    <th>
+                                        {{ 'Currency'|trans }}
+                                    </th>
+                                    <th class="text-right">
+                                        {{ 'Ammount'|trans }}
+                                    </th>
+                                    <th class="text-right">
+                                        {{ 'Free amount'|trans }}<br />
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="wallet in liquidityBalances.bitbay">
+                                    <td>
+                                        {{ '{{ wallet.currency.fullName }}' }}
+                                    </td>
+                                    <td class="text-right">
+                                        {{ '{{ wallet.amount }}' }}
+                                    </td>
+                                    <td class="text-right">
+                                        {{ '{{ wallet.freeAmount }}' }}
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div ng-if="!liquidityBalances">
+                            <div class="sk-spinner sk-spinner-circle" >
+                                <div class="sk-circle1 sk-circle"></div>
+                                <div class="sk-circle2 sk-circle"></div>
+                                <div class="sk-circle3 sk-circle"></div>
+                                <div class="sk-circle4 sk-circle"></div>
+                                <div class="sk-circle5 sk-circle"></div>
+                                <div class="sk-circle6 sk-circle"></div>
+                                <div class="sk-circle7 sk-circle"></div>
+                                <div class="sk-circle8 sk-circle"></div>
+                                <div class="sk-circle9 sk-circle"></div>
+                                <div class="sk-circle10 sk-circle"></div>
+                                <div class="sk-circle11 sk-circle"></div>
+                                <div class="sk-circle12 sk-circle"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="ibox">
+                    <div class="ibox-title">
+                        <h5>{{ 'BINANCE Liquidity balances'|trans }}</h5>
+
+                        <button class="btn btn-success btn-outline btn-xs" ng-click="loadLiquidityBalances()">
+                            <i class="fa fa-refresh"></i> Refresh
+                        </button>
+                    </div>
+                    <div class="ibox-content">
+                        <div ng-show="liquidityBalances.binance">
+                            <table class="table table-stripped text-center" ng-show="liquidityBalances.binance.length > 0">
+                                <thead>
+                                <tr>
+                                    <th>
+                                        {{ 'Currency'|trans }}
+                                    </th>
+                                    <th class="text-right">
+                                        {{ 'Ammount'|trans }}
+                                    </th>
+                                    <th class="text-right">
+                                        {{ 'Free amount'|trans }}<br />
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="wallet in liquidityBalances.binance">
+                                    <td>
+                                        {{ '{{ wallet.currency.fullName }}' }}
+                                    </td>
+                                    <td class="text-right">
+                                        {{ '{{ wallet.amount }}' }}
+                                    </td>
+                                    <td class="text-right">
+                                        {{ '{{ wallet.freeAmount }}' }}
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div ng-if="!liquidityBalances">
+                            <div class="sk-spinner sk-spinner-circle" >
+                                <div class="sk-circle1 sk-circle"></div>
+                                <div class="sk-circle2 sk-circle"></div>
+                                <div class="sk-circle3 sk-circle"></div>
+                                <div class="sk-circle4 sk-circle"></div>
+                                <div class="sk-circle5 sk-circle"></div>
+                                <div class="sk-circle6 sk-circle"></div>
+                                <div class="sk-circle7 sk-circle"></div>
+                                <div class="sk-circle8 sk-circle"></div>
+                                <div class="sk-circle9 sk-circle"></div>
+                                <div class="sk-circle10 sk-circle"></div>
+                                <div class="sk-circle11 sk-circle"></div>
+                                <div class="sk-circle12 sk-circle"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-8">
+                <div class="ibox">
+                    <div class="ibox-title">
+                        <h5>{{ 'Not processed wallet transfers'|trans }}</h5>
+
+                        <button class="btn btn-success btn-outline btn-xs" ng-click="pushWalletTransfers()">
+                            <i class="fa fa-bolt"></i> Push
+                        </button>
+                    </div>
+                    <div class="ibox-content">
+                        <div ng-show="walletTransfers">
+                            <div ng-if="walletTransfers.length === 0">
+                                <small class="text-muted">{{ 'Nothing found'|trans }}</small>
+                            </div>
+
+                            <table class="table table-stripped text-center" ng-show="walletTransfers.length > 0">
+                                <thead>
+                                <tr>
+                                    <th width="1">
+                                        {{ 'Created at'|trans }}
+                                    </th>
+                                    <th width="1">
+                                        {{ 'Processed'|trans }} {{ 'Success'|trans }}
+                                    </th>
+                                    <th>
+                                        {{ 'Related object ID'|trans }}<br />
+                                    </th>
+                                    <th>
+                                        {{ 'Wallet transfers'|trans }}<br />
+                                        <small>Wallet ID / Action / Amount</small>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="walletTransferBatch in walletTransfers">
+                                    <td>
+                                        {{ '{{ walletTransferBatch.createdAt }}' }}<br />
+                                    </td>
+                                    <td>
+                                        <div>
+                                            <i ng-if="walletTransferBatch.processed" class="fa fa-check text-navy"></i>
+                                            <i ng-if="!walletTransferBatch.processed" class="fa fa-times text-danger"></i>
+                                            <i ng-if="walletTransferBatch.success" class="fa fa-check text-navy"></i>
+                                            <i ng-if="!walletTransferBatch.success" class="fa fa-times text-danger"></i>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <button ng-if="walletTransferBatch.tradeId" class="btn btn-success btn-outline btn-xs" ng-click="routing.openTrade(walletTransferBatch.tradeId)">Trade {{ '{{ walletTransferBatch.tradeId }}' }}</button>
+                                        <button ng-if="walletTransferBatch.depositId" class="btn btn-success btn-outline btn-xs" ng-click="routing.openDeposit(walletTransferBatch.depositId)">Deposit {{ '{{ walletTransferBatch.depositId }}' }}</button>
+                                        <button ng-if="walletTransferBatch.withdrawalId" class="btn btn-success btn-outline btn-xs" ng-click="routing.openWithdrawal(walletTransferBatch.withdrawalId)">Withdrawal {{ '{{ walletTransferBatch.withdrawalId }}' }}</button>
+                                    </td>
+                                    <td class="text-center">
+                                        <div ng-repeat="walletTransferItem in walletTransferBatch.walletTransfers">
+                                            <small>
+                                                {{ '{{ walletTransferItem.walletId }}' }}
+                                                {{ '{{ walletTransferItem.type }}' }}
+                                                {{ '{{ walletTransferItem.amount }}' }}
+                                            </small>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div ng-if="!walletTransfers">
+                            <div class="sk-spinner sk-spinner-circle" >
+                                <div class="sk-circle1 sk-circle"></div>
+                                <div class="sk-circle2 sk-circle"></div>
+                                <div class="sk-circle3 sk-circle"></div>
+                                <div class="sk-circle4 sk-circle"></div>
+                                <div class="sk-circle5 sk-circle"></div>
+                                <div class="sk-circle6 sk-circle"></div>
+                                <div class="sk-circle7 sk-circle"></div>
+                                <div class="sk-circle8 sk-circle"></div>
+                                <div class="sk-circle9 sk-circle"></div>
+                                <div class="sk-circle10 sk-circle"></div>
+                                <div class="sk-circle11 sk-circle"></div>
+                                <div class="sk-circle12 sk-circle"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="ibox">
+                    <div class="ibox-title">
+                        <h5>{{ 'Not processed trading transactions'|trans }}</h5>
+
+                        <button class="btn btn-success btn-outline btn-xs" ng-click="pushTradingTransactions()">
+                            <i class="fa fa-bolt"></i> Push
+                        </button>
+                    </div>
+                    <div class="ibox-content">
+                        <div ng-show="tradingTransactions">
+                            <div ng-if="tradingTransactions.length === 0">
+                                <small class="text-muted">{{ 'Nothing found'|trans }}</small>
+                            </div>
+
+                            <table class="table table-stripped text-center" ng-show="tradingTransactions.length > 0">
+                                <thead>
+                                <tr>
+                                    <th width="1">
+                                        {{ 'Created at'|trans }}
+                                    </th>
+                                    <th width="1">
+                                        {{ 'Processed'|trans }} {{ 'Success'|trans }}
+                                    </th>
+                                    <th>
+                                        {{ 'Order ID'|trans }}<br />
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="tradingTransaction in tradingTransactions">
+                                    <td>
+                                        {{ '{{ tradingTransaction.createdAt }}' }}<br />
+                                    </td>
+                                    <td>
+                                        <div>
+                                            <i ng-if="tradingTransaction.processed" class="fa fa-check text-navy"></i>
+                                            <i ng-if="!tradingTransaction.processed" class="fa fa-times text-danger"></i>
+                                            <i ng-if="tradingTransaction.success" class="fa fa-check text-navy"></i>
+                                            <i ng-if="!tradingTransaction.success" class="fa fa-times text-danger"></i>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <button ng-if="tradingTransaction.orderId" class="btn btn-success btn-outline btn-xs" ng-click="routing.openOrder(tradingTransaction.orderId)">Order {{ '{{ tradingTransaction.orderId }}' }}</button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div ng-if="!tradingTransactions">
+                            <div class="sk-spinner sk-spinner-circle" >
+                                <div class="sk-circle1 sk-circle"></div>
+                                <div class="sk-circle2 sk-circle"></div>
+                                <div class="sk-circle3 sk-circle"></div>
+                                <div class="sk-circle4 sk-circle"></div>
+                                <div class="sk-circle5 sk-circle"></div>
+                                <div class="sk-circle6 sk-circle"></div>
+                                <div class="sk-circle7 sk-circle"></div>
+                                <div class="sk-circle8 sk-circle"></div>
+                                <div class="sk-circle9 sk-circle"></div>
+                                <div class="sk-circle10 sk-circle"></div>
+                                <div class="sk-circle11 sk-circle"></div>
+                                <div class="sk-circle12 sk-circle"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script src="/admin/app/dashboardApp.js"></script>
+{% endblock %}

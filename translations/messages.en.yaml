@@ -1,0 +1,265 @@
+email:
+  title:
+    user:
+      registered: 'Your swapcoin application starts now!'
+      email_confirmed: 'Your email address was confirmed!'
+      bank_account_approved: 'Your bank account was approved!'
+      password_request: 'You requested to reset the password'
+      tier2:
+        approved: 'Tier 2 approved'
+      tier3:
+        approved: 'Tier 3 approved'
+    withdrawal:
+      created: 'New swapcoin withdrawal order was created.'
+      approved: 'Your swapcoin withdrawal order was approved.'
+      declined: 'Your swapcoin withdrawal order was declined.'
+      rejected: 'Your swapcoin withdrawal has been rejected.'
+    internal_transfer:
+      created: 'New swapcoin internal transfer was created.'
+      approved: 'Your swapcoin internal transfer order was approved.'
+      declined: 'Your swapcoin internal transfer order was declined.'
+      rejected: 'Your swapcoin internal transfer has been rejected.'
+
+#email:
+#  title:
+#    user:
+#      registered: 'Proces rejestracji swapcoin.today właśnie się rozpoczął!'
+#      email_confirmed: 'Twój adres e-mail został potwierdzony!'
+#      bank_account_approved: 'Twoje konto bankowe zostało zatwierdzone!'
+#      password_request: 'Poprosiłeś o zresetowanie hasła'
+#      tier2:
+#        approved: 'Przeszedłeś drugi etap weryfikacji!'
+#      tier3:
+#        approved: 'Gratulacje! Możesz w pełni korzystać z platformy swapcoin.today! '
+#    withdrawal:
+#      created: 'Utworzono nowe zlecenie wypłaty'
+#      approved: 'Twoje zlecenie wypłaty zostało zatwierdzone.'
+#      declined: 'Twoje zlecenie wypłaty zostało odrzucone.'
+#      rejected: 'Twoje zlecenie wypłaty zostało odrzucone.'
+#    internal_transfer:
+#      created: 'Zlecono transfer wewnętrzny z Twojego konta na platformie swapcoin.today.'
+#      approved: 'Twoje zlecenie transferu zostało zatwierdzone.'
+#      declined: 'Twoje zlecenie transferu zostało odrzucone.'
+#      rejected: 'Twoje zlecenie transferu zostało odrzucone.'
+
+notification:
+  type:
+    order:
+      created: 'Your order %id% has been created'
+      updated: 'Your order %id% has been updated'
+      filled: 'Your order %id% has been filled'
+      partly_filled: 'Your order %id% has been partly filled'
+      rejected: 'Your order %id% has been rejected'
+    user:
+      registered: ''
+      email_confirmed: ''
+      bank_account_approved: ''
+      password_request: ''
+      tier2:
+        approved: 'Tier 2 approved'
+      tier3:
+        approved: 'Tier 3 approved'
+    withdrawal:
+      created: ''
+      approved: ''
+      declined: ''
+      rejected: ''
+    deposit:
+      accepted: ''
+
+error:
+  required:
+    amount: 'Amount is required'
+    address: 'Address is required'
+  invalid:
+    amount: 'Amount is invalid'
+    address: 'Address is invalid'
+  address:
+    not_found: 'Address not found'
+    cannot_create: 'Address cannot be created. Try again.'
+    currency_not_supported: 'Currency is not supported. Address cannot be created.'
+    type_not_allowed: 'Address type now allowed'
+  email:
+    notification_type_not_supported: 'Notification type not supported'
+  notification:
+    not_found: 'Notification not found'
+    related_object_not_allowed: 'Related object of notification is not allowed'
+  order:
+    not_found: 'Order not found'
+    status_not_allowed_to_cancel: 'Order status does not allow to cancel'
+    filled_already: 'Order is filled already'
+    hegde_not_allowed: 'Hedge is not allowed on the market.'
+  trade:
+    orders_not_valid: 'Orders not valid'
+    bid_offer_required: 'Bid and offer orders required'
+  trading:
+    order_not_found: 'Order not found'
+    order_cannot_be_filled: 'Order cannot be filled'
+  user:
+    not_found: 'User not found'
+    already_confirmed: 'User already confirmed'
+    email_doesnt_match: 'Email does not match'
+    address_already_approved: 'Address already approved'
+    market_order_not_allowed: 'Market order not allowed, please wait and try again'
+    limit_order_not_allowed: 'Limit order not allowed, please wait and try again'
+  wallet:
+    not_found: 'Wallet not found'
+    not_loaded: 'Wallet not loaded'
+    insufficient_funds: 'Insufficient funds'
+    withdrawal_not_allowed: 'Withdrawal not allowed'
+  withdrawal:
+    not_found: 'Withdrawal not found'
+    status_does_not_allow: 'Withdrawal status does not allow to process the action'
+    address_cannot_be_empty: 'Address cannot be empty'
+    invalid_amount: 'Amount has to be bigger than 0'
+    invalid_confirmation_code: 'Confirmation code invalid'
+    expired_confirmation_code: 'Confirmation code expired'
+  internal_transfer:
+    not_found: 'Transfer not found'
+    status_does_not_allow: 'Transfer status does not allow to process the action'
+    invalid_confirmation_code: 'Confirmation code invalid'
+    expired_confirmation_code: 'Confirmation code expired'
+
+Deposits: Deposits
+Trades: Trades
+'List of trades': 'List of trades'
+Name: Name
+'Created at': 'Created at'
+Amount: Amount
+Price: Price
+'Fee offer': 'Fee offer'
+'Fee bid': 'Fee bid'
+Signature: Signature
+'Offer & Bid orders': 'Offer & Bid orders'
+'Nothing found': 'Nothing found'
+Order: Order
+Details: Details
+Type: Type
+Status: Status
+Owner: Owner
+'Currency pair': 'Currency pair'
+'Wallets involved': 'Wallets involved'
+wallet: wallet
+'Order filled': 'Order filled'
+'Price and volume': 'Price and volume'
+'Limit price': 'Limit price'
+Volume: Volume
+'Filled volume': 'Filled volume'
+'Offer fee rate': 'Offer fee rate'
+'Offer fee': 'Offer fee'
+'Order transfer history': 'Order transfer history'
+'No transfers found for the order': 'No transfers found for the order'
+'New deposit': 'New deposit'
+Wallet: Wallet
+Currency: Currency
+Addresses: Addresses
+'No addresses found': 'No addresses found'
+Deposit: Deposit
+'Internal transfer': 'Internal transfer'
+'Wallet transfer history': 'Wallet transfer history'
+'Deposit requests': 'Deposit requests'
+Trade: Trade
+Offer: Offer
+Bid: Bid
+Orders: Orders
+'List of orders': 'List of orders'
+'Amount filled': 'Amount filled'
+'Is filled': 'Is filled'
+'Not found': 'Not found'
+'Content not found.': 'Content not found.'
+'Trade transfer history': 'Trade transfer history'
+'No transfers found for the trade': 'No transfers found for the trade'
+Currencies: Currencies
+'New currency': 'New currency'
+'Full name': 'Full name'
+'Short name': 'Short name'
+'Smart contract address': 'Smart contract address'
+'Save currency': 'Save currency'
+required: required
+'New currency pair': 'New currency pair'
+'Base currency ID': 'Base currency ID'
+'Quoted currency ID': 'Quoted currency ID'
+'Save pair': 'Save pair'
+'List of currencies': 'List of currencies'
+Enabled: Enabled
+Disable: Disable
+Enable: Enable
+'Wallet ID': 'Wallet ID'
+Transfer: Transfer
+'Internal transfer not allowed. No wallet selected.': 'Internal transfer not allowed. No wallet selected.'
+'Added by': 'Added by'
+Approved: Approved
+'Approved at': 'Approved at'
+'Approved by': 'Approved by'
+'Bank transaction': 'Bank transaction'
+'not approved yet': 'not approved yet'
+'Find wallet for deposit': 'Find wallet for deposit'
+'Find wallet': 'Find wallet'
+'Deposit selected wallet': 'Deposit selected wallet'
+'Select for deposit': 'Select for deposit'
+Address: Address
+Phone: Phone
+Balance: Balance
+'Pending balance': 'Pending balance'
+'My recent deposits': 'My recent deposits'
+'List of wallets': 'List of wallets'
+'Name and details': 'Name and details'
+'Amount pending': 'Amount pending'
+'Amount free': 'Amount free'
+User: User
+'Wallet balance': 'Wallet balance'
+'Wallet balance not allowed. No wallet selected.': 'Wallet balance not allowed. No wallet selected.'
+'Find deposit by bank transaction': 'Find deposit by bank transaction'
+'Bank transaction ID': 'Bank transaction ID'
+'Find deposit': 'Find deposit'
+'List of deposits': 'List of deposits'
+'No transfers found': 'No transfers found'
+'Wallet transfer history not allowed. No wallet selected.': 'Wallet transfer history not allowed. No wallet selected.'
+'Transaction date': 'Transaction date'
+'Transaction ID': 'Transaction ID'
+'Deposit request for wallet': 'Deposit request for wallet'
+'Deposit not allowed. No wallet selected.': 'Deposit not allowed. No wallet selected.'
+by: by
+'Wallet details': 'Wallet details'
+'Approval information': 'Approval information'
+'Approval status': 'Approval status'
+approved: approved
+'in progress': 'in progress'
+Approve: Approve
+'Approval date': 'Approval date'
+Wallets: Wallets
+Withdrawal: Withdrawal
+'Transfer tree': 'Transfer tree'
+'Transfer tree for the trade': 'Transfer tree for the trade'
+'Find for': 'Find for'
+'Trade ID': 'Trade ID'
+Withdrawals: Withdrawals
+'List of withdrawals': 'List of withdrawals'
+Street: Street
+Building: Building
+Apartment: Apartment
+City: City
+State: State
+'Postal code': 'Postal code'
+Country: Country
+Verification: Verification
+'Bank account': 'Bank account'
+'Trading volume': 'Trading volume'
+Bids: Bids
+Offers: Offers
+'Currently opened orders': 'Currently opened orders'
+Users: Users
+'List of users': 'List of users'
+'First name': 'First name'
+'Last name': 'Last name'
+Email: Email
+E-mail: E-mail
+'Trading volume Bid/Offer': 'Trading volume Bid/Offer'
+'Address approved': 'Address approved'
+'Bank account approved': 'Bank account approved'
+'Currency pairs': 'Currency pairs'
+'Base currency': 'Base currency'
+'Quoted currency': 'Quoted currency'
+Profile: Profile
+Logout: Logout
+Configuration: Configuration

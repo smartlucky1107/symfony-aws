@@ -1,0 +1,180 @@
+{% extends 'admin/admin_base.html.twig' %}
+
+{% block title %}{{ 'Withdrawal'|trans }}{% endblock %}
+
+{% block body %}
+    {% include 'admin/admin/partial/breadcrumbs.html.twig' with {
+        'title': 'Withdrawal details',
+        'items': [
+            { 'title': 'Withdrawals', 'url': path('admin_withdrawals') }
+        ],
+        'currentTitle': ' [ID: ' ~ withdrawal.id ~ ']'
+    } only %}
+
+    <div class="wrapper wrapper-content animated fadeInRight" id="withdrawalAppHandler" ng-controller="WithdrawalAppController">
+        <div class="row" ng-if="!withdrawal">
+            <div class="col-lg-12">
+                {% include 'admin/admin/partial/loader.html.twig' %}
+            </div>
+        </div>
+
+        <div class="row" ng-if="withdrawal">
+            <div class="col-lg-6">
+                <div class="ibox">
+                    <div class="ibox-title">
+                        <h5>{{ 'Details'|trans }}</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <small>{{ 'Amount'|trans }}</small>
+                                <div>
+                                    <h2 class="product-main-price">{{ '{{ withdrawal.amount }}' }} <small class="text-muted">{{ '{{ withdrawal.wallet.currency.fullName }}' }}</small> </h2>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <small>{{ 'Created at'|trans }}</small>
+                                <div>
+                                    {{ '{{ withdrawal.createdAt|date:\'medium\' }}' }}
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <small>{{ 'Address'|trans }}</small>
+                                <div class="bg-primary p-xs b-r-sm">
+                                    <strong>{{ '{{ withdrawal.address }}' }}</strong>
+                                </div>
+                            </div>
+                            <div class="col-12" ng-if="withdrawal.wallet.isFiat == true">
+                                <hr />
+                                <small>{{ 'FIAT transfer title'|trans }}</small>
+                                <div class="bg-info p-xs b-r-sm">
+                                    <strong>{{ '{{ withdrawal.wallet.currency.shortName }}' }}TOK-{{ '{{ withdrawal.wallet.user.id }}' }}-{{ '{{ withdrawal.id }}' }}</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ibox">
+                    <div class="ibox-title">
+                        <h5>
+                            {{ 'Wallet details'|trans }} <button class="btn btn-success btn-outline btn-xs ng-binding" ng-click="routing.openWallet(withdrawal.wallet.id)">{{ '{{ withdrawal.wallet.id }}' }}</button>
+                        </h5>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <h4>{{ '{{ withdrawal.wallet.user.fullName }}' }} [{{ '{{ withdrawal.wallet.user.id }}' }}]</h4>
+                                <p>
+                                    <strong>{{ 'Address'|trans }}</strong><br />
+                                    {{ '{{ withdrawal.wallet.user.street }}' }}, {{ '{{ withdrawal.wallet.user.building }}' }}, {{ '{{ withdrawal.wallet.user.apartment }}' }}<br />
+                                    {{ '{{ withdrawal.wallet.user.postalCode }}' }}, {{ '{{ withdrawal.wallet.user.city }}' }}, {{ '{{ withdrawal.wallet.user.state }}' }}<br />
+                                    {{ '{{ withdrawal.wallet.user.country.name }}' }}, <br />
+                                    <strong>{{ 'Phone'|trans }}</strong>
+                                    {{ '{{ withdrawal.wallet.user.phone }}' }}
+                                </p>
+                            </div>
+                            <div class="col-lg-6">
+                                <h2 class="product-main-price">{{ '{{ withdrawal.wallet.currency.fullName }}' }} <small class="text-muted">{{ '{{ withdrawal.wallet.currency.shortName }}' }}</small> </h2>
+
+                                <div class="row">
+                                    <div class="col-6">
+                                        <small class="stats-label">{{ 'Balance'|trans }}</small>
+                                        <h4>{{ '{{ withdrawal.wallet.amount }}' }} <small class="text-muted">{{ '{{ withdrawal.wallet.currency.shortName }}' }}</small></h4>
+                                        <div class="progress progress-mini">
+                                            <div style="width: {{ '{{ withdrawal.wallet.freeAmountPercent }}' }}%;" class="progress-bar"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <small class="stats-label">{{ 'Pending'|trans }}</small>
+                                        <h4>{{ '{{ withdrawal.wallet.amountPending }}' }} <small class="text-muted">{{ '{{ withdrawal.wallet.currency.shortName }}' }}</small></h4>
+                                        <div class="progress progress-mini">
+                                            <div style="width: {{ '{{ withdrawal.wallet.amountPendingPercentage }}' }}%;" class="progress-bar progress-bar-warning"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="ibox">
+                    <div class="ibox-title">
+                        <h5>{{ 'Approval information'|trans }}</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="row text-center">
+                            <div class="col-lg-5">
+                                <small class="stats-label">{{ 'Approval status'|trans }}</small>
+
+                                <div ng-if="withdrawal.isApproved" class="text-navy">
+                                    <i class="fa fa-check-square-o"></i>
+                                    <small>{{ '{{ withdrawal.statusName }}' }}</small>
+                                </div>
+                                <div ng-if="withdrawal.isExternalApproval" class="text-navy">
+                                    <i class="fa fa-square-o"></i>
+                                    <small>{{ '{{ withdrawal.statusName }}' }}</small>
+                                </div>
+                                <div ng-if="withdrawal.isNew">
+                                    <small class="text-warning">{{ '{{ withdrawal.statusName }}' }}</small>
+                                </div>
+                                <div ng-if="withdrawal.isRequest">
+                                    <small class="text-warning">{{ '{{ withdrawal.statusName }}' }}</small>
+                                </div>
+                                <div ng-if="withdrawal.isDeclined">
+                                    <small class="text-danger">{{ '{{ withdrawal.statusName }}' }}</small>
+                                </div>
+                                <div ng-if="withdrawal.isRejected">
+                                    <small class="text-danger">{{ '{{ withdrawal.statusName }}' }}</small>
+                                </div>
+
+                                <div class="mt-2 row" ng-if="withdrawal.isRequest">
+                                    <div class="col-12 mb-2">
+                                        <button ng-click="sendForExternalApproval(withdrawal.id)" type="button" class="btn btn-sm btn-outline btn-primary btn-block"><i class="fa fa-thumbs-o-up"></i> {{ 'Send for approval'|trans }}</button>
+                                        <hr />
+                                    </div>
+                                    <div class="col-6 pr-1">
+                                        <button ng-click="approveWithdrawal(withdrawal.id)" type="button" class="btn btn-sm btn-outline btn-primary btn-block"><i class="fa fa-thumbs-o-up"></i> {{ 'Approve'|trans }}</button>
+                                    </div>
+                                    <div class="col-6 pl-1">
+                                        <button ng-click="declineWithdrawal(withdrawal.id)" type="button" class="btn btn-sm btn-outline btn-danger btn-block"><i class="fa fa-thumbs-o-down"></i> {{ 'Decline'|trans }}</button>
+                                    </div>
+                                </div>
+                                <div class="mt-2 row" ng-if="withdrawal.isNew">
+                                    <div class="col-12">
+                                        <button ng-click="rejectWithdrawal(withdrawal.id)" type="button" class="btn btn-sm btn-outline btn-danger btn-block"><i class="fa fa-thumbs-o-down"></i> {{ 'Reject'|trans }}</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <small class="stats-label">{{ 'Approval date'|trans }}</small>
+
+                                <div ng-if="withdrawal.isApproved">{{ '{{ withdrawal.approvedAt|date:\'medium\' }}' }}</div>
+                                <div ng-if="!(withdrawal.isApproved)">
+                                    <small class="text-muted">{{ 'not approved'|trans }}</small>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <small class="stats-label">{{ 'Transfer ID'|trans }}</small>
+
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {% include 'admin/admin/app-views/wallet_info_view.html.twig' %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script>
+        let $withdrawalId = {{ withdrawal.id }};
+    </script>
+    <script src="/admin/app/Controller/WalletInfoController.js"></script>
+    <script src="/admin/app/withdrawalApp.js"></script>
+{% endblock %}

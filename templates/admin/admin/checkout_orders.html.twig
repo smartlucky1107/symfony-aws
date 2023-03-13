@@ -1,0 +1,23 @@
+{% extends 'admin/admin_base.html.twig' %}
+
+{% block title %}{{ 'Checkout orders'|trans }}{% endblock %}
+
+{% block body %}
+    {% include 'admin/admin/partial/breadcrumbs.html.twig' with {
+        'title': 'Checkout order list'
+    } only %}
+
+    <div class="wrapper wrapper-content animated fadeInRight" id="checkoutOrdersAppHandler">
+        <div class="row">
+            <div class="col-lg-12">
+                {% include 'admin/admin/app-views/checkout_order_list_view.html.twig' %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script src="/admin/app/listModule.js"></script>
+    <script src="/admin/app/Controller/CheckoutOrderListController.js"></script>
+    <script src="/admin/app/checkoutOrdersApp.js"></script>
+{% endblock %}

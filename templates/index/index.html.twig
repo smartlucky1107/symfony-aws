@@ -1,0 +1,120 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello IndexController!{% endblock %}
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+<div class="example-wrapper">
+
+    <script>
+        //let notif = new WebSocket("ws://localhost:8080/notifications/subscribe?token=21312323h12jk3h13kj1h32kj");
+        let notif = new WebSocket("ws://localhost:8080");
+
+        notif.onmessage = function (event) {
+            console.log(event.data);
+            // tape
+            document.getElementById('tape').innerHTML = '';
+
+            let tape = JSON.parse(event.data).tape;
+            if(tape){
+                let trades = '';
+                for(let i in tape.trades){
+                    trades += '<div>' + tape.trades[i].createdAt.date + ' | ' + tape.trades[i].currencyPairShortName +  ' | ' + tape.trades[i].amount + '['+ tape.trades[i].price + ']</div>';
+                }
+
+                document.getElementById('tape').innerHTML = trades;
+            }
+
+            // offers & bids
+            document.getElementById('offers').innerHTML = '';
+            document.getElementById('bids').innerHTML = '';
+
+            let orderBook = JSON.parse(event.data).orderBook;
+
+            if(orderBook){
+                if(orderBook.offerOrders){
+                    let offers = '';
+                    for(let i in orderBook.offerOrders){
+                        offers += '<div>' + +orderBook.offerOrders[i].limitPrice +  ' [' + orderBook.offerOrders[i].amount + ']</div>';
+                    }
+
+                    document.getElementById('offers').innerHTML = offers;
+                }
+
+                if(orderBook.bidOrders){
+                    let bids = '';
+                    for(let i in orderBook.bidOrders){
+                        bids += '<div>' +orderBook.bidOrders[i].limitPrice +  ' [' + orderBook.bidOrders[i].amount + ']</div>';
+                    }
+
+                    document.getElementById('bids').innerHTML = bids;
+                }
+            }
+        };
+
+        notif.onopen = function() {
+            notif.send(JSON.stringify({
+                'action': 'subscribe',
+                'module': 'tape',
+                'currencyPairShortName': 'BTC-PLN'
+            }));
+            notif.send(JSON.stringify({
+                'action': 'subscribe',
+                'module': 'orderbook',
+                'currencyPairShortName': 'BTC-PLN'
+            }));
+            notif.send(JSON.stringify({
+                'action': 'subscribe',
+                'module': 'notifications',
+                'userId': 1
+            }));
+            notif.send(JSON.stringify({
+                'action': 'subscribe',
+                'module': 'notifications',
+                'userId': 2
+            }));
+            notif.send(JSON.stringify({
+                'action': 'unsubscribe',
+                'module': 'notifications',
+                'userId': 2
+            }));
+            notif.send(JSON.stringify({
+                'action': 'unsubscribe',
+                'module': 'orderbook',
+                'currencyPairShortName': 'BTC-PLN'
+            }));
+
+            // notif.send(JSON.stringify({
+            //     'action': 'subscribe',
+            //     'module': 'notifications',
+            //     'userId': 1
+            // }));
+        };
+
+        notif.onerror = function(error) {
+            console.log('error');
+        }
+    </script>
+
+    <table width="100%">
+        <tr>
+            <td style="vertical-align: top;">
+                <h1>offers</h1>
+                <div id="offers"></div>
+            </td>
+            <td style="vertical-align: top;">
+                <h1>bids</h1>
+                <div id="bids"></div>
+            </td>
+            <td style="vertical-align: top;">
+                <h1>tape</h1>
+                <div id="tape"></div>
+            </td>
+        </tr>
+    </table>
+</div>
+{% endblock %}

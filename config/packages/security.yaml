@@ -1,0 +1,155 @@
+security:
+    encoders:
+        App\Entity\User:
+            algorithm: bcrypt
+    providers:
+        entity_provider:
+            entity:
+                class: App\Entity\User
+                property: email
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        login:
+            pattern:  ^/login
+            stateless: true
+            anonymous: true
+            json_login:
+                check_path: /login_check
+                success_handler: app.jwt_authentication_success
+                failure_handler: lexik_jwt_authentication.handler.authentication_failure
+
+        login_pl:
+            pattern:  ^/pl/login
+            stateless: true
+            anonymous: true
+            json_login:
+                check_path: /pl/login_check
+                success_handler: app.jwt_authentication_success
+                failure_handler: lexik_jwt_authentication.handler.authentication_failure
+
+        register:
+            pattern:  ^/register
+            stateless: true
+            anonymous: true
+
+        register_pl:
+            pattern:  ^/pl/register
+            stateless: true
+            anonymous: true
+
+        #### private API
+        api_private:
+            pattern:  ^/api-private/
+            stateless: true
+            anonymous: false
+            provider: entity_provider
+            guard:
+                authenticators:
+                    - App\Security\Guard\ApiKeyAuthenticator
+
+        api_private_pl:
+            pattern:  ^/pl/api-private/
+            stateless: true
+            anonymous: false
+            provider: entity_provider
+            guard:
+                authenticators:
+                    - App\Security\Guard\ApiKeyAuthenticator
+
+        #### POS API
+        ## TODO - napisać specjalny Authenticator dla POS
+        api_pos:
+            pattern:  ^/api-pos/
+            stateless: true
+            anonymous: false
+            provider: entity_provider
+            guard:
+                authenticators:
+                    - App\Security\Guard\ApiKeyAuthenticator
+
+        api_pos_pl:
+            pattern:  ^/pl/api-pos/
+            stateless: true
+            anonymous: false
+            provider: entity_provider
+            guard:
+                authenticators:
+                    - App\Security\Guard\ApiKeyAuthenticator
+
+        #### internal API
+        api:
+            pattern:  ^/api/
+            stateless: true
+            anonymous: false
+            provider: entity_provider
+            guard:
+                authenticators:
+                    - app.jwt_token_authenticator
+        api_pl:
+            pattern:  ^/pl/api/
+            stateless: true
+            anonymous: false
+            provider: entity_provider
+            guard:
+                authenticators:
+                    - app.jwt_token_authenticator
+
+        #### internal API ADMIN
+        api_admin:
+            pattern:  ^/api-admin/
+            stateless: true
+            anonymous: false
+            provider: entity_provider
+            guard:
+                authenticators:
+                    - app.jwt_token_authenticator
+        api_admin_pl:
+            pattern:  ^/pl/api-admin/
+            stateless: true
+            anonymous: false
+            provider: entity_provider
+            guard:
+                authenticators:
+                    - app.jwt_token_authenticator
+        admin:
+            pattern:   ^/admin/p/
+            stateless: true
+            guard:
+                authenticators:
+                    - app.admin.jwt_token_authenticator
+
+    access_control:
+        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/pl/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/register, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/pl/register, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/resetting, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/pl/resetting, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/, roles: IS_AUTHENTICATED_FULLY }
+
+#security:
+#    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
+#    providers:
+#        in_memory: { memory: ~ }
+#    firewalls:
+#        dev:
+#            pattern: ^/(_(profiler|wdt)|css|images|js)/
+#            security: false
+#        main:
+#            anonymous: true
+#
+#            # activate different ways to authenticate
+#
+#            # http_basic: true
+#            # https://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
+#
+#            # form_login: true
+#            # https://symfony.com/doc/current/security/form_login_setup.html
+#
+#    # Easy way to control access for large sections of your site
+#    # Note: Only the *first* access control that matches will be used
+#    access_control:
+#        # - { path: ^/admin, roles: ROLE_ADMIN }
+#        # - { path: ^/profile, roles: ROLE_USER }

@@ -1,0 +1,135 @@
+{% extends 'admin/admin_base.html.twig' %}
+
+{% block title %}{{ 'Withdrawals'|trans }}{% endblock %}
+
+{% block body %}
+    {% include 'admin/admin/partial/breadcrumbs.html.twig' with {
+        'title': 'Withdrawal list'
+    } only %}
+
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox" id="withdrawalListAppHandler" ng-controller="withdrawalListAppCtrl">
+                    <div class="ibox-title">
+                        <h5>{{ 'List of withdrawals'|trans }}</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <div>
+                            <span ng-if="listManager.options.id" class="label label-info">ID: {{ '{{ listManager.options.id }}' }}</span>
+                            <span ng-if="listManager.options.status" class="label label-info">{{ 'Status'|trans }}: {{ '{{ listManager.options.status }}' }}</span>
+                            <span ng-if="listManager.options.address" class="label label-info">{{ 'Address'|trans }}: {{ '{{ listManager.options.address }}' }}</span>
+                        </div>
+
+                        <table class="table table-stripped">
+                            <thead>
+                            <tr>
+                                <th width="100px">
+                                    <span ng-click="setSortBy('id')">ID</span>
+                                    <i ng-if="!listManager.isSortByField('id')" class="fa fa-sort"></i>
+                                    <i ng-if="listManager.isSortByField('id')" class="fa" ng-class="{'fa-sort-amount-asc': listManager.isSortBy('id', 1), 'fa-sort-amount-desc': listManager.isSortBy('id', 0)}" ></i>
+                                </th>
+                                <th>
+                                    <span ng-click="setSortBy('status')">{{ 'Status'|trans }}</span>
+                                    <i ng-if="!listManager.isSortByField('status')" class="fa fa-sort"></i>
+                                    <i ng-if="listManager.isSortByField('status')" class="fa" ng-class="{'fa-sort-amount-asc': listManager.isSortBy('status', 1), 'fa-sort-amount-desc': listManager.isSortBy('status', 0)}" ></i>
+                                </th>
+                                <th>
+                                    <span ng-click="setSortBy('amount')">{{ 'Amount'|trans }}</span>
+                                    <i ng-if="!listManager.isSortByField('amount')" class="fa fa-sort"></i>
+                                    <i ng-if="listManager.isSortByField('amount')" class="fa" ng-class="{'fa-sort-amount-asc': listManager.isSortBy('amount', 1), 'fa-sort-amount-desc': listManager.isSortBy('amount', 0)}" ></i>
+                                </th>
+                                <th>
+                                    <span ng-click="setSortBy('address')">{{ 'Address'|trans }}</span>
+                                    <i ng-if="!listManager.isSortByField('address')" class="fa fa-sort"></i>
+                                    <i ng-if="listManager.isSortByField('address')" class="fa" ng-class="{'fa-sort-amount-asc': listManager.isSortBy('address', 1), 'fa-sort-amount-desc': listManager.isSortBy('address', 0)}" ></i>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <input style="width: 50px;" ng-model="listManager.filters.id" on-enter="search()" />
+                                    <button class="btn btn-success btn-xs" ng-click="search()">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </th>
+                                <th>
+                                    <input ng-model="listManager.filters.status" on-enter="search()" />
+                                    <button class="btn btn-success btn-xs" ng-click="search()">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </th>
+                                <th></th>
+                                <th>
+                                    <input ng-model="listManager.filters.address" on-enter="search()" />
+                                    <button class="btn btn-success btn-xs" ng-click="search()">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="withdrawal in results">
+                                <td>
+                                    <button class="btn btn-success btn-outline btn-xs" ng-click="routing.openWithdrawal(withdrawal.id)">{{ '{{ withdrawal.id }}' }}</button>
+                                </td>
+                                <td>
+                                    <div ng-if="withdrawal.isApproved" class="text-navy">
+                                        <i class="fa fa-check-square-o"></i>
+                                        <small>{{ '{{ withdrawal.statusName }}' }}</small>
+                                    </div>
+                                    <div ng-if="withdrawal.isExternalApproval" class="text-navy">
+                                        <i class="fa fa-square-o"></i>
+                                        <small>{{ '{{ withdrawal.statusName }}' }}</small>
+                                    </div>
+                                    <div ng-if="withdrawal.isNew">
+                                        <small class="text-warning">{{ '{{ withdrawal.statusName }}' }}</small>
+                                    </div>
+                                    <div ng-if="withdrawal.isRequest">
+                                        <small class="text-warning">{{ '{{ withdrawal.statusName }}' }}</small>
+                                    </div>
+                                    <div ng-if="withdrawal.isDeclined">
+                                        <small class="text-danger">{{ '{{ withdrawal.statusName }}' }}</small>
+                                    </div>
+                                    <div ng-if="withdrawal.isRejected">
+                                        <small class="text-danger">{{ '{{ withdrawal.statusName }}' }}</small>
+                                    </div>
+                                </td>
+                                <td>
+                                    {{ '{{ withdrawal.amount }}' }}
+                                    <small class="text-muted">{{ '{{ withdrawal.wallet.currency.shortName }}' }}</small>
+                                </td>
+                                <td>{{ '{{ withdrawal.address }}' }}</td>
+                            </tr>
+                            <tr ng-if="results.length === 0">
+                                <td colspan="4">
+                                    {{ 'Nothing found'|trans }}
+                                </td>
+                            </tr>
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <td colspan="14" class="text-right">
+                                    <button ng-click="changePageSize(100)" class="btn btn-info" ng-class="{'active': listManager.isPageSizeActive(100)}">100</button>
+                                    <button ng-click="changePageSize(250)" class="btn btn-info" ng-class="{'active': listManager.isPageSizeActive(250)}">250</button>
+                                    <button ng-click="changePageSize(500)" class="btn btn-info" ng-class="{'active': listManager.isPageSizeActive(500)}">500</button>
+                                    &#160;/&#160;page
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="4">
+                                    <button ng-click="changePage(page.page)" ng-repeat="page in pages" class="btn btn-success" ng-class="{'active': listManager.isPageActive(page.page)}">{{ '{{ page.page }}' }}</button>
+                                </td>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script src="/admin/app/listModule.js"></script>
+    <script src="/admin/app/withdrawalListApp.js"></script>
+{% endblock %}

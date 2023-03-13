@@ -1,0 +1,99 @@
+{% extends 'admin/admin_base.html.twig' %}
+
+{% block title %}{{ 'Checkout order'|trans }}{% endblock %}
+
+{% block body %}
+    {% include 'admin/admin/partial/breadcrumbs.html.twig' with {
+        'title': 'Checkout order details',
+        'items': [
+            { 'title': 'Checkout orders', 'url': path('admin_checkout_orders') }
+        ],
+        'currentTitle': ' [ID: ' ~ checkoutOrder.id ~ ']'
+    } only %}
+
+    <div class="wrapper wrapper-content animated fadeInRight" id="checkoutOrderAppHandler" ng-controller="CheckoutOrderAppController">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="ibox" ng-non-bindable>
+                    <div class="ibox-title">
+                        <h5>{{ 'Details'|trans }}</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <small>{{ 'Type'|trans }}</small>
+                                <div>
+                                    {% if checkoutOrder.isOffer() %}
+                                        <span class="label label-danger">{{ checkoutOrder.getTypeName() }} <i class="fa fa-level-down"></i></span>
+                                    {% endif %}
+
+                                    {% if checkoutOrder.isBid() %}
+                                        <span class="label label-primary">{{ checkoutOrder.getTypeName() }} <i class="fa fa-level-up"></i></span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <small>{{ 'Status'|trans }}</small>
+                                <div>
+                                    {{ checkoutOrder.getStatusName() }}
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <small>{{ 'Owner'|trans }}</small>
+                                <div>
+                                    <a href="{{ path('admin_user', { 'userId': checkoutOrder.user.id }) }}" class="btn btn-success btn-outline btn-xs">{{ checkoutOrder.user.getFullName() }}</a>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <small>{{ 'Created at'|trans }}</small>
+                                <div>
+                                    {{ checkoutOrder.createdAt|date }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr />
+
+                        <small>{{ 'Currency pair'|trans }}</small>
+                        <div>
+                            <h2 class="product-main-price">{{ checkoutOrder.currencyPair.baseCurrency.fullName }}/{{ checkoutOrder.currencyPair.quotedCurrency.fullName }} <small class="text-muted">{{ checkoutOrder.currencyPair.pairShortName }}</small> </h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="ibox" ng-non-bindable>
+                    <div class="ibox-title">
+                        {#{% if checkoutOrder.isFilled %}#}
+                            {#<span class="label label-primary float-right">{{ 'Order filled'|trans }}</span>#}
+                        {#{% endif %}#}
+                        <h5>{{ 'Price and volume'|trans }}</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="row">
+                            <div class="col-4">
+                                <small class="stats-label">{{ 'Initiation price'|trans }}</small>
+                                <h4>{{ checkoutOrder.initiationPrice }} <small class="text-muted">{{ checkoutOrder.currencyPair.quotedCurrency.shortName }}</small></h4>
+                            </div>
+                            <div class="col-4">
+                                <small class="stats-label">{{ 'Volume'|trans }}</small>
+                                <h4>{{ checkoutOrder.amount }} <small class="text-muted">{{ checkoutOrder.currencyPair.baseCurrency.shortName }}</small></h4>
+                            </div>
+                            <div class="col-4">
+                                <small class="stats-label">{{ 'Total price'|trans }}</small>
+                                <h4>{{ checkoutOrder.totalPrice }} <small class="text-muted">{{ checkoutOrder.currencyPair.quotedCurrency.shortName }}</small></h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script>
+        let $checkoutOrderId = {{ checkoutOrder.id }};
+    </script>
+    <script src="/admin/app/checkoutOrderApp.js"></script>
+{% endblock %}

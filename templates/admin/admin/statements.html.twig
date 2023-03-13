@@ -1,0 +1,143 @@
+{% extends 'admin/admin_base.html.twig' %}
+
+{% block title %}{{ 'Statements'|trans }}{% endblock %}
+
+{% block body %}
+    {% include 'admin/admin/partial/breadcrumbs.html.twig' with {
+        'title': 'Statements'
+    } only %}
+
+    <div class="wrapper wrapper-content animated fadeInRight" id="statementsAppHandler" ng-controller="StatementsController">
+        <div class="row">
+            <div class="col-6">
+                <div class="ibox">
+                    <div class="ibox-title">
+                        <h5>{{ 'Real time balances'|trans }}</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="row">
+                            <div class="col-8">
+                                <select class="form-control" ng-model="balancesType">
+                                    <option ng-repeat="balancesTypeChoice in balancesTypeChoices" value="{{ '{{ balancesTypeChoice.id }}' }}">{{ '{{ balancesTypeChoice.label }}' }}</option>
+                                </select>
+                            </div>
+                            <div class="col-4">
+                                <button class="btn btn-primary btn-outline btn-block" ng-click="loadBalances()">Refresh</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <div ng-show="balances">
+                            <table class="table table-stripped text-center" ng-show="balances.length > 0">
+                                <thead>
+                                <tr>
+                                    <th class="text-left">
+                                        {{ 'Currency'|trans }}
+                                    </th>
+                                    <th class="text-right">
+                                        {{ 'Balance'|trans }}
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="wallet in balances">
+                                    <td class="text-left">
+                                        {{ '{{ wallet.currency }}' }}
+                                    </td>
+                                    <td class="text-right">
+                                        {{ '{{ wallet.balance }}' }}
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div ng-if="!balances">
+                            <div class="sk-spinner sk-spinner-circle" >
+                                <div class="sk-circle1 sk-circle"></div>
+                                <div class="sk-circle2 sk-circle"></div>
+                                <div class="sk-circle3 sk-circle"></div>
+                                <div class="sk-circle4 sk-circle"></div>
+                                <div class="sk-circle5 sk-circle"></div>
+                                <div class="sk-circle6 sk-circle"></div>
+                                <div class="sk-circle7 sk-circle"></div>
+                                <div class="sk-circle8 sk-circle"></div>
+                                <div class="sk-circle9 sk-circle"></div>
+                                <div class="sk-circle10 sk-circle"></div>
+                                <div class="sk-circle11 sk-circle"></div>
+                                <div class="sk-circle12 sk-circle"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="ibox">
+                    <div class="ibox-title">
+                        <h5>{{ 'Income Fees'|trans }}</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="row">
+                            <div class="col-5">
+                                <input class="form-control" placeholder="from" ng-model="incomingFeesFrom" />
+                            </div>
+                            <div class="col-4">
+                                <input class="form-control" placeholder="to" ng-model="incomingFeesTo" />
+                            </div>
+                            <div class="col-3">
+                                <button class="btn btn-primary btn-outline btn-block" ng-click="loadIncomingFees()">Refresh</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <div ng-show="incomingFees">
+                            <table class="table table-stripped text-center" ng-show="incomingFees.length > 0">
+                                <thead>
+                                <tr>
+                                    <th class="text-left">
+                                        {{ 'Currency'|trans }}
+                                    </th>
+                                    <th class="text-right">
+                                        {{ 'Incomes Total'|trans }}
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="wallet in incomingFees">
+                                    <td class="text-left">
+                                        {{ '{{ wallet.currency }}' }}
+                                    </td>
+                                    <td class="text-right">
+                                        {{ '{{ wallet.incomesTotal }}' }}
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div ng-if="!incomingFees">
+                            <div class="sk-spinner sk-spinner-circle" >
+                                <div class="sk-circle1 sk-circle"></div>
+                                <div class="sk-circle2 sk-circle"></div>
+                                <div class="sk-circle3 sk-circle"></div>
+                                <div class="sk-circle4 sk-circle"></div>
+                                <div class="sk-circle5 sk-circle"></div>
+                                <div class="sk-circle6 sk-circle"></div>
+                                <div class="sk-circle7 sk-circle"></div>
+                                <div class="sk-circle8 sk-circle"></div>
+                                <div class="sk-circle9 sk-circle"></div>
+                                <div class="sk-circle10 sk-circle"></div>
+                                <div class="sk-circle11 sk-circle"></div>
+                                <div class="sk-circle12 sk-circle"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script src="/admin/app/statementsApp.js"></script>
+{% endblock %}

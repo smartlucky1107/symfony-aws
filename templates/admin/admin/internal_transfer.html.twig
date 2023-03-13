@@ -1,0 +1,205 @@
+{% extends 'admin/admin_base.html.twig' %}
+
+{% block title %}{{ 'Internal transfer'|trans }}{% endblock %}
+
+{% block body %}
+    {% include 'admin/admin/partial/breadcrumbs.html.twig' with {
+        'title': 'Internal transfer details',
+        'items': [
+            { 'title': 'Internal transfers', 'url': path('admin_internal_transfers') }
+        ],
+        'currentTitle': ' [ID: ' ~ internalTransfer.id ~ ']'
+    } only %}
+
+    <div class="wrapper wrapper-content animated fadeInRight" id="internalTransferAppHandler" ng-controller="InternalTransferAppController">
+        <div class="row" ng-if="!internalTransfer">
+            <div class="col-lg-12">
+                {% include 'admin/admin/partial/loader.html.twig' %}
+            </div>
+        </div>
+
+        <div class="row" ng-if="internalTransfer">
+            <div class="col-lg-6">
+                <div class="ibox">
+                    <div class="ibox-title">
+                        <h5>{{ 'Details'|trans }}</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <small>{{ 'Amount'|trans }}</small>
+                                <div>
+                                    <h2 class="product-main-price">{{ '{{ internalTransfer.amount }}' }} <small class="text-muted">{{ '{{ internalTransfer.wallet.currency.fullName }}' }}</small> </h2>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <small>{{ 'Created at'|trans }}</small>
+                                <div>
+                                    {{ '{{ internalTransfer.createdAt|date:\'medium\' }}' }}
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <small>{{ 'Address'|trans }}</small>
+                                <div class="bg-primary p-xs b-r-sm">
+                                    <strong>{{ '{{ internalTransfer.address }}' }}</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ibox">
+                    <div class="ibox-title">
+                        <h5>
+                            {{ 'From wallet details'|trans }} <button class="btn btn-success btn-outline btn-xs ng-binding" ng-click="routing.openWallet(internalTransfer.wallet.id)">{{ '{{ internalTransfer.wallet.id }}' }}</button>
+                        </h5>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <h4>{{ '{{ internalTransfer.wallet.user.fullName }}' }}</h4>
+                                <p>
+                                    <strong>{{ 'Address'|trans }}</strong><br />
+                                    {{ '{{ internalTransfer.wallet.user.street }}' }}, {{ '{{ internalTransfer.wallet.user.building }}' }}, {{ '{{ internalTransfer.wallet.user.apartment }}' }}<br />
+                                    {{ '{{ internalTransfer.wallet.user.postalCode }}' }}, {{ '{{ internalTransfer.wallet.user.city }}' }}, {{ '{{ internalTransfer.wallet.user.state }}' }}<br />
+                                    {{ '{{ internalTransfer.wallet.user.country.name }}' }}, <br />
+                                    <strong>{{ 'Phone'|trans }}</strong>
+                                    {{ '{{ internalTransfer.wallet.user.phone }}' }}
+                                </p>
+                            </div>
+                            <div class="col-lg-6">
+                                <h2 class="product-main-price">{{ '{{ internalTransfer.wallet.currency.fullName }}' }} <small class="text-muted">{{ '{{ internalTransfer.wallet.currency.shortName }}' }}</small> </h2>
+
+                                <div class="row">
+                                    <div class="col-6">
+                                        <small class="stats-label">{{ 'Balance'|trans }}</small>
+                                        <h4>{{ '{{ internalTransfer.wallet.amount }}' }} <small class="text-muted">{{ '{{ internalTransfer.wallet.currency.shortName }}' }}</small></h4>
+                                        <div class="progress progress-mini">
+                                            <div style="width: {{ '{{ internalTransfer.wallet.freeAmountPercent }}' }}%;" class="progress-bar"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <small class="stats-label">{{ 'Pending'|trans }}</small>
+                                        <h4>{{ '{{ internalTransfer.wallet.amountPending }}' }} <small class="text-muted">{{ '{{ internalTransfer.wallet.currency.shortName }}' }}</small></h4>
+                                        <div class="progress progress-mini">
+                                            <div style="width: {{ '{{ internalTransfer.wallet.amountPendingPercentage }}' }}%;" class="progress-bar progress-bar-warning"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="ibox">
+                    <div class="ibox-title">
+                        <h5>
+                            {{ 'To wallet details'|trans }} <button class="btn btn-success btn-outline btn-xs ng-binding" ng-click="routing.openWallet(internalTransfer.toWallet.id)">{{ '{{ internalTransfer.toWallet.id }}' }}</button>
+                        </h5>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <h4>{{ '{{ internalTransfer.toWallet.user.fullName }}' }}</h4>
+                                <p>
+                                    <strong>{{ 'Address'|trans }}</strong><br />
+                                    {{ '{{ internalTransfer.toWallet.user.street }}' }}, {{ '{{ internalTransfer.toWallet.user.building }}' }}, {{ '{{ internalTransfer.toWallet.user.apartment }}' }}<br />
+                                    {{ '{{ internalTransfer.toWallet.user.postalCode }}' }}, {{ '{{ internalTransfer.toWallet.user.city }}' }}, {{ '{{ internalTransfer.toWallet.user.state }}' }}<br />
+                                    {{ '{{ internalTransfer.toWallet.user.country.name }}' }}, <br />
+                                    <strong>{{ 'Phone'|trans }}</strong>
+                                    {{ '{{ internalTransfer.toWallet.user.phone }}' }}
+                                </p>
+                            </div>
+                            <div class="col-lg-6">
+                                <h2 class="product-main-price">{{ '{{ internalTransfer.toWallet.currency.fullName }}' }} <small class="text-muted">{{ '{{ internalTransfer.toWallet.currency.shortName }}' }}</small> </h2>
+
+                                <div class="row">
+                                    <div class="col-6">
+                                        <small class="stats-label">{{ 'Balance'|trans }}</small>
+                                        <h4>{{ '{{ internalTransfer.toWallet.amount }}' }} <small class="text-muted">{{ '{{ internalTransfer.toWallet.currency.shortName }}' }}</small></h4>
+                                        <div class="progress progress-mini">
+                                            <div style="width: {{ '{{ internalTransfer.toWallet.freeAmountPercent }}' }}%;" class="progress-bar"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <small class="stats-label">{{ 'Pending'|trans }}</small>
+                                        <h4>{{ '{{ internalTransfer.toWallet.amountPending }}' }} <small class="text-muted">{{ '{{ internalTransfer.toWallet.currency.shortName }}' }}</small></h4>
+                                        <div class="progress progress-mini">
+                                            <div style="width: {{ '{{ internalTransfer.toWallet.amountPendingPercentage }}' }}%;" class="progress-bar progress-bar-warning"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="ibox">
+                    <div class="ibox-title">
+                        <h5>{{ 'Approval information'|trans }}</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="row text-center">
+                            <div class="col-lg-6">
+                                <small class="stats-label">{{ 'Approval status'|trans }}</small>
+
+                                <div ng-if="internalTransfer.isNew">
+                                    <small class="text-warning">{{ '{{ internalTransfer.statusName }}' }}</small>
+                                </div>
+                                <div ng-if="internalTransfer.isRequest">
+                                    <small class="text-warning">{{ '{{ internalTransfer.statusName }}' }}</small>
+                                </div>
+                                <div ng-if="internalTransfer.isApproved" class="text-navy">
+                                    <i class="fa fa-check-square-o"></i>
+                                    <small>{{ '{{ internalTransfer.statusName }}' }}</small>
+                                </div>
+                                <div class="mt-2" ng-if="internalTransfer.isApproved">
+                                    <button ng-if="internalTransfer.isApproved" ng-click="revertInternalTransfer(internalTransfer.id)" type="button" class="btn btn-xs btn-outline btn-danger"><i class="fa fa-thumbs-o-down"></i> {{ 'Revert'|trans }}</button>
+                                </div>
+
+                                <div ng-if="internalTransfer.isDeclined">
+                                    <small class="text-danger">{{ '{{ internalTransfer.statusName }}' }}</small>
+                                </div>
+                                <div ng-if="internalTransfer.isRejected">
+                                    <small class="text-danger">{{ '{{ internalTransfer.statusName }}' }}</small>
+                                </div>
+                                <div ng-if="internalTransfer.isReverted">
+                                    <small class="text-danger">{{ '{{ internalTransfer.statusName }}' }}</small>
+                                </div>
+
+                                <div class="mt-2 row" ng-if="internalTransfer.isRequest">
+                                    <div class="col-6 pr-1">
+                                        <button ng-click="approveInternalTransfer(internalTransfer.id)" type="button" class="btn btn-sm btn-outline btn-primary btn-block"><i class="fa fa-thumbs-o-up"></i> {{ 'Approve'|trans }}</button>
+                                    </div>
+                                    <div class="col-6 pl-1">
+                                        <button ng-click="declineInternalTransfer(internalTransfer.id)" type="button" class="btn btn-sm btn-outline btn-danger btn-block"><i class="fa fa-thumbs-o-down"></i> {{ 'Decline'|trans }}</button>
+                                    </div>
+                                </div>
+                                <div class="mt-2 row" ng-if="internalTransfer.isNew">
+                                    <div class="col-12">
+                                        <button ng-click="rejectInternalTransfer(internalTransfer.id)" type="button" class="btn btn-sm btn-outline btn-danger btn-block"><i class="fa fa-thumbs-o-down"></i> {{ 'Reject'|trans }}</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <small class="stats-label">{{ 'Approval date'|trans }}</small>
+
+                                <div ng-if="internalTransfer.isApproved">{{ '{{ internalTransfer.approvedAt|date:\'medium\' }}' }}</div>
+                                <div ng-if="!(internalTransfer.isApproved)">
+                                    <small class="text-muted">{{ 'not approved'|trans }}</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script>
+        let $internalTransferId = {{ internalTransfer.id }};
+    </script>
+    <script src="/admin/app/internalTransferApp.js"></script>
+{% endblock %}

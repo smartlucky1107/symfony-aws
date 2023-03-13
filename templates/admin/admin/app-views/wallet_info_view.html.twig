@@ -1,0 +1,96 @@
+<div ng-controller="WalletInfoController">
+    <div class="ibox">
+        <div class="ibox-title">
+            <h5>{{ 'Wallet balance'|trans }}</h5>
+        </div>
+        <div class="ibox-content">
+            <div ng-if="walletId">
+                <div class="row">
+                    <div class="col-6">
+                        <small class="stats-label">{{ 'Balance'|trans }}</small>
+                        <h4>{{ '{{ wallet.amount }}' }} <small class="text-muted">{{ '{{ wallet.currency.shortName }}' }}</small></h4>
+                        <div class="progress progress-mini">
+                            <div style="width: {{ '{{ wallet.freeAmountPercent }}' }}%;" class="progress-bar"></div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <small class="stats-label">{{ 'Pending' }}</small>
+                        <h4>{{ '{{ wallet.amountPending }}' }} <small class="text-muted">{{ '{{ wallet.currency.shortName }}' }}</small></h4>
+                        <div class="progress progress-mini">
+                            <div style="width: {{ '{{ wallet.amountPendingPercentage }}' }}%;" class="progress-bar progress-bar-warning"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12"><hr /></div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <small class="stats-label">{{ 'Deposit balance'|trans }}</small>
+                        <h4>{{ '{{ wallet.amountDeposits }}' }} <small class="text-muted">{{ '{{ wallet.currency.shortName }}' }}</small></h4>
+                        <div class="progress progress-mini">
+                            <div style="width: {{ '{{ wallet.amountDeposits/wallet.amountDepositsLimit * 100 }}' }}%;" class="progress-bar progress-bar-info"></div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <small class="stats-label">{{ 'Deposits left' }}</small>
+                        <h4>{{ '{{ wallet.amountDepositsLeft }}' }}/{{ '{{ wallet.amountDepositsLimit }}' }} <small class="text-muted">{{ '{{ wallet.currency.shortName }}' }}</small></h4>
+                        <div class="progress progress-mini">
+                            <div style="width: {{ '{{ wallet.amountDepositsLeft/wallet.amountDepositsLimit * 100 }}' }}%;" class="progress-bar progress-bar-danger"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div ng-if="!walletId" class="text-center text-muted">
+                {{ 'Wallet balance not allowed. No wallet selected.'|trans }}
+            </div>
+        </div>
+    </div>
+
+    <div class="ibox">
+        <div class="ibox-title">
+            <h5>{{ 'Wallet analysis'|trans }}</h5>
+            <button ng-click="loadAnalysis()" type="button" class="btn btn-xs btn-outline btn-success"><i class="fa fa-refresh"></i> {{ 'Re-check'|trans }}</button>
+        </div>
+        <div class="ibox-content">
+            <div ng-show="analysis && analysisAllowed">
+                <div class="text-center">
+                    <div class="text-navy" ng-if="analysis.status == 1">
+                        <i class="fa fa-check-square-o"></i> Wallet analysis passed
+                    </div>
+
+                    <div class="text-danger" ng-if="analysis.status == 2">
+                        <i class="fa fa-minus-square-o"></i> Wallet analysis failed
+                    </div>
+                </div>
+                <hr />
+                <div class="row text-center">
+                    <div class="col-6">
+                        <small>{{ 'Input balance'|trans }}</small>
+                        <div>{{ '{{ analysis.inputBalance }}' }}</div>
+
+                        <small>{{ 'Input balance blocked'|trans }}</small>
+                        <div>{{ '{{ analysis.inputBalanceBlocked }}' }}</div>
+                    </div>
+                    <div class="col-6">
+                        <small>{{ 'Output balance'|trans }}</small>
+                        <div>{{ '{{ analysis.outputBalance }}' }}</div>
+
+                        <small>{{ 'Output balance blocked'|trans }}</small>
+                        <div>{{ '{{ analysis.outputBalanceBlocked }}' }}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" ng-if="!analysis && analysisAllowed">
+                <div class="col-lg-12">
+                    {% include 'admin/admin/partial/loader.html.twig' %}
+                </div>
+            </div>
+            <div class="row" ng-if="!analysisAllowed">
+                <div class="col-12">
+                    <small>No access</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

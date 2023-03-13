@@ -1,0 +1,66 @@
+<div ng-controller="WalletTransfersController">
+    <div ng-if="walletId">
+        <table class="table table-stripped">
+            <thead>
+            <tr>
+                <th>{{ 'Created at'|trans }}</th>
+                <th>
+                    {{ 'Offer & Bid orders'|trans }} |
+                    {{ 'Trade'|trans }} |
+                    {{ 'Deposit'|trans }} |
+                    {{ 'Withdrawal'|trans }} |
+                    {{ 'Internal Transfer'|trans }} |
+                    {{ 'Checkout Order'|trans }}
+                </th>
+                <th>{{ 'Type'|trans }}</th>
+                <th>{{ 'Wallet ID'|trans }}</th>
+                <th>{{ 'Amount'|trans }}</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="transfer in transfers">
+                <td>{{ '{{ transfer.createdAt }}' }}</td>
+                <td>
+                    <button ng-if="transfer.orderId" class="btn btn-success btn-outline btn-xs" ng-click="routing.openOrder(transfer.orderId)">
+                        {{ 'Order'|trans }} {{ '{{ transfer.orderId }}' }}
+                    </button>
+                    <button ng-if="transfer.offerOrderId" class="btn btn-success btn-outline btn-xs" ng-click="routing.openOrder(transfer.offerOrderId)">
+                        {{ 'Offer'|trans }} {{ '{{ transfer.offerOrderId }}' }}
+                    </button>
+                    <button ng-if="transfer.bidOrderId" class="btn btn-success btn-outline btn-xs" ng-click="routing.openOrder(transfer.bidOrderId)">
+                        {{ 'Bid'|trans }} {{ '{{ transfer.bidOrderId }}' }}
+                    </button>
+                    <button ng-if="transfer.tradeId" class="btn btn-success btn-outline btn-xs" ng-click="routing.openTrade(transfer.tradeId)">
+                        {{ 'Trade'|trans }} {{ '{{ transfer.tradeId }}' }}
+                    </button>
+                    <button ng-if="transfer.depositId" class="btn btn-success btn-outline btn-xs" ng-click="routing.openDeposit(transfer.depositId)">
+                        {{ 'Deposit'|trans }} {{ '{{ transfer.depositId }}' }}
+                    </button>
+                    <button ng-if="transfer.withdrawalId" class="btn btn-success btn-outline btn-xs" ng-click="routing.openWithdrawal(transfer.withdrawalId)">
+                        {{ 'Withdrawal'|trans }} {{ '{{ transfer.withdrawalId }}' }}
+                    </button>
+                    <button ng-if="transfer.internalTransferId" class="btn btn-success btn-outline btn-xs" ng-click="routing.openInternalTransfer(transfer.internalTransferId)">
+                        {{ 'Internal Transfer'|trans }} {{ '{{ transfer.internalTransferId }}' }}
+                    </button>
+                    <button ng-if="transfer.checkoutOrderId" class="btn btn-success btn-outline btn-xs" ng-click="routing.openCheckoutOrder(transfer.checkoutOrderId)">
+                        {{ 'Checkout Order'|trans }} {{ '{{ transfer.checkoutOrderId }}' }}
+                    </button>
+                </td>
+                <td>{#{{ '{{ transfer.type }}' }}#} {{ '{{ transfer.typeName }}' }}</td>
+                <td>
+                    <button class="btn btn-success btn-outline btn-xs" ng-click="routing.openWallet(transfer.walletId)">{{ '{{ transfer.walletId }}' }}</button>
+                </td>
+                <td>{{ '{{ transfer.amount }}' }}</td>
+            </tr>
+            <tr ng-if="transfers.length === 0">
+                <td colspan="7">
+                    {{ 'No transfers found'|trans }}
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div ng-if="!walletId" class="text-center text-muted">
+        {{ 'Wallet transfer history not allowed. No wallet selected.'|trans }}
+    </div>
+</div>

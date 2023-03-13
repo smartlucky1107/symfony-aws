@@ -1,0 +1,93 @@
+{% extends 'admin/admin_base.html.twig' %}
+
+{% block title %}{{ 'Workspace'|trans }}{% endblock %}
+
+{% block body %}
+    {% include 'admin/admin/partial/breadcrumbs.html.twig' with {
+        'title': 'Workspace details',
+        'items': [
+            { 'title': 'Workspaces', 'url': path('admin_workspaces') }
+        ],
+        'currentTitle': ' [ID: ' ~ workspace.id ~ ']'
+    } only %}
+
+    <div class="wrapper wrapper-content animated fadeInRight" id="workspaceAppHandler" ng-controller="WorkspaceAppController">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="ibox" ng-non-bindable>
+                    <div class="ibox-title">
+                        <h5>{{ 'Details'|trans }}</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <small>{{ 'Name'|trans }}</small>
+                                <div>
+                                    <strong>
+                                        {{ workspace.name }}
+                                    </strong>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <small>{{ 'Owner'|trans }}</small>
+                                <div>
+                                    <a href="{{ path('admin_user', { 'userId': workspace.user.id }) }}" class="btn btn-success btn-outline btn-xs">{{ workspace.user.getFullName() }}</a>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <small>{{ 'Default currency'|trans }}</small>
+                                <div>
+                                    {{ workspace.defaultQuotedCurrency.fullName }} <small class="text-muted">{{ workspace.defaultQuotedCurrency.shortName }}</small>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <small>{{ 'Verified'|trans }}</small>
+                                <div>
+                                    {% if workspace.isVerified %}
+                                        <div class="text-navy">
+                                            <i class="fa fa-check-square-o"></i>
+                                            <small>{{ 'Yes'|trans }}</small>
+                                        </div>
+                                    {% else %}
+                                        <div class="text-warning">
+                                            <i class="fa fa-square-o"></i>
+                                            <small>{{ 'No'|trans }}</small>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr />
+
+                        <small>{{ 'Company details'|trans }}</small>
+                        <div class="row">
+                            <div class="col-6">
+                                <strong>{{ workspace.companyName }}</strong>
+                                <div>
+                                    NIP: {{ workspace.companyNip }}
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                {{ workspace.companyStreet }}<br />
+                                {{ workspace.companyCity }}
+                                {{ workspace.companyPostcode }}<br />
+                                {{ workspace.companyCountry }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script>
+        let $workspaceId = {{ workspace.id }};
+    </script>
+    <script src="/admin/app/workspaceApp.js"></script>
+{% endblock %}

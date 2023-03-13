@@ -1,0 +1,59 @@
+{% extends 'admin/admin_base.html.twig' %}
+
+{% block title %}{{ 'Orderbook'|trans }}{% endblock %}
+
+{% block body %}
+    {% include 'admin/admin/partial/breadcrumbs.html.twig' with {
+        'title': 'Orderbook'
+    } only %}
+
+    <div class="wrapper wrapper-content animated fadeInRight" id="orderbookAppHandler">
+        <div class="row" ng-controller="OrderbookController">
+            <div class="col-6">
+                <div class="ibox">
+                    <div class="ibox-title">
+                        <h5>{{ 'Bids'|trans }}</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <div ng-repeat="bid in bids" class="row">
+                            <div class="col-4">
+                                [{{ '{{ bid.limitPrice }}' }}]
+                            </div>
+                            <div class="col-4">
+                                {{ '{{ bid.amount }}' }}
+                            </div>
+                            <div class="col-4">
+                                {{ '{{ bid.total }}' }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="ibox">
+                    <div class="ibox-title">
+                        <h5>{{ 'Asks'|trans }}</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <div ng-repeat="offer in offers" class="row">
+                            <div class="col-4">
+                                [{{ '{{ offer.limitPrice }}' }}]
+                            </div>
+                            <div class="col-4">
+                                {{ '{{ offer.amount }}' }}
+                            </div>
+                            <div class="col-4">
+                                {{ '{{ offer.total }}' }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script src="/admin/app/Controller/OrderbookController.js"></script>
+    <script src="/admin/app/orderbookApp.js"></script>
+{% endblock %}

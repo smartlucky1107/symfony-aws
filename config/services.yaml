@@ -1,0 +1,269 @@
+# This file is the entry point to configure your own services.
+# Files in the packages/ subdirectory configure your dependencies.
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
+parameters:
+    locale: 'pl'
+    redis_host:         '%env(REDIS_HOST)%'
+    redis_port:         '%env(REDIS_PORT)%'
+    system_alert_email:         '%env(SYSTEM_ALERT_EMAIL)%'
+
+    env(MONGODB_URL): ''
+    env(MONGODB_DB): ''
+
+    websocket_host:         '%env(WEBSOCKET_HOST)%'
+    websocket_port:         '%env(WEBSOCKET_PORT)%'
+
+    address_app_api_url:    '%env(ADDRESS_APP_API_URL)%'
+    address_app_api_key:    '%env(ADDRESS_APP_API_KEY)%'
+
+    recaptcha_v2_secret_key:   '%env(RECAPTCHA_V2_SECRET_KEY)%'
+    recaptcha_v3_secret_key:   '%env(RECAPTCHA_V3_SECRET_KEY)%'
+
+    cash_wallet_pln:   '%env(CASH_WALLET_PLN)%'
+    cash_wallet_btc:   '%env(CASH_WALLET_BTC)%'
+    cash_wallet_eth:   '%env(CASH_WALLET_ETH)%'
+
+    bitbay_api_public:          '%env(BITBAY_API_PUBLIC)%'
+    bitbay_api_private:         '%env(BITBAY_API_PRIVATE)%'
+
+    binance_api_public:         'BINANCE_API_PUBLIC'
+    binance_api_private:        'BINANCE_API_PUBLIC'
+
+    kraken_api_url:             '%env(KRAKEN_API_URL)%'
+    kraken_api_key:             '%env(KRAKEN_API_KEY)%'
+    kraken_api_private:         '%env(KRAKEN_API_PRIVATE)%'
+
+    walutomat_api_url:          '%env(WALUTOMAT_API_URL)%'
+    walutomat_api_key:          '%env(WALUTOMAT_API_KEY)%'
+
+    jumio_url:                  '%env(JUMIO_URL)%'
+    jumio_token:                '%env(JUMIO_TOKEN)%'
+    jumio_secret:               '%env(JUMIO_SECRET)%'
+
+    idenfy_url:                 '%env(IDENFY_URL)%'
+    idenfy_key:                 '%env(IDENFY_KEY)%'
+    idenfy_secret:              '%env(IDENFY_SECRET)%'
+
+    indacoin_url:               '%env(INDACOIN_URL)%'
+    indacoin_partner:           '%env(INDACOIN_PARTNER)%'
+    indacoin_secret:            '%env(INDACOIN_SECRET)%'
+
+    blockchair_url:             '%env(BLOCKCHAIR_URL)%'
+    blockchair_key:             '%env(BLOCKCHAIR_KEY)%'
+
+    mailer_lite_api_key:        '%env(MAILER_LITE_API_KEY)%'
+
+    serwer_sms_url:             '%env(SERWER_SMS_URL)%'
+    serwer_sms_username:        '%env(SERWER_SMS_USERNAME)%'
+    serwer_sms_password:        '%env(SERWER_SMS_PASSWORD)%'
+
+    przelewy24_url:             '%env(PRZELEWY24_URL)%'
+    przelewy24_order_key:       '%env(PRZELEWY24_ORDER_KEY)%'
+    przelewy24_crc:             '%env(PRZELEWY24_CRC)%'
+    przelewy24_merchant_id:     '%env(PRZELEWY24_MERCHANT_ID)%'
+    przelewy24_pos_id:          '%env(PRZELEWY24_POS_ID)%'
+    przelewy24_report_key:      '%env(PRZELEWY24_REPORT_KEY)%'
+    przelewy24_payment_base_url: '%env(PRZELEWY24_PAYMENT_BASE_URL)%'
+    przelewy24_return_base_url: '%env(PRZELEWY24_RETURN_BASE_URL)%'
+
+    paywall_api_url:            '%env(PAYWALL_API_URL)%'
+    paywall_api_key:            '%env(PAYWALL_API_KEY)%'
+    paywall_return_url_transaction:     '%env(PAYWALL_RETURN_URL_TRANSACTION)%'
+    paywall_return_url_card:            '%env(PAYWALL_RETURN_URL_CARD)%'
+
+    iaml_api_url:               '%env(IAML_API_URL)%'
+    iaml_api_key:               '%env(IAML_API_KEY)%'
+
+    frontend_base_url:          '%env(FRONTEND_BASE_URL)%'
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+    # makes classes in src/ available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
+    App\:
+        resource: '../src/*'
+        exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
+
+    # controllers are imported separately to make sure services can be injected
+    # as action arguments even if you don't extend any base controller class
+    App\Controller\:
+        resource: '../src/Controller'
+        tags: ['controller.service_arguments']
+
+    # add more service definitions when explicit configuration is needed
+    # please note that last definitions always *replace* previous ones
+
+    app.redis_provider:
+        class: Redis
+        public: false
+        factory: ['Symfony\Component\Cache\Adapter\RedisAdapter', 'createConnection']
+        arguments: ["redis://%redis_host%:%redis_port%"]
+
+    App\Manager\RedisProvider:
+        arguments:
+            - '@app.redis_provider'
+
+    App\Service\AddressApp\AddressAppApi:
+        arguments:
+            - '%address_app_api_url%'
+            - '%address_app_api_key%'
+
+    App\Service\ExternalMarket\BitbayApi:
+        arguments:
+            - '%bitbay_api_public%'
+            - '%bitbay_api_private%'
+
+    App\Service\ExternalMarket\BinanceApi:
+        arguments:
+            - '%binance_api_public%'
+            - '%binance_api_private%'
+
+    App\Service\ExternalMarket\KrakenApi:
+        arguments:
+            - '%kraken_api_key%'
+            - '%kraken_api_private%'
+            - '%kraken_api_url%'
+
+    App\Service\ExternalMarket\WalutomatApi:
+        arguments:
+            - '%walutomat_api_url%'
+            - '%walutomat_api_key%'
+
+    App\Service\MailerLite\MailerLiteApi:
+        arguments:
+            - '%mailer_lite_api_key%'
+
+    App\Manager\EmailManager:
+        arguments:
+            - '@templating'
+            - '@mailer'
+            - '%system_alert_email%'
+            - '@translator'
+
+    App\Manager\Liquidity\LiquidityReportsManager:
+        arguments:
+            - '%cash_wallet_pln%'
+            - '%cash_wallet_btc%'
+            - '%cash_wallet_eth%'
+
+    #listeners
+    app.cors_listener:
+        class: App\EventListener\CorsListener
+        arguments:
+            - ""
+        tags:
+            - { name: kernel.event_subscriber }
+
+    app.jwt_token_authenticator:
+        autowire: false
+        autoconfigure: false
+        class: App\Security\Guard\JWTTokenAuthenticator
+        parent: lexik_jwt_authentication.security.guard.jwt_token_authenticator
+        calls:
+            - method: setTokenManager
+              arguments:
+                  - '@App\Security\TokenManager'
+
+    app.admin.jwt_token_authenticator:
+        autowire: false
+        autoconfigure: false
+        class: App\Security\Guard\AdminJWTTokenAuthenticator
+        parent: lexik_jwt_authentication.security.guard.jwt_token_authenticator
+
+    app.jwt_authentication_success:
+        autowire: false
+        autoconfigure: false
+        class: App\Security\Http\Authentication\AppAuthenticationSuccessHandler
+        parent: lexik_jwt_authentication.handler.authentication_success
+        calls:
+            - method: setReCaptchaManager
+              arguments:
+                  - '@App\Manager\reCaptchaManager'
+            - method: setGoogleAuthenticatorManager
+              arguments:
+                  - '@App\Manager\GoogleAuthenticatorManager'
+
+    App\Command\TradingProcessorCommand:
+        arguments:
+            - '@App\Manager\RedisProvider'
+            - '@App\Manager\Processor\TradingProcessor'
+            - '@monolog.logger.trading'
+            - '@App\Manager\Queue\QueueItemManager'
+
+    app_api.event.authentication_success_listener:
+        class: App\EventListener\AuthenticationSuccessListener
+        tags:
+            - { name: kernel.event_listener, event: lexik_jwt_authentication.on_authentication_success, method: onAuthenticationSuccessResponse }
+
+    app_api.event.jwt_not_found_listener:
+        class: App\EventListener\JWTNotFoundListener
+        tags:
+            - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_not_found, method: onJWTNotFound }
+
+    app_api.event.jwt_invalid_listener:
+        class: App\EventListener\JWTInvalidListener
+        tags:
+            - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_invalid, method: onJWTInvalid }
+
+    app_api.event.jwt_expired_listener:
+        class: App\EventListener\JWTExpiredListener
+        tags:
+            - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_expired, method: onJWTExpired }
+
+    app_api.event.ws_push_listener:
+        class: App\EventListener\WSPushListener
+        tags:
+            - { name: kernel.event_listener, event: websocket.on_push, method: onPush }
+            - { name: kernel.event_listener, event: websocket.on_push_external_orderbook, method: onPushExternalOrderBook }
+            - { name: kernel.event_listener, event: websocket.on_push_notification, method: onPushNotification }
+
+    app_api.event.user_update_listener:
+        class: App\EventListener\UserUpdateListener
+        tags:
+            - { name: kernel.event_listener, event: user.on_set_recent_order_at, method: onSetRecentOrderAt }
+
+    app_api.event.order_update_listener:
+        class: App\EventListener\OrderUpdateListener
+        tags:
+            - { name: kernel.event_listener, event: order.on_order_release_amount, method: onOrderRelease }
+
+    app_api.event.wallet_transfer_listener:
+        class: App\EventListener\WalletTransferListener
+        tags:
+            - { name: kernel.event_listener, event: wallet.on_wallet_transfer, method: onWalletTransfer }
+            - { name: kernel.event_listener, event: wallet.on_wallet_transfer_deposit, method: onWalletTransferDeposit }
+            - { name: kernel.event_listener, event: wallet.on_wallet_transfer_order, method: onWalletTransferOrder }
+            - { name: kernel.event_listener, event: wallet.on_wallet_transfer_withdrawal, method: onWalletTransferWithdrawal }
+            - { name: kernel.event_listener, event: wallet.on_wallet_transfer_internal_transfer, method: onWalletTransferInternalTransfer }
+
+    app_api.event.wallet_save_balance_listener:
+        class: App\EventListener\WalletSaveBalanceListener
+        tags:
+            - { name: kernel.event_listener, event: wallet.balance_before_trade, method: onBalanceBeforeTrade }
+            - { name: kernel.event_listener, event: wallet.balance_after_trade,  method: onBalanceAfterTrade }
+            - { name: kernel.event_listener, event: wallet.balance_before_order, method: onBalanceBeforeOrder }
+            - { name: kernel.event_listener, event: wallet.balance_after_order,  method: onBalanceAfterOrder }
+            - { name: kernel.event_listener, event: wallet.balance_before_deposit, method: onBalanceBeforeDeposit }
+            - { name: kernel.event_listener, event: wallet.balance_after_deposit,  method: onBalanceAfterDeposit }
+            - { name: kernel.event_listener, event: wallet.balance_before_withdrawal, method: onBalanceBeforeWithdrawal }
+            - { name: kernel.event_listener, event: wallet.balance_after_withdrawal,  method: onBalanceAfterWithdrawal }
+
+    app_api.event.login_listener:
+        class: App\EventListener\LoginListener
+        tags:
+            - { name: kernel.event_listener, event: app.login, method: onLogin }
+
+    app.exception_normalizer:
+        class: App\Normalizer\ExceptionNormalizer
+        tags:
+            - { name: serializer.normalizer }
+
+    app.api_private_listener:
+        class: App\EventListener\ApiPrivateListener
+        tags:
+            - { name: kernel.event_subscriber }

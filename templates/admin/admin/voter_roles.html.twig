@@ -1,0 +1,58 @@
+{% extends 'admin/admin_base.html.twig' %}
+
+{% block title %}{{ 'Voter roles'|trans }}{% endblock %}
+
+{% block body %}
+    {% include 'admin/admin/partial/breadcrumbs.html.twig' with {
+        'title': 'Voter role list'
+    } only %}
+
+    <div class="wrapper wrapper-content animated fadeInRight" id="voterRolesAppHandler">
+        <div class="row">
+            <div class="col-lg-6">
+
+                <div class="ibox">
+                    <div class="ibox-title">
+                        {{ 'Create new voter role'|trans }}
+                    </div>
+                    <div class="ibox-content">
+                        <form role="form" ng-controller="NewVoterRoleController">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>{{ 'Module'|trans }} <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" name="module" ng-model="voterRoleData.module">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>{{ 'Action'|trans }} <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" name="action" ng-model="voterRoleData.action">
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <button ng-click="createVoterRole()" class="btn btn-success btn-outline btn-sm" type="button"><i class="fa fa-check"></i> {{ 'Create'|trans }}</button>
+                                <div>
+                                    <small class="text-danger float-right">* {{ 'required'|trans }}</small>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                {% include 'admin/admin/app-views/voter_role_list_view.html.twig' %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script src="/admin/app/listModule.js"></script>
+    <script src="/admin/app/Controller/VoterRoleListController.js"></script>
+    <script src="/admin/app/Controller/NewVoterRoleController.js"></script>
+    <script src="/admin/app/voterRolesApp.js"></script>
+{% endblock %}

@@ -1,0 +1,99 @@
+{% extends 'admin/admin_base.html.twig' %}
+
+{% block title %}{{ 'Liquidity orderbook'|trans }}{% endblock %}
+
+{% block body %}
+    {% include 'admin/admin/partial/breadcrumbs.html.twig' with {
+        'title': 'Orderbook'
+    } only %}
+
+    <div class="wrapper wrapper-content animated fadeInRight" id="liquidityOrderbookAppHandler">
+        <div class="row" ng-controller="LiquidityOrderbookController">
+            <div class="col-6">
+                <div class="ibox">
+                    <div class="ibox-title">
+                        <h5>{{ 'Buy'|trans }}</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="row">
+                            <div class="col-5">
+                                <input class="form-control" ng-model="buyAmount" placeholder="amount" />
+                            </div>
+                            <div class="col-5">
+                                <input class="form-control" ng-model="buyPrice" placeholder="price" />
+                            </div>
+                            <div class="col-2">
+                                <button class="btn btn-primary btn-outline btn-block" ng-click="buy()">Buy</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="ibox">
+                    <div class="ibox-title">
+                        <h5>{{ 'Sell'|trans }}</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="row">
+                            <div class="col-5">
+                                <input class="form-control" ng-model="sellAmount" placeholder="amount" />
+                            </div>
+                            <div class="col-5">
+                                <input class="form-control" ng-model="sellPrice" placeholder="price" />
+                            </div>
+                            <div class="col-2">
+                                <button class="btn btn-danger btn-outline btn-block" ng-click="sell()">Sell</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="ibox">
+                    <div class="ibox-title">
+                        <h5>{{ 'Bids'|trans }}</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <div ng-repeat="bid in bids" class="row">
+                            <div class="col-4">
+                                [{{ '{{ bid.limitPrice }}' }}]
+                            </div>
+                            <div class="col-4">
+                                {{ '{{ bid.amount }}' }}
+                            </div>
+                            <div class="col-4">
+                                {{ '{{ bid.total }}' }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="ibox">
+                    <div class="ibox-title">
+                        <h5>{{ 'Asks'|trans }}</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <div ng-repeat="offer in offers" class="row">
+                            <div class="col-4">
+                                [{{ '{{ offer.limitPrice }}' }}]
+                            </div>
+                            <div class="col-4">
+                                {{ '{{ offer.amount }}' }}
+                            </div>
+                            <div class="col-4">
+                                {{ '{{ offer.total }}' }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script src="/admin/app/Controller/LiquidityOrderbookController.js"></script>
+    <script src="/admin/app/liquidityOrderbookApp.js"></script>
+{% endblock %}

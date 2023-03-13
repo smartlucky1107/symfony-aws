@@ -1,0 +1,101 @@
+<div class="ibox" ng-controller="WorkspaceListController">
+    <div class="ibox-title">
+        <h5>{{ 'List of workspaces'|trans }}</h5>
+    </div>
+    <div class="ibox-content">
+        <div>
+            <span ng-if="listManager.options.id" class="label label-info">ID: {{ '{{ listManager.options.id }}' }}</span>
+            <span ng-if="listManager.options.name" class="label label-info">Name: {{ '{{ listManager.options.name }}' }}</span>
+        </div>
+
+        <table class="table table-stripped">
+            <thead>
+            <tr>
+                <th width="100px">
+                    <span ng-click="setSortBy('id')">ID</span>
+                    <i ng-if="!listManager.isSortByField('id')" class="fa fa-sort"></i>
+                    <i ng-if="listManager.isSortByField('id')" class="fa" ng-class="{'fa-sort-amount-asc': listManager.isSortBy('id', 1), 'fa-sort-amount-desc': listManager.isSortBy('id', 0)}" ></i>
+                </th>
+                <th>
+                    <span ng-click="setSortBy('name')">{{ 'Name'|trans }}</span>
+                    <i ng-if="!listManager.isSortByField('name')" class="fa fa-sort"></i>
+                    <i ng-if="listManager.isSortByField('name')" class="fa" ng-class="{'fa-sort-amount-asc': listManager.isSortBy('name', 1), 'fa-sort-amount-desc': listManager.isSortBy('name', 0)}" ></i>
+                </th>
+                <th>{{ 'Verified'|trans }}</th>
+                <th>{{ 'Company'|trans }}</th>
+                <th>{{ 'Company address'|trans }}</th>
+                <th>{{ 'Default currency'|trans }}</th>
+            </tr>
+            <tr>
+                <th>
+                    <input style="width: 50px;" ng-model="listManager.filters.id" on-enter="search()" />
+                    <button class="btn btn-success btn-xs" ng-click="search()">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </th>
+                <th>
+                    <input style="width: 50px;" ng-model="listManager.filters.name" on-enter="search()" />
+                    <button class="btn btn-success btn-xs" ng-click="search()">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="workspace in results">
+                <td>
+                    <button class="btn btn-success btn-outline btn-xs" ng-click="routing.openWorkspace(workspace.id)">{{ '{{ workspace.id }}' }}</button>
+                </td>
+                <td>{{ '{{ workspace.name }}' }}</td>
+                <td>
+                    <div ng-if="workspace.isVerified" class="text-navy">
+                        <i class="fa fa-check-square-o"></i>
+                        <small>{{ 'Yes'|trans }}</small>
+                    </div>
+                    <div ng-if="!workspace.isVerified" class="text-warning">
+                        <i class="fa fa-square-o"></i>
+                        <small>{{ 'No'|trans }}</small>
+                    </div>
+                </td>
+                <td>
+                    <strong>{{ '{{ workspace.companyName }}' }}</strong>
+                    <div>
+                        NIP: {{ '{{ workspace.companyNip }}' }}
+                    </div>
+                </td>
+                <td>
+                    {{ '{{ workspace.companyStreet }}' }}<br />
+                    {{ '{{ workspace.companyCity }}' }}
+                    {{ '{{ workspace.companyPostcode }}' }}<br />
+                    {{ '{{ workspace.companyCountry }}' }}
+                </td>
+                <td>{{ '{{ workspace.defaultQuotedCurrency.shortName }}' }}</td>
+            </tr>
+            <tr ng-if="results.length === 0">
+                <td colspan="10">
+                    {{ 'Nothing found'|trans }}
+                </td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+                <td colspan="14" class="text-right">
+                    <button ng-click="changePageSize(100)" class="btn btn-info" ng-class="{'active': listManager.isPageSizeActive(100)}">100</button>
+                    <button ng-click="changePageSize(250)" class="btn btn-info" ng-class="{'active': listManager.isPageSizeActive(250)}">250</button>
+                    <button ng-click="changePageSize(500)" class="btn btn-info" ng-class="{'active': listManager.isPageSizeActive(500)}">500</button>
+                    &#160;/&#160;page
+                </td>
+            </tr>
+            <tr>
+                <td colspan="10">
+                    <button ng-click="changePage(page.page)" ng-repeat="page in pages" class="btn btn-success" ng-class="{'active': listManager.isPageActive(page.page)}">{{ '{{ page.page }}' }}</button>
+                </td>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>

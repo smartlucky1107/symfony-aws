@@ -1,0 +1,164 @@
+{% extends 'admin/admin_base.html.twig' %}
+
+{% block title %}{{ 'Wallet'|trans }}{% endblock %}
+
+{% block body %}
+    {% include 'admin/admin/partial/breadcrumbs.html.twig' with {
+        'title': 'Wallet details',
+        'items': [
+            { 'title': 'Wallets', 'url': path('admin_wallets') }
+        ],
+        'currentTitle': wallet.name ~ ' [ID: ' ~ wallet.id ~ ']'
+    } only %}
+
+    <div class="wrapper wrapper-content animated fadeInRight" id="walletAppHandler" ng-controller="WalletAppController">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="ibox">
+                    <div class="ibox-title">
+                        <h5>{{ 'Details'|trans }}</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="row" ng-non-bindable>
+                            <div class="col-lg-6">
+                                <small>{{ 'Currency'|trans }}</small>
+                                <div>
+                                    <h2 class="product-main-price">{{ wallet.currency.fullName }} <small class="text-muted">{{ wallet.currency.shortName }}</small> </h2>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <small>{{ 'Owner'|trans }}</small>
+                                <div>
+                                    <a href="{{ path('admin_user', { 'userId': wallet.user.id }) }}" class="btn btn-success btn-outline btn-xs">{{ wallet.user.getFullName() }}</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr>
+
+                        <h4>{{ 'Addresses'|trans }}</h4>
+                        <div>
+                            <button ng-click="createNewAddress()" type="button" class="btn btn-xs btn-outline btn-success"><i class="fa fa-plus-circle"></i> New address</button>
+                        </div>
+                        <div ng-non-bindable>
+                            {% if wallet.addresses|length > 0 %}
+                                <table class="table table-hover">
+                                    <tbody>
+                                    {% for address in wallet.addresses %}
+                                        <tr>
+                                            <td>
+                                                {{ address.address }}
+                                            </td>
+                                            <td>
+                                                <div class="row">
+                                                    <div class="col-6">
+
+                                                    </div>
+                                                    <div class="col-6">
+
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            {% else %}
+                                <small>{{ 'No addresses found'|trans }}</small>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                {% include 'admin/admin/app-views/wallet_info_view.html.twig' %}
+
+                <div class="tabs-container">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li><a class="nav-link active show" data-toggle="tab" href="#newDeposit">{{ 'Deposit'|trans }}</a></li>
+                        <li><a class="nav-link" data-toggle="tab" href="#newInternalTransfer">{{ 'Internal transfer'|trans }}</a></li>
+                        <li><a class="nav-link" data-toggle="tab" href="#newReleaseBlocked">{{ 'Release blocked'|trans }}</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div role="tabpanel" id="newDeposit" class="tab-pane active show">
+                            <div class="panel-body">
+                                {% include 'admin/admin/app-views/new_deposit_view.html.twig' %}
+                            </div>
+                        </div>
+                        <div role="tabpanel" id="newInternalTransfer" class="tab-pane">
+                            <div class="panel-body">
+                                {% include 'admin/admin/app-views/new_internal_transfer_view.html.twig' %}
+                            </div>
+                        </div>
+                        <div role="tabpanel" id="newReleaseBlocked" class="tab-pane">
+                            <div class="panel-body">
+                                {% include 'admin/admin/app-views/new_release_blocked_view.html.twig' %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <br />
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="tabs-container">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li><a class="nav-link active show" data-toggle="tab" href="#balanceHistory">{{ 'Wallet balance history'|trans }}</a></li>
+                        <li><a class="nav-link" data-toggle="tab" href="#transferHistory">{{ 'Wallet transfer history'|trans }}</a></li>
+                        <li><a class="nav-link" data-toggle="tab" href="#depositRequests">{{ 'Deposit requests'|trans }}</a></li>
+                        <li><a class="nav-link" data-toggle="tab" href="#pendingOrders">{{ 'Pending orders'|trans }}</a></li>
+                        <li><a class="nav-link" data-toggle="tab" href="#banks">{{ 'Banks'|trans }}</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div role="tabpanel" id="balanceHistory" class="tab-pane active show">
+                            <div class="panel-body">
+                                {% include 'admin/admin/app-views/wallet_balances_view.html.twig' %}
+                            </div>
+                        </div>
+                        <div role="tabpanel" id="transferHistory" class="tab-pane">
+                            <div class="panel-body">
+                                {% include 'admin/admin/app-views/wallet_transfers_view.html.twig' %}
+                            </div>
+                        </div>
+                        <div role="tabpanel" id="depositRequests" class="tab-pane">
+                            <div class="panel-body">
+                                {% include 'admin/admin/app-views/deposit_list_view.html.twig' with { 'listType': 'walletRequests', 'wallet': wallet } only %}
+                            </div>
+                        </div>
+                        <div role="tabpanel" id="pendingOrders" class="tab-pane">
+                            <div class="panel-body">
+                                {% include 'admin/admin/app-views/wallet_pending_orders_view.html.twig' %}
+                            </div>
+                        </div>
+                        <div role="tabpanel" id="banks" class="tab-pane">
+                            <div class="panel-body">
+                                {% include 'admin/admin/app-views/wallet_banks_view.html.twig' %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script>
+        let $walletId = {{ wallet.id }};
+    </script>
+    <script src="/admin/app/listModule.js"></script>
+    <script src="/admin/app/Controller/WalletInfoController.js"></script>
+    <script src="/admin/app/Controller/WalletTransfersController.js"></script>
+    <script src="/admin/app/Controller/WalletBalancesController.js"></script>
+    <script src="/admin/app/Controller/DepositListController.js"></script>
+    <script src="/admin/app/Controller/NewDepositController.js"></script>
+    <script src="/admin/app/Controller/NewInternalTransferController.js"></script>
+    <script src="/admin/app/Controller/NewReleaseBlockedController.js"></script>
+    <script src="/admin/app/Controller/WalletPendingOrdersController.js"></script>
+    <script src="/admin/app/Controller/WalletBanksController.js"></script>
+    <script src="/admin/app/walletApp.js"></script>
+{% endblock %}

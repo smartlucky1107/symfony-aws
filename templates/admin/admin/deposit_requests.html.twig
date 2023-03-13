@@ -1,0 +1,27 @@
+{% extends 'admin/admin_base.html.twig' %}
+
+{% block title %}{{ 'Deposit requests'|trans }}{% endblock %}
+
+{% block body %}
+    {% include 'admin/admin/partial/breadcrumbs.html.twig' with {
+        'title': 'Deposit requests',
+        'items': [
+            { 'title': 'Deposits', 'url': path('admin_deposits') }
+        ],
+        'currentTitle': 'Deposit requests'
+    } only %}
+
+    <div class="wrapper wrapper-content animated fadeInRight" id="depositRequestsAppHandler">
+        <div class="row">
+            <div class="col-lg-12">
+                {% include 'admin/admin/app-views/deposit_list_view.html.twig' with { 'listType': 'requests' } only %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script src="/admin/app/listModule.js"></script>
+    <script src="/admin/app/Controller/DepositListController.js"></script>
+    <script src="/admin/app/depositRequestsApp.js"></script>
+{% endblock %}

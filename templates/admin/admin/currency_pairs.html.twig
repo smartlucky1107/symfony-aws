@@ -1,0 +1,95 @@
+{% extends 'admin/admin_base.html.twig' %}
+
+{% block title %}{{ 'Currency pairs'|trans }}{% endblock %}
+
+{% block body %}
+    {% include 'admin/admin/partial/breadcrumbs.html.twig' with {
+        'title': 'Currency pair list'
+    } only %}
+
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox" id="currencyPairListAppHandler" ng-controller="currencyPairListAppCtrl">
+                    <div class="ibox-title">
+                        <h5>{{ 'List of currencies'|trans }}</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <div>
+                            {# active filters #}
+                        </div>
+
+                        <table class="table table-stripped">
+                            <thead>
+                            <tr>
+                                <th>
+                                    <span ng-click="setSortBy('id')">ID</span>
+                                    <i ng-if="!listManager.isSortByField('id')" class="fa fa-sort"></i>
+                                    <i ng-if="listManager.isSortByField('id')" class="fa" ng-class="{'fa-sort-amount-asc': listManager.isSortBy('id', 1), 'fa-sort-amount-desc': listManager.isSortBy('id', 0)}" ></i>
+                                </th>
+                                <th>{{ 'Base currency'|trans }}</th>
+                                <th>{{ 'Quoted currency'|trans }}</th>
+                                <th>
+                                    <span ng-click="setSortBy('enabled')">{{ 'Enabled'|trans }}</span>
+                                    <i ng-if="!listManager.isSortByField('enabled')" class="fa fa-sort"></i>
+                                    <i ng-if="listManager.isSortByField('enabled')" class="fa" ng-class="{'fa-sort-amount-asc': listManager.isSortBy('enabled', 1), 'fa-sort-amount-desc': listManager.isSortBy('enabled', 0)}" ></i>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="currencyPair in results">
+                                <td>{{ '{{ currencyPair.id }}' }}</td>
+                                <td>
+                                    {{ '{{ currencyPair.baseCurrency.fullName }}' }}
+                                    <small class="text-muted">{{ '{{ currencyPair.baseCurrency.shortName }}' }}</small>
+                                </td>
+                                <td>
+                                    {{ '{{ currencyPair.quotedCurrency.fullName }}' }}
+                                    <small class="text-muted">{{ '{{ currencyPair.quotedCurrency.shortName }}' }}</small>
+                                </td>
+                                <td>
+                                    <i ng-if="currencyPair.enabled" class="fa fa-check text-navy"></i>
+                                    <i ng-if="!currencyPair.enabled" class="fa fa-times text-danger"></i>
+                                    <button ng-if="currencyPair.enabled" ng-click="disableCurrencyPair(currencyPair.id)" type="button" class="btn btn-xs btn-outline btn-danger">{{ 'Disable'|trans }}</button>
+                                    <button ng-if="!currencyPair.enabled" ng-click="enableCurrencyPair(currencyPair.id)" type="button" class="btn btn-xs btn-outline btn-primary">{{ 'Enable'|trans }}</button>
+                                </td>
+                            </tr>
+                            <tr ng-if="results.length === 0">
+                                <td colspan="4">
+                                    {{ 'Nothing found'|trans }}
+                                </td>
+                            </tr>
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <td colspan="14" class="text-right">
+                                    <button ng-click="changePageSize(100)" class="btn btn-info" ng-class="{'active': listManager.isPageSizeActive(100)}">100</button>
+                                    <button ng-click="changePageSize(250)" class="btn btn-info" ng-class="{'active': listManager.isPageSizeActive(250)}">250</button>
+                                    <button ng-click="changePageSize(500)" class="btn btn-info" ng-class="{'active': listManager.isPageSizeActive(500)}">500</button>
+                                    &#160;/&#160;page
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="4">
+                                    <button ng-click="changePage(page.page)" ng-repeat="page in pages" class="btn btn-success" ng-class="{'active': listManager.isPageActive(page.page)}">{{ '{{ page.page }}' }}</button>
+                                </td>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script src="/admin/app/listModule.js"></script>
+    <script src="/admin/app/currencyPairListApp.js"></script>
+{% endblock %}

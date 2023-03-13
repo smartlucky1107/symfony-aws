@@ -1,0 +1,232 @@
+<div ng-controller="WalletBalancesController">
+    <div ng-if="walletId">
+        <table class="table table-stripped">
+            <thead>
+            <tr>
+                <th>{{ 'Created at'|trans }}</th>
+                <th>{{ 'Wallet ID'|trans }}</th>
+                <th>
+                    {{ 'Order'|trans }} |
+                    {{ 'Trade'|trans }} |
+                    {{ 'Deposit'|trans }} |
+                    {{ 'Withdrawal'|trans }}
+                </th>
+                <th>{{ 'Balance before'|trans }}</th>
+                <th>{{ 'Balance after'|trans }}</th>
+                <th class="text-center">{{ 'Details'|trans }}</th>
+            </tr>
+            </thead>
+            <tbody ng-repeat="walletBalance in walletBalances">
+            <tr ng-class="{ 'bg-muted': walletBalance.transfersEnabled }">
+                <td>{{ '{{ walletBalance.createdAt }}' }}</td>
+                <td>
+                    <button ng-if="walletBalance.walletId" class="btn btn-success btn-outline btn-xs" ng-click="routing.openWallet(walletBalance.walletId)">{{ '{{ walletBalance.walletId }}' }}</button>
+                </td>
+                <td>
+                    <button ng-if="walletBalance.orderId" class="btn btn-success btn-outline btn-xs" ng-click="routing.openOrder(walletBalance.orderId)">
+                        {{ 'Order'|trans }} {{ '{{ walletBalance.orderId }}' }}
+                    </button>
+                    <button ng-if="walletBalance.tradeId" class="btn btn-success btn-outline btn-xs" ng-click="routing.openTrade(walletBalance.tradeId)">
+                        {{ 'Trade'|trans }} {{ '{{ walletBalance.tradeId }}' }}
+                    </button>
+                    <button ng-if="walletBalance.depositId" class="btn btn-success btn-outline btn-xs" ng-click="routing.openDeposit(walletBalance.depositId)">
+                        {{ 'Deposit'|trans }} {{ '{{ walletBalance.depositId }}' }}
+                    </button>
+                    <button ng-if="walletBalance.withdrawalId" class="btn btn-success btn-outline btn-xs" ng-click="routing.openWithdrawal(walletBalance.withdrawalId)">
+                        {{ 'Withdrawal'|trans }} {{ '{{ walletBalance.withdrawalId }}' }}
+                    </button>
+                </td>
+                <td>{{ '{{ walletBalance.balanceBefore }}' }}</td>
+                <td>{{ '{{ walletBalance.balanceAfter }}' }}</td>
+                <td class="text-center">
+                    <button ng-if="detailsAllowed(walletBalance)" ng-click="details(walletBalance)" ng-class="{ 'active': walletBalance.transfersEnabled }" class="btn btn-success btn-outline btn-xs"><i class="fa fa-list"></i></button>
+                </td>
+            </tr>
+            <tr ng-if="walletBalance.transfersEnabled">
+                <td colspan="10">
+                    <table class="table table-stripped">
+                        <thead>
+                        <tr>
+                            <th width="1">
+                                {{ 'Created at'|trans }}<br />
+                                {{ 'Processed'|trans }}/{{ 'Success'|trans }}
+                            </th>
+                            <th>{{ 'Trade ID'|trans }}</th>
+                            <th>
+                                {{ 'Transfers'|trans }}<br />
+                                <small>Wallet ID / Action / Amount</small>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="walletTransferBatch in walletBalance.transfers">
+                            <td>
+                                {{ '{{ walletTransferBatch.createdAt }}' }}<br />
+                                <div>
+                                    <i ng-if="walletTransferBatch.processed" class="fa fa-check text-navy"></i>
+                                    <i ng-if="!walletTransferBatch.processed" class="fa fa-times text-danger"></i>
+                                    <i ng-if="walletTransferBatch.success" class="fa fa-check text-navy"></i>
+                                    <i ng-if="!walletTransferBatch.success" class="fa fa-times text-danger"></i>
+                                </div>
+                            </td>
+                            <td>
+                                <button ng-if="walletTransferBatch.tradeId" class="btn btn-success btn-outline btn-xs btn-block mb-2" ng-click="routing.openTrade(walletTransferBatch.tradeId)">{{ '{{ walletTransferBatch.tradeId }}' }}</button>
+                                <div>
+                                    <strong>amount</strong> {{ '{{ walletTransferBatch.trade.amount }}' }}<br />
+                                    <strong>fee offer</strong> {{ '{{ walletTransferBatch.trade.feeOffer }}' }}<br />
+                                    <strong>fee bid</strong> {{ '{{ walletTransferBatch.trade.feeBid }}' }}<br />
+                                    <strong>price</strong> {{ '{{ walletTransferBatch.trade.price }}' }}
+                                </div>
+                            </td>
+                            <td>
+                                <div ng-if="walletTransferBatch.trade && walletTransferBatch.feeWalletOffer && walletTransferBatch.feeWalletBid" class="row text-center">
+                                    <div class="col-4 mb-2">
+                                        <small ng-click="routing.openUser(walletTransferBatch.trade.orderSell.baseCurrencyWallet.user.id)">{{ '{{ walletTransferBatch.trade.orderSell.baseCurrencyWallet.user.id }}' }} {{ '{{ walletTransferBatch.trade.orderSell.baseCurrencyWallet.user.fullName }}' }}</small>
+                                        <button ng-if="walletTransferBatch.trade.orderSell.baseCurrencyWallet.id" class="btn btn-success btn-outline btn-xs btn-block mb-2" ng-click="routing.openWallet(walletTransferBatch.trade.orderSell.baseCurrencyWallet.id)">{{ '{{ walletTransferBatch.trade.orderSell.baseCurrencyWallet.currency.shortName }}' }} [{{ '{{ walletTransferBatch.trade.orderSell.baseCurrencyWallet.id }}' }}]</button>
+
+                                        <div ng-repeat="walletTransferItem in walletTransferBatch.walletTransfersProcessed" ng-if="walletTransferItem.walletId == walletTransferBatch.trade.orderSell.baseCurrencyWallet.id">
+                                            <i class="fa fa-minus-square-o text-danger" ng-if="walletTransferItem.type == 'defund'"></i>
+                                            <i class="fa fa-minus-square-o text-danger" ng-if="walletTransferItem.type == 'defund_fee'"></i>
+                                            <i class="fa fa-plus-square-o text-navy" ng-if="walletTransferItem.type == 'fund'"></i>
+                                            <i class="fa fa-plus-square-o text-navy" ng-if="walletTransferItem.type == 'fund_fee'"></i>
+                                            <i class="fa fa-square-o text-muted" ng-if="walletTransferItem.type == 'release'"></i>
+                                            <i class="fa fa-square text-muted" ng-if="walletTransferItem.type == 'block'"></i>
+
+                                            <span ng-if="walletTransferItem.type != 'defund_fee'">{{ '{{ walletTransferItem.amount }}' }}</span>
+                                            <small ng-if="walletTransferItem.type == 'defund_fee'">{{ '{{ walletTransferItem.amount }}' }}</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-4 mb-2">
+                                        <small ng-click="routing.openUser(walletTransferBatch.trade.orderBuy.baseCurrencyWallet.user.id)">{{ '{{ walletTransferBatch.trade.orderBuy.baseCurrencyWallet.user.id }}' }} {{ '{{ walletTransferBatch.trade.orderBuy.baseCurrencyWallet.user.fullName }}' }}</small>
+                                        <button ng-if="walletTransferBatch.trade.orderBuy.baseCurrencyWallet.id" class="btn btn-success btn-outline btn-xs btn-block mb-2" ng-click="routing.openWallet(walletTransferBatch.trade.orderBuy.baseCurrencyWallet.id)">{{ '{{ walletTransferBatch.trade.orderBuy.baseCurrencyWallet.currency.shortName }}' }} [{{ '{{ walletTransferBatch.trade.orderBuy.baseCurrencyWallet.id }}' }}]</button>
+
+                                        <div ng-repeat="walletTransferItem in walletTransferBatch.walletTransfersProcessed" ng-if="walletTransferItem.walletId == walletTransferBatch.trade.orderBuy.baseCurrencyWallet.id">
+                                            <i class="fa fa-minus-square-o text-danger" ng-if="walletTransferItem.type == 'defund'"></i>
+                                            <i class="fa fa-minus-square-o text-danger" ng-if="walletTransferItem.type == 'defund_fee'"></i>
+                                            <i class="fa fa-plus-square-o text-navy" ng-if="walletTransferItem.type == 'fund'"></i>
+                                            <i class="fa fa-plus-square-o text-navy" ng-if="walletTransferItem.type == 'fund_fee'"></i>
+                                            <i class="fa fa-square-o text-muted" ng-if="walletTransferItem.type == 'release'"></i>
+                                            <i class="fa fa-square text-muted" ng-if="walletTransferItem.type == 'block'"></i>
+
+                                            <span ng-if="walletTransferItem.type != 'defund_fee'">{{ '{{ walletTransferItem.amount }}' }}</span>
+                                            <small ng-if="walletTransferItem.type == 'defund_fee'">{{ '{{ walletTransferItem.amount }}' }}</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-4 mb-2">
+                                        <small ng-click="routing.openUser(walletTransferBatch.feeWalletBid.user.id)">{{ '{{ walletTransferBatch.feeWalletBid.user.id }}' }} {{ '{{ walletTransferBatch.feeWalletBid.user.fullName }}' }}</small>
+                                        <button ng-if="walletTransferBatch.feeWalletBid.id" class="btn btn-success btn-outline btn-xs btn-block mb-2" ng-click="routing.openWallet(walletTransferBatch.feeWalletBid.id)">{{ '{{ walletTransferBatch.feeWalletBid.currency.shortName }}' }} [{{ '{{ walletTransferBatch.feeWalletBid.id }}' }}]</button>
+
+                                        <div ng-repeat="walletTransferItem in walletTransferBatch.walletTransfersProcessed" ng-if="walletTransferItem.walletId == walletTransferBatch.feeWalletBid.id">
+                                            <i class="fa fa-minus-square-o text-danger" ng-if="walletTransferItem.type == 'defund'"></i>
+                                            <i class="fa fa-minus-square-o text-danger" ng-if="walletTransferItem.type == 'defund_fee'"></i>
+                                            <i class="fa fa-plus-square-o text-navy" ng-if="walletTransferItem.type == 'fund'"></i>
+                                            <i class="fa fa-plus-square-o text-navy" ng-if="walletTransferItem.type == 'fund_fee'"></i>
+                                            <i class="fa fa-square-o text-muted" ng-if="walletTransferItem.type == 'release'"></i>
+                                            <i class="fa fa-square text-muted" ng-if="walletTransferItem.type == 'block'"></i>
+
+                                            <span ng-if="walletTransferItem.type != 'defund_fee'">{{ '{{ walletTransferItem.amount }}' }}</span>
+                                            <small ng-if="walletTransferItem.type == 'defund_fee'">{{ '{{ walletTransferItem.amount }}' }}</small>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-4 mb-2">
+                                        <small ng-click="routing.openUser(walletTransferBatch.trade.orderSell.quotedCurrencyWallet.user.id)">{{ '{{ walletTransferBatch.trade.orderSell.quotedCurrencyWallet.user.id }}' }} {{ '{{ walletTransferBatch.trade.orderSell.quotedCurrencyWallet.user.fullName }}' }}</small>
+                                        <button ng-if="walletTransferBatch.trade.orderSell.quotedCurrencyWallet.id" class="btn btn-success btn-outline btn-xs btn-block mb-2" ng-click="routing.openWallet(walletTransferBatch.trade.orderSell.quotedCurrencyWallet.id)">{{ '{{ walletTransferBatch.trade.orderSell.quotedCurrencyWallet.currency.shortName }}' }} [{{ '{{ walletTransferBatch.trade.orderSell.quotedCurrencyWallet.id }}' }}]</button>
+
+                                        <div ng-repeat="walletTransferItem in walletTransferBatch.walletTransfersProcessed" ng-if="walletTransferItem.walletId == walletTransferBatch.trade.orderSell.quotedCurrencyWallet.id">
+                                            <i class="fa fa-minus-square-o text-danger" ng-if="walletTransferItem.type == 'defund'"></i>
+                                            <i class="fa fa-minus-square-o text-danger" ng-if="walletTransferItem.type == 'defund_fee'"></i>
+                                            <i class="fa fa-plus-square-o text-navy" ng-if="walletTransferItem.type == 'fund'"></i>
+                                            <i class="fa fa-plus-square-o text-navy" ng-if="walletTransferItem.type == 'fund_fee'"></i>
+                                            <i class="fa fa-square-o text-muted" ng-if="walletTransferItem.type == 'release'"></i>
+                                            <i class="fa fa-square text-muted" ng-if="walletTransferItem.type == 'block'"></i>
+
+                                            <span ng-if="walletTransferItem.type != 'defund_fee'">{{ '{{ walletTransferItem.amount }}' }}</span>
+                                            <small ng-if="walletTransferItem.type == 'defund_fee'">{{ '{{ walletTransferItem.amount }}' }}</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-4 mb-2">
+                                        <small ng-click="routing.openUser(walletTransferBatch.trade.orderBuy.quotedCurrencyWallet.user.id)">{{ '{{ walletTransferBatch.trade.orderBuy.quotedCurrencyWallet.user.id }}' }} {{ '{{ walletTransferBatch.trade.orderBuy.quotedCurrencyWallet.user.fullName }}' }}</small>
+                                        <button ng-if="walletTransferBatch.trade.orderBuy.quotedCurrencyWallet.id" class="btn btn-success btn-outline btn-xs btn-block mb-2" ng-click="routing.openWallet(walletTransferBatch.trade.orderBuy.quotedCurrencyWallet.id)">{{ '{{ walletTransferBatch.trade.orderBuy.quotedCurrencyWallet.currency.shortName }}' }} [{{ '{{ walletTransferBatch.trade.orderBuy.quotedCurrencyWallet.id }}' }}]</button>
+
+                                        <div ng-repeat="walletTransferItem in walletTransferBatch.walletTransfersProcessed" ng-if="walletTransferItem.walletId == walletTransferBatch.trade.orderBuy.quotedCurrencyWallet.id">
+                                            <i class="fa fa-minus-square-o text-danger" ng-if="walletTransferItem.type == 'defund'"></i>
+                                            <i class="fa fa-minus-square-o text-danger" ng-if="walletTransferItem.type == 'defund_fee'"></i>
+                                            <i class="fa fa-plus-square-o text-navy" ng-if="walletTransferItem.type == 'fund'"></i>
+                                            <i class="fa fa-plus-square-o text-navy" ng-if="walletTransferItem.type == 'fund_fee'"></i>
+                                            <i class="fa fa-square-o text-muted" ng-if="walletTransferItem.type == 'release'"></i>
+                                            <i class="fa fa-square text-muted" ng-if="walletTransferItem.type == 'block'"></i>
+
+                                            <span ng-if="walletTransferItem.type != 'defund_fee'">{{ '{{ walletTransferItem.amount }}' }}</span>
+                                            <small ng-if="walletTransferItem.type == 'defund_fee'">{{ '{{ walletTransferItem.amount }}' }}</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-4 mb-2">
+                                        <small ng-click="routing.openUser(walletTransferBatch.feeWalletOffer.user.id)">{{ '{{ walletTransferBatch.feeWalletOffer.user.id }}' }} {{ '{{ walletTransferBatch.feeWalletOffer.user.fullName }}' }}</small>
+                                        <button ng-if="walletTransferBatch.feeWalletOffer.id" class="btn btn-success btn-outline btn-xs btn-block mb-2" ng-click="routing.openWallet(walletTransferBatch.feeWalletOffer.id)">{{ '{{ walletTransferBatch.feeWalletOffer.currency.shortName }}' }} [{{ '{{ walletTransferBatch.feeWalletOffer.id }}' }}]</button>
+
+                                        <div ng-repeat="walletTransferItem in walletTransferBatch.walletTransfersProcessed" ng-if="walletTransferItem.walletId == walletTransferBatch.feeWalletOffer.id">
+                                            <i class="fa fa-minus-square-o text-danger" ng-if="walletTransferItem.type == 'defund'"></i>
+                                            <i class="fa fa-minus-square-o text-danger" ng-if="walletTransferItem.type == 'defund_fee'"></i>
+                                            <i class="fa fa-plus-square-o text-navy" ng-if="walletTransferItem.type == 'fund'"></i>
+                                            <i class="fa fa-plus-square-o text-navy" ng-if="walletTransferItem.type == 'fund_fee'"></i>
+                                            <i class="fa fa-square-o text-muted" ng-if="walletTransferItem.type == 'release'"></i>
+                                            <i class="fa fa-square text-muted" ng-if="walletTransferItem.type == 'block'"></i>
+
+                                            <span ng-if="walletTransferItem.type != 'defund_fee'">{{ '{{ walletTransferItem.amount }}' }}</span>
+                                            <small ng-if="walletTransferItem.type == 'defund_fee'">{{ '{{ walletTransferItem.amount }}' }}</small>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <hr />
+
+                                <div class="row text-center">
+                                    <div class="col-6">
+                                        <div>
+                                            <strong>{{ 'Wallet transfers'|trans }}</strong><br />
+                                            <small>Wallet ID / Action / Amount</small>
+                                        </div>
+                                        <div ng-repeat="walletTransferItem in walletTransferBatch.walletTransfers">
+                                            <small>
+                                                {{ '{{ walletTransferItem.walletId }}' }}
+                                                {{ '{{ walletTransferItem.type }}' }}
+                                                {{ '{{ walletTransferItem.amount }}' }}
+                                            </small>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div>
+                                            <strong>{{ 'Wallet transfers processed'|trans }}</strong><br />
+                                            <small>Wallet ID / Action / Amount</small>
+                                        </div>
+
+                                        <div ng-repeat="walletTransferItem in walletTransferBatch.walletTransfersProcessed">
+                                            <small>
+                                                {{ '{{ walletTransferItem.walletId }}' }}
+                                                {{ '{{ walletTransferItem.type }}' }}
+                                                {{ '{{ walletTransferItem.amount }}' }}
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            </tbody>
+            <tbody>
+            <tr ng-if="walletBalances.length === 0">
+                <td colspan="10">
+                    {{ 'No wallet balances found'|trans }}
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div ng-if="!walletId" class="text-center text-muted">
+        {{ 'Wallet balance history not allowed. No wallet selected.'|trans }}
+    </div>
+</div>

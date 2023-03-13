@@ -1,0 +1,143 @@
+{% extends 'admin/admin_base.html.twig' %}
+
+{% block title %}{{ 'Order'|trans }}{% endblock %}
+
+{% block body %}
+    {% include 'admin/admin/partial/breadcrumbs.html.twig' with {
+        'title': 'Order details',
+        'items': [
+            { 'title': 'Orders', 'url': path('admin_orders') }
+        ],
+        'currentTitle': ' [ID: ' ~ order.id ~ ']'
+    } only %}
+
+    <div class="wrapper wrapper-content animated fadeInRight" id="orderAppHandler" ng-controller="OrderAppController">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="ibox" ng-non-bindable>
+                    <div class="ibox-title">
+                        <h5>{{ 'Details'|trans }}</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <small>{{ 'Type'|trans }}</small>
+                                <div>
+                                    {% if order.isOffer() %}
+                                        <span class="label label-danger">{{ order.getTypeName() }} <i class="fa fa-level-down"></i></span>
+                                    {% endif %}
+
+                                    {% if order.isBid() %}
+                                        <span class="label label-primary">{{ order.getTypeName() }} <i class="fa fa-level-up"></i></span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <small>{{ 'Status'|trans }}</small>
+                                <div>
+                                    {{ order.getStatusName() }}
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <small>{{ 'Owner'|trans }}</small>
+                                <div>
+                                    <a href="{{ path('admin_user', { 'userId': order.user.id }) }}" class="btn btn-success btn-outline btn-xs">{{ order.user.getFullName() }}</a>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <small>{{ 'Created at'|trans }}</small>
+                                <div>
+                                    {{ order.createdAt|date }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr />
+
+                        <small>{{ 'Currency pair'|trans }}</small>
+                        <div>
+                            <h2 class="product-main-price">{{ order.currencyPair.baseCurrency.fullName }}/{{ order.currencyPair.quotedCurrency.fullName }} <small class="text-muted">{{ order.currencyPair.pairShortName }}</small> </h2>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ibox" ng-non-bindable>
+                    <div class="ibox-title">
+                        <h5>{{ 'Wallets involved'|trans }}</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="row">
+                            <div class="col-lg-6 text-center">
+                                <a href="{{ path('admin_wallet', { 'walletId': order.baseCurrencyWallet.id }) }}" class="btn btn-success btn-outline btn-xs">{{ order.currencyPair.baseCurrency.shortName }} {{ 'wallet'|trans }} [{{ order.baseCurrencyWallet.id }}]</a>
+                            </div>
+                            <div class="col-lg-6 text-center">
+                                <a href="{{ path('admin_wallet', { 'walletId': order.quotedCurrencyWallet.id }) }}" class="btn btn-success btn-outline btn-xs">{{ order.currencyPair.quotedCurrency.shortName }} {{ 'wallet'|trans }} [{{ order.quotedCurrencyWallet.id }}]</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="ibox" ng-non-bindable>
+                    <div class="ibox-title">
+                        {% if order.isFilled %}
+                            <span class="label label-primary float-right">{{ 'Order filled'|trans }}</span>
+                        {% endif %}
+                        <h5>{{ 'Price and volume'|trans }}</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="row">
+                            <div class="col-4">
+                                <small class="stats-label">{{ 'Limit price'|trans }}</small>
+                                <h4>{{ order.limitPrice }} <small class="text-muted">{{ order.currencyPair.quotedCurrency.shortName }}</small></h4>
+                            </div>
+                            <div class="col-4">
+                                <small class="stats-label">{{ 'Volume'|trans }}</small>
+                                <h4>{{ order.amount }} <small class="text-muted">{{ order.currencyPair.baseCurrency.shortName }}</small></h4>
+                            </div>
+                            <div class="col-4">
+                                <small class="stats-label">{{ 'Filled volume'|trans }}</small>
+                                <h4>{{ order.amountFilled }} <small class="text-muted">{{ order.progress() }}%</small></h4>
+                                <div class="progress progress-mini">
+                                    <div style="width: {{ order.progress() }}%;" class="progress-bar"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ibox">
+                    <div class="ibox-title">
+                        <h5>{{ 'Actions'|trans }}</h5>
+                    </div>
+                    <div class="ibox-content">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox" ng-non-bindable>
+                    <div class="ibox-title">
+                        <h5>{{ 'Order transfer history'|trans }}</h5>
+                    </div>
+                    <div class="ibox-content">
+                        {% if transfers is defined and transfers|length > 0 %}
+                            {% include 'admin/admin/partial/transfers.html.twig' with { 'transfers': transfers } only %}
+                        {% else %}
+                            <small>{{ 'No transfers found for the order'|trans }}</small>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script>
+        let $orderId = {{ order.id }};
+    </script>
+    <script src="/admin/app/orderApp.js"></script>
+{% endblock %}

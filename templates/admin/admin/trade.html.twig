@@ -1,0 +1,24 @@
+{% extends 'admin/admin_base.html.twig' %}
+
+{% block title %}{{ 'Trade'|trans }}{% endblock %}
+
+{% block body %}
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox" ng-non-bindable>
+                    <div class="ibox-title">
+                        <h5>{{ 'Trade transfer history'|trans }}</h5>
+                    </div>
+                    <div class="ibox-content">
+                        {% if transfers is defined and transfers|length > 0 %}
+                            {% include 'admin/admin/partial/transfers.html.twig' with { 'transfers': transfers } only %}
+                        {% else %}
+                            <small>{{ 'No transfers found for the trade'|trans }}</small>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

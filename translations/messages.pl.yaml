@@ -1,0 +1,364 @@
+email:
+  title:
+    user:
+      registered: 'Proces rejestracji swapcoin.today właśnie się rozpoczął!'
+      email_confirmed: 'Twój adres e-mail został potwierdzony!'
+      bank_account_approved: 'Twoje konto bankowe zostało zatwierdzone!'
+      password_request: 'Poprosiłeś o zresetowanie hasła'
+      tier2:
+        approved: 'Przeszedłeś drugi etap weryfikacji!'
+        declined: 'Twoja weryfikacja została odrzucona.'
+      tier3:
+        approved: 'Gratulacje! Możesz w pełni korzystać z platformy swapcoin.today! '
+        declined: 'Twoja weryfikacja została odrzucona.'
+    withdrawal:
+      created: 'Utworzono nowe zlecenie wypłaty'
+      approved: 'Twoje zlecenie wypłaty zostało zatwierdzone.'
+      declined: 'Twoje zlecenie wypłaty zostało odrzucone.'
+      rejected: 'Twoje zlecenie wypłaty zostało odrzucone.'
+    internal_transfer:
+      created: 'Zlecono transfer wewnętrzny z Twojego konta na platformie swapcoin.today.'
+      approved: 'Twoje zlecenie transferu zostało zatwierdzone.'
+      declined: 'Twoje zlecenie transferu zostało odrzucone.'
+      rejected: 'Twoje zlecenie transferu zostało odrzucone.'
+
+notification:
+  type:
+    order:
+      created: 'Twoje zamówienie %id% zostało utworzone'
+      updated: 'Twoje zamówienie %id% zostało zaktualizowane'
+      filled: 'Twoje zamówienie %id% zostało wypełnione'
+      partly_filled: 'Twoje zamówienie %id% zostało wypełnione tylko częściowo!'
+      rejected: 'Twoje zamówienie %id% zostało odrzucone'
+    user:
+      registered: 'Proces rejestracji swapcoin.today właśnie się rozpoczął!'
+      email_confirmed: 'Twój adres e-mail został potwierdzony!'
+      bank_account_approved: ''
+      password_request: ''
+      tier2:
+        approved: 'Etap 2 został zatwierdzony'
+        declined: 'Twoja weryfikacja została odrzucona.'
+      tier3:
+        approved: 'Etap 3 został zatwierdzony'
+        declined: 'Twoja weryfikacja została odrzucona.'
+    withdrawal:
+      created: 'Utworzono nowe zlecenie wypłaty.'
+      approved: 'Twoje zlecenie wypłaty zostało zatwierdzone.'
+      declined: 'Twoje zlecenie wypłaty zostało odrzucone.'
+      rejected: 'Twoje zlecenie wypłaty zostało odrzucone.'
+    deposit:
+      accepted: ''
+
+error:
+  required:
+    amount: 'Ilość jest wymagana'
+    address: 'Adres jest wymagany'
+  invalid:
+    amount: 'Podana ilość jest nieprawidłowa'
+    address: 'Podany adres jest nieprawidłowy'
+  address:
+    not_found: 'Adres nie został znaleziony'
+    cannot_create: 'Nie można utworzyć adresu. Spróbuj ponownie.'
+    currency_not_supported: 'Ta waluta nie jest obsługiwana. Nie można utworzyć adresu.'
+    type_not_allowed: 'Ten typ adresu nie jest dozwolony'
+  email:
+    notification_type_not_supported: 'Ten typ powiadomienia nie jest obsługiwany'
+  notification:
+    not_found: 'Nie znaleziono powiadomienia'
+    related_object_not_allowed: 'Powiązany obiekt powiadomienia jest niedozwolony'
+  order:
+    not_found: 'Nie znaleziono zamówienia'
+    status_not_allowed_to_cancel: 'Status zamówienia nie zezwala na anulowanie'
+    filled_already: 'Zamówienia nie można anulować, jest już wypełnione'
+    hegde_not_allowed: 'Hedging na rynku jest niedozwolony.'
+  trade:
+    orders_not_valid: 'Zamówienia nie są poprawne'
+    bid_offer_required: 'Wymagane jest zlecenie oferty zakupu i sprzedaży'
+  trading:
+    order_not_found: 'Nie znaleziono zamówienia'
+    order_cannot_be_filled: 'Nie można wypełnić zamówienia'
+  user:
+    not_found: 'Nie znaleziono użytkownika'
+    already_confirmed: 'Użytkownik został już potwierdzony'
+    email_doesnt_match: 'E-mail nie pasuje'
+    address_already_approved: 'Adres został już zatwierdzony'
+    market_order_not_allowed: 'Zamówienie na rynku jest niedozwolone, proszę poczekać i spróbować ponownie'
+    limit_order_not_allowed: 'Limit zamówienia niedozwolony, proszę czekać i spróbować ponownie'
+  wallet:
+    not_found: 'Nie znaleziono portfela'
+    not_loaded: 'Portfel nie został załadowany'
+    insufficient_funds: 'Niewystarczające fundusze'
+    withdrawal_not_allowed: 'Wypłata nie jest dozwolona'
+  withdrawal:
+    not_found: 'Nie znaleziono wypłaty'
+    status_does_not_allow: 'Status wypłaty nie pozwala na przetworzenie akcji'
+    address_cannot_be_empty: 'Adres nie może być pusty'
+    invalid_amount: 'Ilość musi wynosić więcej niż 0'
+    invalid_confirmation_code: 'Nieprawidłowy kod potwierdzający'
+    expired_confirmation_code: 'Kod potwierdzający wygasł'
+  internal_transfer:
+    not_found: 'Nie znaleziono transferu'
+    status_does_not_allow: 'Status transferu nie pozwala na przetworzenie akcji'
+    invalid_confirmation_code: 'Nieprawidłowy kod potwierdzający'
+    expired_confirmation_code: 'Kod potwierdzający wygasł'
+
+'Hedge positions not allowed': 'Pozycje przeciwstawne nie są dozwolone'
+#'Amount is invalid': 'Nieprawidłowa ilość'
+'Limit price is invalid': 'Nieprawidłowa cena'
+'Currency pair ID cannot be empty': 'ID waluty nie może być puste'
+'Trading for the pair is not allowed': 'Handel dla tej pary jest niedozwolony'
+'User wallets not found': 'Nie znaleziono portfeli użytkownika'
+'Base currency wallet and quoted currency wallet is required': 'Nieprawidłowe waluty portfeli'
+'Invalid Google Authentication code': 'Nieprawidłowy kod Google Authentication'
+'Invalid reCaptcha': 'Błąd reCaptcha'
+#'User is not allowed for trading': 'Handel dla użytkownika jest zablokowany'
+#'Error occurred': 'Wystąpił błąd, spróbuj ponownie.'
+'Invalid locale': 'Błędny język'
+
+Deposits: Depozyty
+Trades: Transakcje
+'List of trades': 'Lista transakcji'
+Name: Nazwa
+'Created at': 'Utworzono'
+Amount: Ilość
+Price: Cena
+'Fee offer': 'Opłata za sprzedaż'
+'Fee bid': 'Opłata za kupno'
+Signature: Podpis
+'Offer & Bid orders': 'Zamówienie kupna i sprzedaży'
+'Nothing found': 'Nic nie znaleziono'
+Order: Zamówienie
+Details: Szczegóły
+Type: Typ
+Status: Status
+Owner: Właściciel
+'Currency pair': 'Para walut'
+'Wallets involved': 'Aktywne portfele'
+wallet: portfel
+'Order filled': 'Zamówienie wypełnione'
+'Price and volume': 'Cena i ilość'
+'Limit price': 'Limit ceny'
+Volume: Ilość
+'Filled volume': 'Ilość wypełniona'
+'Offer fee rate': 'Stawka opłaty za ofertę'
+'Offer fee': 'Opłata za ofertę'
+'Order transfer history': 'Historia przelewów zamówienia'
+'No transfers found for the order': 'Nie znaleziono przelewów dla zamówienia'
+'New deposit': 'Nowy depozyt'
+Wallet: Portfel
+Currency: Waluta
+Addresses: Adresy
+'No addresses found': 'Nie znaleziono adresów'
+Deposit: Depozyt
+'Internal transfer': 'Przelew wewnętrzny'
+'Wallet transfer history': 'Historia przelewów w portfelu'
+'Deposit requests': 'Prośba o złożenie depozytu'
+Trade: Transakcja
+Offer: Sprzedaż
+Bid: Kupno
+Orders: Zamówienia
+'List of orders': 'Lista zamówień'
+'Amount filled': 'Wypełniona kwota'
+'Is filled': 'Jest wypełniony'
+'Not found': 'Nie znaleziono'
+'Content not found.': 'Nie znaleziono treści.'
+'Trade transfer history': 'Historia przelewów transakcji'
+'No transfers found for the trade': 'Nie znaleziono przelewów dla tej transakcji'
+Currencies: Waluty
+'New currency': 'Nowa waluta'
+'Full name': 'Pełna nazwa'
+'Short name': 'Nazwa skrócona'
+'Smart contract address': 'Adres inteligentnej umowy'
+'Save currency': 'Zapisz walutę'
+required: wymagane
+'New currency pair': 'Nowa para walut'
+'Base currency ID': 'ID podstawowej waluty'
+'Quoted currency ID': 'ID waluty kwotowanej'
+'Save pair': 'Zapisz parę'
+'List of currencies': 'Lista walut'
+Enabled: Włączony
+Disable: Wyłączyć
+Enable: Włączyć
+'Wallet ID': 'ID portfela'
+Transfer: Przelew
+'Internal transfer not allowed. No wallet selected.': 'Przelew wewnętrzny niedozwolony. Nie wybrano portfela.'
+'Added by': 'Dodane przez'
+Approved: Zatwierdzony
+'Approved at': 'Zatwierdzony w'
+'Approved by': 'Zatwierdzony przez'
+'Bank transaction': 'Transakcja bankowa'
+'not approved yet': 'jeszcze nie zatwierdzony'
+'Find wallet for deposit': 'Wybierz portfel do przelewu'
+'Find wallet': 'Wybierz portfel'
+'Deposit selected wallet': 'Przelej wybrany portfel'
+'Select for deposit': 'Wybierz do przelewu'
+Address: Adres
+Phone: Telefon
+Balance: Saldo
+'Pending balance': 'Saldo w toku'
+'My recent deposits': 'Moje ostatnie przelewy'
+'List of wallets': 'Lista portfeli'
+'Name and details': 'Nazwa i szczegóły'
+'Amount pending': 'Kwota w toku'
+'Amount free': 'Dostępna kwota'
+User: Użytkownik
+'Wallet balance': 'Saldo portfela'
+'Wallet balance not allowed. No wallet selected.': ' Saldo portfela jest niedostępne. Nie wybrano portfela.'
+'Find deposit by bank transaction': 'Wyszukaj przelew poprzez transakcje bankowe'
+'Bank transaction ID': 'ID transakcji bankowej'
+'Find deposit': 'Znajdź przelew'
+'List of deposits': 'Lista przelewów'
+'No transfers found': 'Nie znaleziono przelewów'
+'Wallet transfer history not allowed. No wallet selected.': 'Historia przelewów w portfelu jest niedostępna. Nie wybrano portfela.'
+'Transaction date': 'Data transakcji'
+'Transaction ID': 'ID transakcji'
+'Deposit request for wallet': 'Żądanie przelewu na portfel'
+'Deposit not allowed. No wallet selected.': 'Przelew nie jest możliwy. Nie wybrano portfela.'
+by: przez
+'Wallet details': 'Szczegóły portfela'
+'Approval information': 'Informacje o zatwierdzeniu'
+'Approval status': 'Status zatwierdzenia'
+approved: zatwierdzono
+'in progress': 'w toku'
+Approve: Zatwierdź
+'Approval date': 'Data zatwierdzenia'
+Wallets: Portfele
+Withdrawal: Wypłata
+'Transfer tree': 'Wykres przelewów'
+'Transfer tree for the trade': 'Wykres przelewów dla tej transakcji'
+'Find for': 'Znajdź dla'
+'Trade ID': 'ID transakcji'
+Withdrawals: Wypłaty
+'List of withdrawals': 'Lista wypłat'
+Street: Ulica
+Building: Budynek
+Apartment: Apartament
+City: Miasto
+State: Stan
+'Postal code': 'Kod pocztowy'
+Country: Kraj
+Verification: Weryfikacja
+'Bank account': 'Konto bankowe'
+'Trading volume': 'Wolumen obrotu'
+Bids: Kupna
+Offers: Sprzedaże
+'Currently opened orders': 'Aktualnie otwarte zamówienia'
+Users: Użytkownicy
+'List of users': 'Lista użytkowników'
+'First name': 'Imię'
+'Last name': 'Nazwisko'
+Email: E-mail
+E-mail: E-mail
+'Trading volume Bid/Offer': 'Wolumen obrotu  kupna/sprzedaży'
+'Address approved': 'Adres zatwierdzony'
+'Bank account approved': 'Konto bankowe zatwierdzone'
+'Currency pairs': 'Pary walut'
+'Base currency': 'Podstawowa waluta'
+'Quoted currency': 'Waluta kwotowana'
+Profile: Profil
+Logout: Wyloguj
+Configuration: Konfiguracja
+
+Cannot find related order: Nie znaleziono powiązanego zlecenia
+Selected liquidity manager not allowed: Wybrany menadżer płynności nie jest dozwolony
+Address not found: Adres nie został znaleziony
+Wallet not found: Portfel nie został znaleziony
+Referral link not found: Link polecający nie został znaleziony
+Invalid date passed: Wpisano nieprawidłową datę
+Card not found: Karta płatnicza nie została znaleziona
+Verification cannot be created: Nie można przeprowadzić weryfikacji
+Verification not found: Nie znaleziono weryfikacji
+User is not allowed for trading: Użytkownik nie jest uprawniony do handlu
+Type is required: Typ jest wymagany
+Currency not found: Nie znaleziono waluty
+Price cannot be calculated: Cena nie może zostać obliczona
+Cannot calculate market order: Nie można obliczyć ceny zlecenia
+Error occurred: Wystąpił błąd
+User is not allowed to process the action: Użytkownik nie jest uprawniony do wykonania akcji
+Order not found: Zlecenie nie zostało znalezione
+Workspace not exists: Obszar roboczy nie istnieje
+Workspace is not enabled: Przestrzeń pracownicza nie jest włączona
+Workspace is already enabled: Przestrzeń pracownicza jest aktualnie włączona
+User is not allowed for workspaces: Użytkownik nie jest uprawniony do korzystania z przestrzeni pracowniczej
+Employee not found: Nie znaleziono pracownika
+Liquidity type not allowed: Niedozwolony rodzaj płynności
+Cannot save transaction: Nie można zapisać transakcji
+Workspace not found: Nie znaleziono obszaru roboczego
+User is not allowed to request the withdrawal: Użytkownik nie ma uprawnień do dokonania wypłaty
+
+Internal transfer not allowed for selected currency: Przelew wewnętrzny nie jest dozwolony dla wybranej waluty
+Invalid transfer email or ID: Nieprawidłowy adres e-mail lub identyfikator do przelewu
+Invalid transfer email: Nieprawidłowy adres e-mail do przelewu
+Bank account not found: Nie znaleziono konta bankowego
+Amount is required: Kwota jest wymagana
+Amount is invalid: Kwota jest nieprawidłowa
+Currency pair is required: Para walutowa jest wymagana
+Currency pair not found: Nie znaleziono pary walutowej
+Lot size is not valid: Rozmiar zlecenia jest nieprawidłowy
+Limit price is not valid: Zakres cen jest nieprawidłowy
+#Base currency wallet and quoted currency wallet is required:  Wymagany jest portfel waluty bazowej i portfel waluty kwotowanej
+User verification status does not allowed to change data: Status weryfikacji użytkownika nie zezwala na zmianę danych
+First name is required: Wymagane jest imię
+Last name is required: Wymagane jest nazwisko
+Company name is required: Wymagana jest nazwa firmy
+NIP is required: Wymagany jest NIP
+Business type is required: Wymagany jest rodzaj działalności gospodarczej
+User type is required: Wymagany jest typ użytkownika
+TX hash not found: Nie znaleziono hashu transakcji
+Addresses not found: Nie znaleziono adresów
+Currency is required: Wymagana jest waluta
+Payment processor is required: Wymagany jest procesor płatności
+Payment amount is not valid for selected payment processor: Kwota jest nieprawidłowa dla wybranego procesora płatności
+Payment card is required: Wymagana jest karta płatnicza
+Iban is required: Wymagany jest numer IBAN
+Swift is required: Wymagany jest kod SWIFT
+Registration status should be verified: Status weryfikacji nie pozwala na przeprowadzenie akcji
+Bank account already exists: Kanto bankowe już istnieje
+Name is required: Wymagane jest imię
+
+Number of requests exceeded. Please contact support: Przekroczono liczbę żądań. Skontaktuj się z supportem.
+Confirmation code is not valid: Kod potwierdzający jest nieprawidłowy
+You cannot request new code. Please wait and try again: Nie możnesz zarządać nowego kodu. Poczekaj i spróbuj ponownie.
+Invalid order: Nieprawidłowe zlecenie
+Order cannot be placed. Try again: Nie można złożyc zlecenia
+Limit order is not allowed: Zlecenie z limitem jest niedozwolone
+Internal transfer inside the same wallet is not allowed.: Przelew wewnętrzny na ten sam portfel nie jest dozwolony.
+Internal transfer not allowed for wallets with different currencies.: Przelew wewnętrzny nie jest dozwolony na portfel obsługujący inną walutę.
+
+Status now allowed: Status jest teraz niedozwolony
+Status cannot be changed: Status nie może być zmieniony
+Cannot obtain payment token: Nie można uzyskać tokena płatniczego
+Verification failed: Weryfikacja nie powiodła się
+Invalid transaction ID: Nieprawidłowy identyfikator transakcji
+Currency is not supported: Waluta nie jest obsługiwana
+Cannot register card: Nie można zarejestrować karty
+Cannot register new transaction: Nie można zarejestrować nowej transakcji
+Order side not allowed: Typ zlecenia niedozwolony
+
+Wallet for deposit cannot be found: Nie znaleziono portfela do wpłaty
+Payment processor not defined: Procesor płatności nie został określony
+Payment processor is not enabled: Procesor płatności nie jest włączony
+Payment processor not supported: Procesor płatności nie jest obsługiwany
+Status does not allowed to update payment url: Status transakcji nie zezwala na aktualizację linku płatności
+Status does not allowed to set order as paid: Status transakcji nie zezwala na ustawienie zlecenia jako opłaconego
+Status does not allowed to set order as processing:  Staus transakcji nie zezwala na ustawienie zlecenia jako przetwarzanego
+User wallet not found: Nie znaleziono portfela użytkownika
+Checkout liquidity user wallet not found: Nie znaleziono portfela użytkownika sprzedażowego
+Virtual wallet status not allowed: Status wirtualnego portfela niedozwolony
+
+Email address is not confirmed: Adres e-mail dla Twojego konta jest niepotwierdzony
+Invalid credentials.: Błędne dane logowania
+Address cannot be generated: Nie można wygenerować adresu, spróbuj ponownie później.
+Trading is not allowed: Handel jest obecnie wyłączony
+Deposit request is not allowed: Możliwość wpłaty środków tymczasowo niedostępna.
+Withdrawal request is not allowed: Możliwość wypłaty środków tymczasowo niedostępna.
+Internal transfer request is not allowed: Możliwość transferu wewnętrznego środków tymczasowo niedostępna.
+Registration is not allowed: Możliwość rejestracji tymczasowo niedostępna.
+Market is not allowed: Handel tymczasowo niedostępny.
+Login is not allowed: Możliwość logowania tymczasowo niedostępna.
+Password resetting is not allowed: Możliwość przypomnienia hasła tymczasowo niedostępna.
+Liquidity does not allow to create instant order: Spróbuj za moment.
+In order to use our services you have to be at least 18 years old.: Aby korzystać z naszego serwisu musisz mieć ukończone 18 lat.
+POS is not allowed: Obsługa POS jest tymczasowo niedostępna, trwają prace techniczne.
+
+POS Order is expired: Transakcja POS wygasła.

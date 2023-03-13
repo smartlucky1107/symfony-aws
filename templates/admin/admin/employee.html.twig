@@ -1,0 +1,86 @@
+{% extends 'admin/admin_base.html.twig' %}
+
+{% block title %}{{ 'Employee'|trans }}{% endblock %}
+
+{% block body %}
+    {% include 'admin/admin/partial/breadcrumbs.html.twig' with {
+        'title': 'Employee details',
+        'items': [
+            { 'title': 'Employees', 'url': path('admin_employees') }
+        ],
+        'currentTitle': ' [ID: ' ~ employee.id ~ ']'
+    } only %}
+
+    <div class="wrapper wrapper-content animated fadeInRight" id="employeeAppHandler" ng-controller="EmployeeAppController">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="ibox" ng-non-bindable>
+                    <div class="ibox-title">
+                        <h5>{{ 'Details'|trans }}</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="row">
+                            <div class="col-lg-2">
+                                <small>{{ 'Workspace'|trans }}</small>
+                                <div>
+                                    <a href="{{ path('admin_workspace', { 'workspaceId': employee.workspace.id }) }}" class="btn btn-success btn-outline btn-xs">{{ employee.workspace.name }}</a>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <small>{{ 'First name'|trans }}</small>
+                                <div>
+                                    <strong>{{ employee.firstName }}</strong>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <small>{{ 'Last name'|trans }}</small>
+                                <div>
+                                    <strong>{{ employee.lastName }}</strong>
+                                </div>
+                            </div>
+                            <div class="col-lg-2">
+                                <small>{{ 'Enabled'|trans }}</small>
+                                <div>
+                                    {% if employee.isEnabled %}
+                                        <div class="text-navy">
+                                            <i class="fa fa-check-square-o"></i>
+                                            <small>{{ 'Yes'|trans }}</small>
+                                        </div>
+                                    {% else %}
+                                        <div class="text-warning">
+                                            <i class="fa fa-square-o"></i>
+                                            <small>{{ 'No'|trans }}</small>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-lg-2">
+                                <small>{{ 'Pin'|trans }}</small>
+                                <div>
+                                    <small>{{ employee.pin }}</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr />
+
+                        <small>{{ 'Transactions'|trans }}</small>
+                        <div class="row">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script>
+        let $employeeId = {{ employee.id }};
+    </script>
+    <script src="/admin/app/employeeApp.js"></script>
+{% endblock %}

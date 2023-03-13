@@ -1,0 +1,31 @@
+# Read the documentation: https://symfony.com/doc/master/bundles/FOSRestBundle/index.html
+fos_rest:
+#    param_fetcher_listener:  true
+#    allowed_methods_listener:  true
+#    routing_loader: true
+    view:
+        view_response_listener:  true
+#    exception:
+#        codes:
+#            App\Exception\MyException: 403
+#        messages:
+#            App\Exception\MyException: Forbidden area.
+    format_listener:
+        rules:
+            - { path: ^/pl/public-api, prefer_extension: true, fallback_format: json, priorities: [ json ] }
+            - { path: ^/pl/charting, prefer_extension: true, fallback_format: json, priorities: [ json ] }
+            - { path: ^/pl/api-private, prefer_extension: true, fallback_format: json, priorities: [ json ] }
+            - { path: ^/pl/api, prefer_extension: true, fallback_format: json, priorities: [ json ] }
+            - { path: ^/public-api, prefer_extension: true, fallback_format: json, priorities: [ json ] }
+            - { path: ^/charting, prefer_extension: true, fallback_format: json, priorities: [ json ] }
+            - { path: ^/api-private, prefer_extension: true, fallback_format: json, priorities: [ json ] }
+            - { path: ^/api/users/me/checkout-orders/history, prefer_extension: true, fallback_format: csv, priorities: ['html', 'csv'] }
+            - { path: ^/api, prefer_extension: true, fallback_format: json, priorities: [ json ] }
+            #- { path: ^/api/users/me/checkout-orders/history, prefer_extension: true, fallback_format: html, priorities: ['html', '*/*'] }
+            - { path: ^/,    prefer_extension: true, fallback_format: html, priorities: ['html', '*/*'] }
+    exception:
+        enabled: true
+        codes:
+            App\Exception\AppException: 400
+#      messages:
+#          Symfony\Component\HttpKernel\Exception\BadRequestHttpException: true

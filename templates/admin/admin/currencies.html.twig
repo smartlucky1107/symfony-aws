@@ -1,0 +1,219 @@
+{% extends 'admin/admin_base.html.twig' %}
+
+{% block title %}{{ 'Currencies'|trans }}{% endblock %}
+
+{% block body %}
+    {% include 'admin/admin/partial/breadcrumbs.html.twig' with {
+        'title': 'Currency list'
+    } only %}
+
+    <div class="wrapper wrapper-content animated fadeInRight" id="currencyListAppHandler" ng-controller="currencyListAppCtrl">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="ibox">
+                    <div class="ibox-title">
+                        <h5>{{ 'New currency'|trans }}</h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <form role="form">
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label>{{ 'Full name'|trans }} <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" name="fullName" ng-model="currencyFormData.fullName">
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label>{{ 'Short name'|trans }} <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" name="shortName" ng-model="currencyFormData.shortName">
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <label>{{ 'Type'|trans }} <span class="text-danger">*</span></label>
+                                    <select class="form-control" ng-model="currencyFormData.type">
+                                        <option ng-repeat="item in currencyTypes" value="{{ '{{ item }}' }}">{{ '{{ item }}' }}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-8">
+                                    <div class="form-group" ng-if="isTypeERC20()">
+                                        <label>{{ 'Smart contract address'|trans }} <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" name="smartContractAddress" ng-model="currencyFormData.smartContractAddress">
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label>&#160;</label>
+                                        <div>
+                                            <button ng-click="saveCurrency()" class="btn btn-success btn-outline btn-sm" type="button"><i class="fa fa-check"></i> {{ 'Save currency'|trans }}</button>
+                                        </div>
+                                        <small class="text-danger">* {{ 'required'|trans }}</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="ibox">
+                    <div class="ibox-title">
+                        <h5>{{ 'New currency pair'|trans }}</h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <form role="form">
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label>{{ 'Base currency ID'|trans }} <span class="text-danger">*</span></label>
+                                        <input type="number" class="form-control" name="baseCurrency" ng-model="currencyPairFormData.baseCurrency">
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label>{{ 'Quoted currency ID'|trans }} <span class="text-danger">*</span></label>
+                                        <input type="number" class="form-control" name="quotedCurrency" ng-model="currencyPairFormData.quotedCurrency">
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label>&#160;</label>
+                                        <div>
+                                            <button ng-click="saveCurrencyPair()" class="btn btn-success btn-outline btn-sm" type="button"><i class="fa fa-check"></i> {{ 'Save pair'|trans }}</button>
+                                        </div>
+                                        <small class="text-danger">* {{ 'required'|trans }}</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox">
+                    <div class="ibox-title">
+                        <h5>{{ 'List of currencies'|trans }}</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <div>
+                            <span ng-if="listManager.options.fullName" class="label label-info">{{ 'Full name'|trans }}: {{ '{{ listManager.options.fullName }}' }}</span>
+                            <span ng-if="listManager.options.shortName" class="label label-info">{{ 'Short name'|trans }}: {{ '{{ listManager.options.shortName }}' }}</span>
+                        </div>
+
+                        <table class="table table-stripped">
+                            <thead>
+                            <tr>
+                                <th>
+                                    <span ng-click="setSortBy('id')">ID</span>
+                                    <i ng-if="!listManager.isSortByField('id')" class="fa fa-sort"></i>
+                                    <i ng-if="listManager.isSortByField('id')" class="fa" ng-class="{'fa-sort-amount-asc': listManager.isSortBy('id', 1), 'fa-sort-amount-desc': listManager.isSortBy('id', 0)}" ></i>
+                                </th>
+                                <th>
+                                    <span ng-click="setSortBy('fullName')">{{ 'Full name'|trans }}</span>
+                                    <i ng-if="!listManager.isSortByField('fullName')" class="fa fa-sort"></i>
+                                    <i ng-if="listManager.isSortByField('fullName')" class="fa" ng-class="{'fa-sort-amount-asc': listManager.isSortBy('fullName', 1), 'fa-sort-amount-desc': listManager.isSortBy('fullName', 0)}" ></i>
+                                </th>
+                                <th>
+                                    <span ng-click="setSortBy('shortName')">{{ 'Short name'|trans }}</span>
+                                    <i ng-if="!listManager.isSortByField('shortName')" class="fa fa-sort"></i>
+                                    <i ng-if="listManager.isSortByField('shortName')" class="fa" ng-class="{'fa-sort-amount-asc': listManager.isSortBy('shortName', 1), 'fa-sort-amount-desc': listManager.isSortBy('shortName', 0)}" ></i>
+                                </th>
+                                <th>
+                                    <span ng-click="setSortBy('type')">{{ 'Type'|trans }}</span>
+                                    <i ng-if="!listManager.isSortByField('type')" class="fa fa-sort"></i>
+                                    <i ng-if="listManager.isSortByField('type')" class="fa" ng-class="{'fa-sort-amount-asc': listManager.isSortBy('type', 1), 'fa-sort-amount-desc': listManager.isSortBy('type', 0)}" ></i>
+                                </th>
+                                <th>
+                                    <span ng-click="setSortBy('fee')">{{ 'Withdrawal fee'|trans }}</span>
+                                    <i ng-if="!listManager.isSortByField('fee')" class="fa fa-sort"></i>
+                                    <i ng-if="listManager.isSortByField('fee')" class="fa" ng-class="{'fa-sort-amount-asc': listManager.isSortBy('fee', 1), 'fa-sort-amount-desc': listManager.isSortBy('fee', 0)}" ></i>
+                                </th>
+                                <th>
+                                    <span ng-click="setSortBy('enabled')">{{ 'Enabled'|trans }}</span>
+                                    <i ng-if="!listManager.isSortByField('enabled')" class="fa fa-sort"></i>
+                                    <i ng-if="listManager.isSortByField('enabled')" class="fa" ng-class="{'fa-sort-amount-asc': listManager.isSortBy('enabled', 1), 'fa-sort-amount-desc': listManager.isSortBy('enabled', 0)}" ></i>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th></th>
+                                <th>
+                                    <input ng-model="listManager.filters.fullName" />
+                                    <button class="btn btn-success btn-xs" ng-click="search()">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </th>
+                                <th>
+                                    <input ng-model="listManager.filters.shortName" />
+                                    <button class="btn btn-success btn-xs" ng-click="search()">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="currency in results">
+                                <td>{{ '{{ currency.id }}' }}</td>
+                                <td>{{ '{{ currency.fullName }}' }}</td>
+                                <td>{{ '{{ currency.shortName }}' }}</td>
+                                <td>{{ '{{ currency.type }}' }}</td>
+                                <td>
+                                    <input type="text" class="form-control" name="fee" ng-model="currency.fee">
+                                    <button ng-click="changeFeeCurrency(currency)" class="btn btn-success btn-outline btn-sm" type="button"><i class="fa fa-check"></i> {{ 'Save fee'|trans }}</button>
+                                </td>
+                                <td>
+                                    <i ng-if="currency.enabled" class="fa fa-check text-navy"></i>
+                                    <i ng-if="!currency.enabled" class="fa fa-times text-danger"></i>
+                                    <button ng-if="currency.enabled" ng-click="disableCurrency(currency.id)" type="button" class="btn btn-xs btn-outline btn-danger">{{ 'Disable'|trans }}</button>
+                                    <button ng-if="!currency.enabled" ng-click="enableCurrency(currency.id)" type="button" class="btn btn-xs btn-outline btn-primary">{{ 'Enable'|trans }}</button>
+                                </td>
+                            </tr>
+                            <tr ng-if="results.length === 0">
+                                <td colspan="5">
+                                    {{ 'Nothing found'|trans }}
+                                </td>
+                            </tr>
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <td colspan="14" class="text-right">
+                                    <button ng-click="changePageSize(100)" class="btn btn-info" ng-class="{'active': listManager.isPageSizeActive(100)}">100</button>
+                                    <button ng-click="changePageSize(250)" class="btn btn-info" ng-class="{'active': listManager.isPageSizeActive(250)}">250</button>
+                                    <button ng-click="changePageSize(500)" class="btn btn-info" ng-class="{'active': listManager.isPageSizeActive(500)}">500</button>
+                                    &#160;/&#160;page
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="5">
+                                    <button ng-click="changePage(page.page)" ng-repeat="page in pages" class="btn btn-success" ng-class="{'active': listManager.isPageActive(page.page)}">{{ '{{ page.page }}' }}</button>
+                                </td>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script src="/admin/app/listModule.js"></script>
+    <script src="/admin/app/currencyListApp.js"></script>
+{% endblock %}

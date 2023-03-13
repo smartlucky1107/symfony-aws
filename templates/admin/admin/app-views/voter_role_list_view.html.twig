@@ -1,0 +1,60 @@
+<div ng-controller="VoterRoleListController" ng-init="search()">
+    <div class="ibox">
+        <div class="ibox-title">
+            <h5>{{ 'List of voter roles'|trans }}</h5>
+        </div>
+        <div class="ibox-content">
+            <div>
+                <span ng-if="listManager.options.id" class="label label-info">ID: {{ '{{ listManager.options.id }}' }}</span>
+            </div>
+            <table class="table table-stripped">
+                <thead>
+                <tr>
+                    <th width="100px">
+                        <span ng-click="setSortBy('id')">ID</span>
+                        <i ng-if="!listManager.isSortByField('id')" class="fa fa-sort"></i>
+                        <i ng-if="listManager.isSortByField('id')" class="fa" ng-class="{'fa-sort-amount-asc': listManager.isSortBy('id', 1), 'fa-sort-amount-desc': listManager.isSortBy('id', 0)}" ></i>
+                    </th>
+                    <th>
+                        <span ng-click="setSortBy('module')">{{ 'Module'|trans }}</span>
+                        <i ng-if="!listManager.isSortByField('module')" class="fa fa-sort"></i>
+                        <i ng-if="listManager.isSortByField('module')" class="fa" ng-class="{'fa-sort-amount-asc': listManager.isSortBy('module', 1), 'fa-sort-amount-desc': listManager.isSortBy('module', 0)}" ></i>
+                    </th>
+                    <th>
+                        <span ng-click="setSortBy('action')">{{ 'Action'|trans }}</span>
+                        <i ng-if="!listManager.isSortByField('action')" class="fa fa-sort"></i>
+                        <i ng-if="listManager.isSortByField('action')" class="fa" ng-class="{'fa-sort-amount-asc': listManager.isSortBy('action', 1), 'fa-sort-amount-desc': listManager.isSortBy('action', 0)}" ></i>
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="voterRole in results">
+                    <td>{{ '{{ voterRole.id }}' }}</td>
+                    <td>{{ '{{ voterRole.module }}' }}</td>
+                    <td>{{ '{{ voterRole.action }}' }}</td>
+                </tr>
+                <tr ng-if="results.length === 0">
+                    <td colspan="3">
+                        {{ 'Nothing found'|trans }}
+                    </td>
+                </tr>
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td colspan="14" class="text-right">
+                        <button ng-click="changePageSize(100)" class="btn btn-info" ng-class="{'active': listManager.isPageSizeActive(100)}">100</button>
+                        <button ng-click="changePageSize(250)" class="btn btn-info" ng-class="{'active': listManager.isPageSizeActive(250)}">250</button>
+                        <button ng-click="changePageSize(500)" class="btn btn-info" ng-class="{'active': listManager.isPageSizeActive(500)}">500</button>
+                        &#160;/&#160;page
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <button ng-click="changePage(page.page)" ng-repeat="page in pages" class="btn btn-success" ng-class="{'active': listManager.isPageActive(page.page)}">{{ '{{ page.page }}' }}</button>
+                    </td>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>

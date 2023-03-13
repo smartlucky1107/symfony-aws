@@ -1,0 +1,28 @@
+{% extends 'admin/admin_base.html.twig' %}
+
+{% block title %}{{ 'New deposit'|trans }}{% endblock %}
+
+{% block body %}
+    {% include 'admin/admin/partial/breadcrumbs.html.twig' with {
+        'title': 'New deposit',
+        'items': [
+            { 'title': 'Deposits', 'url': path('admin_deposits') }
+        ],
+        'currentTitle': 'New deposit'
+    } only %}
+
+    <div class="wrapper wrapper-content animated fadeInRight" id="newDepositAppHandler">
+        <div class="row">
+            <div class="col-lg-12">
+                {% include 'admin/admin/app-views/wallet_list_view.html.twig' with { 'listType': 'forDeposit' } %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script src="/admin/app/listModule.js"></script>
+    <script src="/admin/app/Controller/WalletListController.js"></script>
+    <script src="/admin/app/Controller/NewDepositController.js"></script>
+    <script src="/admin/app/newDepositApp.js"></script>
+{% endblock %}

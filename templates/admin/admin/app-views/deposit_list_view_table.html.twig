@@ -1,0 +1,133 @@
+<table class="table table-stripped">
+    <thead>
+    <tr>
+        <th width="100px">
+            <span ng-click="setSortBy('id')">ID</span>
+            <i ng-if="!listManager.isSortByField('id')" class="fa fa-sort"></i>
+            <i ng-if="listManager.isSortByField('id')" class="fa" ng-class="{'fa-sort-amount-asc': listManager.isSortBy('id', 1), 'fa-sort-amount-desc': listManager.isSortBy('id', 0)}" ></i>
+        </th>
+        <th>
+            <span ng-click="setSortBy('createdAt')">{{ 'Created at'|trans }}</span>
+            <i ng-if="!listManager.isSortByField('createdAt')" class="fa fa-sort"></i>
+            <i ng-if="listManager.isSortByField('createdAt')" class="fa" ng-class="{'fa-sort-amount-asc': listManager.isSortBy('createdAt', 1), 'fa-sort-amount-desc': listManager.isSortBy('createdAt', 0)}" ></i>
+        </th>
+        <th>{{ 'Wallet'|trans }}</th>
+        <th>{{ 'Amount'|trans }}</th>
+        <th>{{ 'Added by'|trans }}</th>
+
+        {% if listType == 'general' %}
+            <th>
+                <span ng-click="setSortBy('status')">{{ 'Status'|trans }}</span>
+                <i ng-if="!listManager.isSortByField('status')" class="fa fa-sort"></i>
+                <i ng-if="listManager.isSortByField('status')" class="fa" ng-class="{'fa-sort-amount-asc': listManager.isSortBy('status', 1), 'fa-sort-amount-desc': listManager.isSortBy('status', 0)}" ></i>
+            </th>
+            <th>
+                <span ng-click="setSortBy('approvedAt')">{{ 'Approved at'|trans }}</span>
+                <i ng-if="!listManager.isSortByField('approvedAt')" class="fa fa-sort"></i>
+                <i ng-if="listManager.isSortByField('approvedAt')" class="fa" ng-class="{'fa-sort-amount-asc': listManager.isSortBy('approvedAt', 1), 'fa-sort-amount-desc': listManager.isSortBy('approvedAt', 0)}" ></i>
+            </th>
+            <th>{{ 'Approved by'|trans }}</th>
+        {% else %}
+            <th>{{ 'Bank transaction'|trans }}</th>
+        {% endif %}
+    </tr>
+    {% if listType != 'walletRequests' %}
+        <tr>
+            <th>
+                <input style="width: 50px;" ng-model="listManager.filters.id" on-enter="search()" />
+                <button class="btn btn-success btn-xs" ng-click="search()">
+                    <i class="fa fa-search"></i>
+                </button>
+            </th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+
+            {% if listType == 'general' %}
+                <th></th>
+                <th></th>
+                <th></th>
+            {% else %}
+                <th>
+                    <input ng-model="listManager.filters.bankTransaction" on-enter="search()" />
+                    <button class="btn btn-success btn-xs" ng-click="search()">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </th>
+            {% endif %}
+        </tr>
+    {% endif %}
+    </thead>
+    <tbody>
+    <tr ng-repeat="deposit in results">
+        <td>
+            <button class="btn btn-success btn-outline btn-xs" ng-click="routing.openDeposit(deposit.id)">{{ '{{ deposit.id }}' }}</button>
+        </td>
+        <td>{{ '{{ deposit.createdAt|date:\'medium\' }}' }}</td>
+        <td>
+            <button class="btn btn-success btn-outline btn-xs" ng-click="routing.openWallet(deposit.wallet.id)">{{ '{{ deposit.wallet.id }}' }}</button>
+        </td>
+        <td>
+            {{ '{{ deposit.amount }}' }}
+            <small class="text-muted">{{ '{{ deposit.wallet.currency.shortName }}' }}</small>
+        </td>
+        <td>
+            <button class="btn btn-success btn-outline btn-xs" ng-click="routing.openUser(deposit.addedByUser.id)">{{ '{{ deposit.addedByUser.id }}' }}</button> {{ '{{ deposit.addedByUser.firstName }}' }} {{ '{{ deposit.addedByUser.lastName }}' }}
+        </td>
+
+        {% if listType == 'general' %}
+            <td>
+                <div ng-if="deposit.isApproved" class="text-navy">
+                    <i class="fa fa-check-square-o"></i>
+                    <small>{{ '{{ deposit.statusName }}' }}</small>
+                </div>
+                <div ng-if="deposit.isRequest">
+                    <small class="text-warning">{{ '{{ deposit.statusName }}' }}</small>
+                </div>
+                <div ng-if="deposit.isDeclined">
+                    <small class="text-danger">{{ '{{ deposit.statusName }}' }}</small>
+                </div>
+                <div ng-if="deposit.isReverted">
+                    <small class="text-danger">{{ '{{ deposit.statusName }}' }}</small>
+                </div>
+            </td>
+            <td>
+                <span ng-if="deposit.isApproved">{{ '{{ deposit.approvedAt|date:\'medium\' }}' }}</span>
+                <small ng-if="!deposit.isApproved" class="text-muted">{{ 'not approved'|trans }}</small>
+            </td>
+            <td>
+                <div ng-if="deposit.isApproved && deposit.approvedByUser">
+                    <button class="btn btn-success btn-outline btn-xs" ng-click="routing.openUser(deposit.approvedByUser.id)">{{ '{{ deposit.approvedByUser.id }}' }}</button> {{ '{{ deposit.approvedByUser.firstName }}' }} {{ '{{ deposit.approvedByUser.lastName }}' }}
+                </div>
+                <small ng-if="!deposit.isApproved" class="text-muted">{{ 'not approved'|trans }}</small>
+            </td>
+        {% else %}
+            <td>
+                <div>{{ '{{ deposit.bankTransactionId }}' }}</div>
+                <small>{{ '{{ deposit.bankTransactionDate }}' }}</small>
+            </td>
+        {% endif %}
+    </tr>
+    <tr ng-if="results.length === 0">
+        <td colspan="8">
+            {{ 'Nothing found'|trans }}
+        </td>
+    </tr>
+    </tbody>
+    <tfoot>
+    <tr>
+        <td colspan="14" class="text-right">
+            <button ng-click="changePageSize(100)" class="btn btn-info" ng-class="{'active': listManager.isPageSizeActive(100)}">100</button>
+            <button ng-click="changePageSize(250)" class="btn btn-info" ng-class="{'active': listManager.isPageSizeActive(250)}">250</button>
+            <button ng-click="changePageSize(500)" class="btn btn-info" ng-class="{'active': listManager.isPageSizeActive(500)}">500</button>
+            &#160;/&#160;page
+        </td>
+    </tr>
+    <tr>
+        <td colspan="8">
+            <button ng-click="changePage(page.page)" ng-repeat="page in pages" class="btn btn-success" ng-class="{'active': listManager.isPageActive(page.page)}">{{ '{{ page.page }}' }}</button>
+        </td>
+    </tr>
+    </tfoot>
+</table>

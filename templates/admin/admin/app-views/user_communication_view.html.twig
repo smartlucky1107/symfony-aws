@@ -1,0 +1,26 @@
+<div ng-controller="UserCommunicationController">
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th width="1">ID</th>
+            <th>{{ 'Name'|trans }}</th>
+            <th width="1" class="text-center">{{ 'Actions'|trans }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="notificationType in allowedNotificationTypes">
+            <td>
+                {{ '{{ notificationType.id }}' }}
+            </td>
+            <td>
+                {{ '{{ notificationType.name }}' }}
+            </td>
+            <td class="text-center">
+                <button class="btn btn-success btn-outline btn-xs" ng-click="resend(notificationType.id)">
+                    <i class="fa fa-paper-plane-o"></i> Resend
+                </button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>

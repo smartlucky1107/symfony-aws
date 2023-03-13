@@ -1,0 +1,42 @@
+{% if transfers is defined and transfers|length > 0 %}
+    <table class="table table-stripped">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>{{ 'Created at'|trans }}</th>
+            <th>{{ 'Offer & Bid orders'|trans }}</th>
+            <th>{{ 'Trade'|trans }}</th>
+            <th>{{ 'Type'|trans }}</th>
+            <th>{{ 'Wallet'|trans }}</th>
+            <th>{{ 'Amount'|trans }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for transfer in transfers %}
+            <tr>
+                <td>{{ transfer.id }}</td>
+                <td>{{ transfer.createdAtTime|date }}</td>
+                <td>
+                    {% if transfer.offerOrderId %}
+                        <a href="{{ path('admin_order', { 'orderId': transfer.offerOrderId }) }}" class="btn btn-success btn-outline btn-xs">{{ 'Offer'|trans }} {{ transfer.offerOrderId }}</a>
+                    {% endif %}
+
+                    {% if transfer.bidOrderId %}
+                        <a href="{{ path('admin_order', { 'orderId': transfer.bidOrderId }) }}" class="btn btn-success btn-outline btn-xs">{{ 'Bid'|trans }} {{ transfer.bidOrderId }}</a>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if transfer.tradeId %}
+                        <a href="{{ path('admin_trade', { 'tradeId': transfer.tradeId }) }}" class="btn btn-success btn-outline btn-xs">{{ 'Trade'|trans }} {{ transfer.tradeId }}</a>
+                    {% endif %}
+                </td>
+                <td>{#{{ transfer.type }}#} {{ transfer.typeName }}</td>
+                <td>
+                    <a href="{{ path('admin_wallet', { 'walletId': transfer.walletId }) }}" class="btn btn-success btn-outline btn-xs">{{ transfer.walletId }}</a>
+                </td>
+                <td>{{ transfer.amount }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endif %}

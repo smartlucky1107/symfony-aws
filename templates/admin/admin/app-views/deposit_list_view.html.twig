@@ -1,0 +1,65 @@
+{% if listType is not defined %}
+    {% set listType = 'general' %}
+{% endif %}
+
+{% set ng_init = 'ng-init="search()"' %}
+
+{% if listType == 'requests' %}
+    {% set ng_init = 'ng-init="initFilterValues(1, null, true)"' %}
+{% elseif listType == 'walletRequests' and wallet is defined %}
+    {% set ng_init = 'ng-init="initFilterValues(1 , ' ~ wallet.id ~ ', true)"' %}
+{% endif %}
+
+{% if listType != 'walletRequests' %}
+    <div ng-controller="DepositListController" {{ ng_init|raw }}>
+        {% if listType == 'requests' %}
+            <div class="row">
+                <div class="col-lg-4"></div>
+                <div class="col-lg-4">
+                    <div class="ibox">
+                        <div class="ibox-title">
+                            <h5>{{ 'Find deposit by bank transaction'|trans }}</h5>
+                            <div class="ibox-tools">
+                                <a class="collapse-link">
+                                    <i class="fa fa-chevron-up"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="ibox-content">
+                            <form role="form" >
+                                <div class="form-group">
+                                    <label>{{ 'Bank transaction ID'|trans }} <span class="text-danger">*</span></label>
+                                    <input class="form-control" name="id" ng-model="listManager.filters.bankTransaction" on-enter="search()">
+                                </div>
+                                <div>
+                                    <button ng-click="search()" class="btn btn-success btn-outline btn-sm" type="button"><i class="fa fa-search"></i> {{ 'Find deposit'|trans }}</button>
+                                    <div>
+                                        <small class="text-danger float-right">* {{ 'required'|trans }}</small>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4"></div>
+            </div>
+        {% endif %}
+
+        <div class="ibox">
+            <div class="ibox-title">
+                <h5>{{ 'List of deposits'|trans }}</h5>
+            </div>
+            <div class="ibox-content">
+                <div>
+                    <span ng-if="listManager.options.id" class="label label-info">ID: {{ '{{ listManager.options.id }}' }}</span>
+                    <span ng-if="listManager.options.bankTransaction" class="label label-info">{{ 'Bank transaction'|trans }}: {{ '{{ listManager.options.bankTransaction }}' }}</span>
+                </div>
+                {% include 'admin/admin/app-views/deposit_list_view_table.html.twig' %}
+            </div>
+        </div>
+    </div>
+{% else %}
+    <div ng-controller="DepositListController" {{ ng_init|raw }}>
+        {% include 'admin/admin/app-views/deposit_list_view_table.html.twig' %}
+    </div>
+{% endif %}

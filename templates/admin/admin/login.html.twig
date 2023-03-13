@@ -1,0 +1,44 @@
+{% extends 'admin/admin_base.html.twig' %}
+
+{% block title %}Homepage{% endblock %}
+
+{% block leftMenu %}
+    <li>
+        <a href="{{ path('admin_login') }}"><i class="fa fa-user-o"></i> <span class="nav-label">{{ 'Login'|trans }}</span></a>
+    </li>
+{% endblock %}
+
+{% block body %}
+    <div class="middle-box text-center loginscreen animated fadeInDown" id="loginAppHandler" ng-controller="LoginAppController">
+        <div>
+            <div><h1 class="logo-name">SWP</h1></div>
+            <h3>Welcome to Swapcoin Manager</h3>
+
+            <form class="m-t" role="form" action="">
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="email" required="" ng-model="loginData.username" on-enter="login()">
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-control" placeholder="password" required="" ng-model="loginData.password" on-enter="login()">
+                </div>
+                <div>
+                    <div
+                            vc-recaptcha
+                            theme="'light'"
+                            key="model.key"
+                            on-create="setWidgetId(widgetId)"
+                            on-success="setResponse(response)"
+                    ></div>
+                </div>
+                <button ng-if="!isLoginProcessing" type="button" class="btn btn-primary block full-width m-b" ng-click="login()">Login</button>
+                <div ng-if="isLoginProcessing" class="progress">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated progress-bar-primary" style="width: 100%" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script src="/admin/app/loginApp.js"></script>
+{% endblock %}

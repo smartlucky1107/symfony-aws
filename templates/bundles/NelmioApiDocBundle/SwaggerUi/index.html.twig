@@ -1,0 +1,28 @@
+{% extends '@!NelmioApiDoc/SwaggerUi/index.html.twig' %}
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        header:before{
+            background-color: #011027;
+        }
+        header #logo img{
+            height: 50px !important;
+            background-color: transparent;
+        }
+        #swagger-ui.api-platform .info .title{
+            color: #777;
+        }
+
+        #swagger-ui.api-platform .btn.execute{
+            background-color: #f02239;
+            border-color: #f02239;
+        }
+        #swagger-ui.api-platform .btn.execute:hover{
+            background-color: #777;
+            border-color: #777;
+        }
+    </style>
+{% endblock stylesheets %}
+{% block header %}
+    <a id="logo" href="https://market.tokeneo.com/"><img src="https://market.tokeneo.com/static/media/logo-secured.0492363a.svg" alt="Tokeneo"></a>
+{% endblock header %}

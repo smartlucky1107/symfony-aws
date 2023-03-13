@@ -1,0 +1,82 @@
+nelmio_api_doc:
+    areas:
+        default:
+            path_patterns: # an array of regexps
+                - ^/api-public/
+            documentation:
+                info:
+                    title: Swapcoin general API
+                    description: Swapcoin general API
+                    version: 1.0.1
+                securityDefinitions:
+                    Bearer:
+                        type: apiKey
+                        description: 'Value: apikey {jwt}'
+                        name: Authorization
+                        in: header
+                security:
+                    - Bearer: []
+        pos:
+            path_patterns: # an array of regexps
+                - ^/api-pos/
+            documentation:
+                info:
+                    title: POS | Dedicated Private API
+                    description: Private API
+                    version: 1.0.1
+                securityDefinitions:
+                    Bearer:
+                        type: apiKey
+                        description: 'Value: apikey {jwt}'
+                        name: Authorization
+                        in: header
+                security:
+                    - Bearer: []
+        private:
+            path_patterns:
+                - ^/api-private/
+            documentation:
+                info:
+                    title: Swapcoin | Private API
+                    description: Private API
+                    version: 1.0.1
+                securityDefinitions:
+                    Bearer:
+                        type: apiKey
+                        description: 'Value: apikey {jwt}'
+                        name: Authorization
+                        in: header
+                security:
+                    - Bearer: []
+        admin:
+            path_patterns:
+                - ^/api-admin/
+            documentation:
+                info:
+                    title: Swapcoin | Admin Private API
+                    description: Admin Private API
+                    version: 1.0.1
+                securityDefinitions:
+                    Bearer:
+                        type: apiKey
+                        description: 'Value: Bearer {jwt}'
+                        name: Authorization
+                        in: header
+                security:
+                    - Bearer: []
+        app:
+            path_patterns:
+                - ^/api/
+            documentation:
+                info:
+                    title: Swapcoin | App API
+                    description: App API
+                    version: 1.0.1
+                securityDefinitions:
+                    Bearer:
+                        type: apiKey
+                        description: 'Value: Bearer {jwt}'
+                        name: Authorization
+                        in: header
+                security:
+                    - Bearer: []

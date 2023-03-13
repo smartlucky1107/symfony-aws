@@ -1,0 +1,113 @@
+{% extends 'admin/admin_base.html.twig' %}
+
+{% block title %}{{ 'Liquidity transactions'|trans }}{% endblock %}
+
+{% block body %}
+    {% include 'admin/admin/partial/breadcrumbs.html.twig' with {
+        'title': 'Liquidity transactions'
+    } only %}
+
+    <div class="wrapper wrapper-content animated fadeInRight" id="liquidityTransactionsAppHandler" ng-controller="LiquidityTransactionsController" >
+        <div class="row">
+            <div class="col-9">
+                <div class="ibox">
+                    <div class="ibox-title">
+                        <h5>{{ 'Liquidity transactions'|trans }}</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="row">
+                            <div class="col-3">
+                                <input class="form-control" placeholder="Currency pair ID" ng-model="currencyPairId" />
+                            </div>
+                            <div class="col-3">
+                                <input class="form-control" placeholder="from" ng-model="from" />
+                            </div>
+                            <div class="col-3">
+                                <input class="form-control" placeholder="to" ng-model="to" />
+                            </div>
+                            <div class="col-3">
+                                <button class="btn btn-primary btn-outline btn-block" ng-click="loadLiquidityTransactions()">Refresh</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <div ng-if="!liquidityTransactions">
+                            <div class="sk-spinner sk-spinner-circle" >
+                                <div class="sk-circle1 sk-circle"></div>
+                                <div class="sk-circle2 sk-circle"></div>
+                                <div class="sk-circle3 sk-circle"></div>
+                                <div class="sk-circle4 sk-circle"></div>
+                                <div class="sk-circle5 sk-circle"></div>
+                                <div class="sk-circle6 sk-circle"></div>
+                                <div class="sk-circle7 sk-circle"></div>
+                                <div class="sk-circle8 sk-circle"></div>
+                                <div class="sk-circle9 sk-circle"></div>
+                                <div class="sk-circle10 sk-circle"></div>
+                                <div class="sk-circle11 sk-circle"></div>
+                                <div class="sk-circle12 sk-circle"></div>
+                            </div>
+                        </div>
+                        <div ng-show="liquidityTransactions">
+                            <div class="row mb-2" ng-repeat="(key, liquidityTransactionArray) in liquidityTransactions">
+                                <div class="col-1">
+                                    <button class="btn btn-success btn-outline btn-xs" ng-click="routing.openOrder(key)">{{ '{{ key }}' }}</button>
+                                </div>
+                                <div class="col-4">
+                                    <div ng-repeat="liquidityTransaction in liquidityTransactionArray" ng-if="liquidityTransaction.liquidityTransaction.marketType == 1">
+                                        <div>
+                                            <span class="label label-primary" ng-if="liquidityTransaction.liquidityTransaction.type == 1">Buy <i class="fa fa-level-up"></i></span>
+                                            <span class="label label-danger" ng-if="liquidityTransaction.liquidityTransaction.type == 2">Sell <i class="fa fa-level-down"></i></span>
+
+                                            <small class="text-navy" ng-if="liquidityTransaction.liquidityTransaction.realized == true">
+                                                <i class="fa fa-check-square-o"></i> realized
+                                            </small>
+                                            <small class="text-danger" ng-if="liquidityTransaction.liquidityTransaction.realized == false">
+                                                <i class="fa fa-minus-square-o"></i> not realized
+                                            </small>
+                                        </div>
+                                        <small>{{ '{{ liquidityTransaction.liquidityTransaction.amount }}' }}</small><br />
+                                        <small>{{ '{{ liquidityTransaction.liquidityTransaction.price }}' }} </small>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div ng-repeat="liquidityTransaction in liquidityTransactionArray" ng-if="liquidityTransaction.liquidityTransaction.marketType == 2">
+                                        <div>
+                                            <span class="label label-primary" ng-if="liquidityTransaction.liquidityTransaction.type == 1">Buy <i class="fa fa-level-up"></i></span>
+                                            <span class="label label-danger" ng-if="liquidityTransaction.liquidityTransaction.type == 2">Sell <i class="fa fa-level-down"></i></span>
+
+                                            <small class="text-navy" ng-if="liquidityTransaction.liquidityTransaction.realized == true">
+                                                <i class="fa fa-check-square-o"></i> realized
+                                            </small>
+                                            <small class="text-danger" ng-if="liquidityTransaction.liquidityTransaction.realized == false">
+                                                <i class="fa fa-minus-square-o"></i> not realized
+                                            </small>
+                                        </div>
+                                        <small>{{ '{{ liquidityTransaction.liquidityTransaction.amount }}' }}</small><br />
+                                        <small>{{ '{{ liquidityTransaction.liquidityTransaction.price }}' }} </small>
+                                    </div>
+                                </div>
+                                <div class="col-3 text-center">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="ibox">
+                    <div class="ibox-title">
+                        <h5></h5>
+                    </div>
+                    <div class="ibox-content">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script src="/admin/app/liquidityTransactionsApp.js"></script>
+{% endblock %}

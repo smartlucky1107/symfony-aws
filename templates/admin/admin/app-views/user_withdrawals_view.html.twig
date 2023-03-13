@@ -1,0 +1,71 @@
+<div ng-controller="UserWithdrawalsController">
+    <div class="sk-spinner sk-spinner-circle" ng-if="isLoading">
+        <div class="sk-circle1 sk-circle"></div>
+        <div class="sk-circle2 sk-circle"></div>
+        <div class="sk-circle3 sk-circle"></div>
+        <div class="sk-circle4 sk-circle"></div>
+        <div class="sk-circle5 sk-circle"></div>
+        <div class="sk-circle6 sk-circle"></div>
+        <div class="sk-circle7 sk-circle"></div>
+        <div class="sk-circle8 sk-circle"></div>
+        <div class="sk-circle9 sk-circle"></div>
+        <div class="sk-circle10 sk-circle"></div>
+        <div class="sk-circle11 sk-circle"></div>
+        <div class="sk-circle12 sk-circle"></div>
+    </div>
+
+    <div ng-show="!isLoading">
+        <div class="project-list" ng-show="userId">
+            <div ng-if="withdrawals.length === 0">
+                <small class="text-muted">{{ 'Nothing found'|trans }}</small>
+            </div>
+
+            <table class="table table-hover" ng-show="withdrawals.length > 0">
+                <thead>
+                <tr>
+                    <th width="1">ID</th>
+                    <th>{{ 'Created at'|trans }}</th>
+                    <th>{{ 'Status'|trans }}</th>
+                    <th>{{ 'Amount'|trans }}</th>
+                    <th>{{ 'Address'|trans }}</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="withdrawal in withdrawals">
+                    <td>
+                        <button class="btn btn-success btn-outline btn-xs" ng-click="routing.openWithdrawal(withdrawal.id)">{{ '{{ withdrawal.id }}' }}</button>
+                    </td>
+                    <td>{{ '{{ withdrawal.createdAt|date:\'medium\' }}' }}</td>
+                    <td>
+                        <div ng-if="withdrawal.isApproved" class="text-navy">
+                            <i class="fa fa-check-square-o"></i>
+                            <small>{{ '{{ withdrawal.statusName }}' }}</small>
+                        </div>
+                        <div ng-if="withdrawal.isExternalApproval" class="text-navy">
+                            <i class="fa fa-square-o"></i>
+                            <small>{{ '{{ withdrawal.statusName }}' }}</small>
+                        </div>
+                        <div ng-if="withdrawal.isNew">
+                            <small class="text-warning">{{ '{{ withdrawal.statusName }}' }}</small>
+                        </div>
+                        <div ng-if="withdrawal.isRequest">
+                            <small class="text-warning">{{ '{{ withdrawal.statusName }}' }}</small>
+                        </div>
+                        <div ng-if="withdrawal.isDeclined">
+                            <small class="text-danger">{{ '{{ withdrawal.statusName }}' }}</small>
+                        </div>
+                        <div ng-if="withdrawal.isRejected">
+                            <small class="text-danger">{{ '{{ withdrawal.statusName }}' }}</small>
+                        </div>
+                    </td>
+                    <td>{{ '{{ withdrawal.amount }}' }}</td>
+                    <td>{{ '{{ withdrawal.address }}' }}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div ng-if="!userId" class="text-center text-muted">
+            {{ 'No user loaded.'|trans }}
+        </div>
+    </div>
+</div>

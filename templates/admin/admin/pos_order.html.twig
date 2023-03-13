@@ -1,0 +1,93 @@
+{% extends 'admin/admin_base.html.twig' %}
+
+{% block title %}{{ 'POS Order'|trans }}{% endblock %}
+
+{% block body %}
+    {% include 'admin/admin/partial/breadcrumbs.html.twig' with {
+        'title': 'POS Order details',
+        'items': [
+            { 'title': 'POS orders', 'url': path('admin_pos_orders') }
+        ],
+        'currentTitle': ' [ID: ' ~ POSOrder.id ~ ']'
+    } only %}
+
+    <div class="wrapper wrapper-content animated fadeInRight" id="POSOrderAppHandler" ng-controller="POSOrderAppController">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="ibox" ng-non-bindable>
+                    <div class="ibox-title">
+                        <h5>{{ 'Details'|trans }}</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <small>{{ 'Workspace'|trans }}</small>
+                                <div>
+                                    {{ POSOrder.workspace.name }}
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <small>{{ 'Employee'|trans }}</small>
+                                <div>
+                                    {{ POSOrder.employee.firstName }} {{ POSOrder.employee.lastName }}
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <small>{{ 'Status'|trans }}</small>
+                                <div>
+                                    {{ POSOrder.getStatusName() }}
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <small>{{ 'Created at'|trans }}</small>
+                                <div>
+                                    {{ POSOrder.createdAt|date }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr />
+
+                        <small>{{ 'Currency pair'|trans }}</small>
+                        <div>
+                            <h2 class="product-main-price">{{ POSOrder.currencyPair.baseCurrency.fullName }}/{{ POSOrder.currencyPair.quotedCurrency.fullName }} <small class="text-muted">{{ POSOrder.currencyPair.pairShortName }}</small> </h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="ibox" ng-non-bindable>
+                    <div class="ibox-title">
+                        {#{% if POSOrder.isFilled %}#}
+                            {#<span class="label label-primary float-right">{{ 'Order filled'|trans }}</span>#}
+                        {#{% endif %}#}
+                        <h5>{{ 'Price and volume'|trans }}</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="row">
+                            <div class="col-4">
+                                <small class="stats-label">{{ 'Initiation price'|trans }}</small>
+                                <h4>{{ POSOrder.initiationPrice }} <small class="text-muted">{{ POSOrder.currencyPair.quotedCurrency.shortName }}</small></h4>
+                            </div>
+                            <div class="col-4">
+                                <small class="stats-label">{{ 'Volume'|trans }}</small>
+                                <h4>{{ POSOrder.amount }} <small class="text-muted">{{ POSOrder.currencyPair.baseCurrency.shortName }}</small></h4>
+                            </div>
+                            <div class="col-4">
+                                <small class="stats-label">{{ 'Total price'|trans }}</small>
+                                <h4>{{ POSOrder.totalPrice }} <small class="text-muted">{{ POSOrder.currencyPair.quotedCurrency.shortName }}</small></h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script>
+        let $POSOrderId = {{ POSOrder.id }};
+    </script>
+    <script src="/admin/app/POSOrderApp.js"></script>
+{% endblock %}

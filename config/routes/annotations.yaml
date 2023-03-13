@@ -1,0 +1,33 @@
+controllers:
+    resource: ../../src/Controller
+    type: annotation
+
+controllers_api_private:
+    resource: ../../src/Controller/ApiPrivate
+    type: annotation
+    prefix: '/api-private/'
+
+controllers_api_pos:
+    resource: ../../src/Controller/ApiPOS
+    type: annotation
+    prefix: '/api-pos/'
+
+controllers_api_public:
+    resource: ../../src/Controller/ApiPublic
+    type: annotation
+    prefix: '/api-public/'
+
+controllers_api:
+    resource: ../../src/Controller/Api
+    type: annotation
+    prefix: '/api/'
+
+controllers_api_admin:
+    resource: ../../src/Controller/ApiAdmin
+    type: annotation
+    prefix: '/api-admin/'
+
+controllers_admin:
+    resource: ../../src/Controller/Admin
+    type: annotation
+    prefix: '/admin'

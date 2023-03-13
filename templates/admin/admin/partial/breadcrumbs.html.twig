@@ -1,0 +1,19 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-12">
+        <h2>{{ title }}</h2>
+        <ol class="breadcrumb">
+            {% if items is defined and items|length > 0 %}
+                {% for item in items %}
+                    <li class="breadcrumb-item">
+                        <a href="{{ item.url }}">{{ item.title }}</a>
+                    </li>
+                {% endfor %}
+            {% endif %}
+            {% if currentTitle is defined %}
+                <li class="breadcrumb-item active">
+                    <strong>{{ currentTitle }}</strong>
+                </li>
+            {% endif %}
+        </ol>
+    </div>
+</div>

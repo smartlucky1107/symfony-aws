@@ -1,0 +1,59 @@
+<div ng-controller="UserVoterRolesController">
+    <div class="sk-spinner sk-spinner-circle" ng-if="isLoading">
+        <div class="sk-circle1 sk-circle"></div>
+        <div class="sk-circle2 sk-circle"></div>
+        <div class="sk-circle3 sk-circle"></div>
+        <div class="sk-circle4 sk-circle"></div>
+        <div class="sk-circle5 sk-circle"></div>
+        <div class="sk-circle6 sk-circle"></div>
+        <div class="sk-circle7 sk-circle"></div>
+        <div class="sk-circle8 sk-circle"></div>
+        <div class="sk-circle9 sk-circle"></div>
+        <div class="sk-circle10 sk-circle"></div>
+        <div class="sk-circle11 sk-circle"></div>
+        <div class="sk-circle12 sk-circle"></div>
+    </div>
+
+    <div ng-show="!isLoading">
+        <div ng-show="userId">
+            <div class="row">
+                <div class="col-lg-8">
+                    <select class="form-control" ng-model="selectedVoterRole">
+                        <option ng-repeat="voterRole in voterRoles" value="{{ '{{ voterRole.id }}' }}">{{ '{{ voterRole.module }}' }} | {{ '{{ voterRole.action }}' }}</option>
+                    </select>
+                </div>
+                <div class="col-lg-4">
+                    <button class="btn btn-success btn-outline btn-sm" type="button" ng-click="grant()"><i class="fa fa-check"></i> {{ 'Grant'|trans }}</button>
+                </div>
+            </div>
+
+            <hr />
+
+            <div ng-if="userVoterRoles.length === 0">
+                <small class="text-muted">{{ 'Nothing found'|trans }}</small>
+            </div>
+
+            <table class="table table-stripped" ng-show="userVoterRoles.length > 0">
+                <thead>
+                <tr>
+                    <th>{{ 'Module'|trans }}</th>
+                    <th>{{ 'Action'|trans }}</th>
+                    <th width="1"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="userVoterRole in userVoterRoles">
+                    <td>{{ '{{ userVoterRole.module }}' }}</td>
+                    <td>{{ '{{ userVoterRole.action }}' }}</td>
+                    <td>
+                        <button ng-click="deny(userVoterRole.id)" type="button" class="btn btn-xs btn-outline btn-danger"><i class="fa fa-times"></i> {{ 'Deny'|trans }}</button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div ng-if="!userId" class="text-center text-muted">
+            {{ 'User voter roles list not allowed. No user loaded.'|trans }}
+        </div>
+    </div>
+</div>

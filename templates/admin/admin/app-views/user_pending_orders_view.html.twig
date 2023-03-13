@@ -1,0 +1,69 @@
+<div ng-controller="UserPendingOrdersController">
+    <div class="sk-spinner sk-spinner-circle" ng-if="isLoading">
+        <div class="sk-circle1 sk-circle"></div>
+        <div class="sk-circle2 sk-circle"></div>
+        <div class="sk-circle3 sk-circle"></div>
+        <div class="sk-circle4 sk-circle"></div>
+        <div class="sk-circle5 sk-circle"></div>
+        <div class="sk-circle6 sk-circle"></div>
+        <div class="sk-circle7 sk-circle"></div>
+        <div class="sk-circle8 sk-circle"></div>
+        <div class="sk-circle9 sk-circle"></div>
+        <div class="sk-circle10 sk-circle"></div>
+        <div class="sk-circle11 sk-circle"></div>
+        <div class="sk-circle12 sk-circle"></div>
+    </div>
+
+    <div ng-show="!isLoading">
+        <div class="project-list" ng-show="userId">
+            <div ng-if="pendingOrders.length === 0">
+                <small class="text-muted">{{ 'Nothing found'|trans }}</small>
+            </div>
+
+            <table class="table table-hover" ng-show="pendingOrders.length > 0">
+                <tbody>
+                <tr ng-repeat="order in pendingOrders">
+                    <td width="1">
+                        <div>
+                            <span ng-if="order.isOffer" class="label label-danger">{{ '{{ order.typeName }}' }} <i class="fa fa-level-down"></i></span>
+                            <span ng-if="order.isBid" class="label label-primary">{{ '{{ order.typeName }}' }} <i class="fa fa-level-up"></i></span>
+                        </div>
+                        <br />
+                        <button class="btn btn-success btn-outline btn-xs" ng-click="routing.openOrder(order.id)">{{ '{{ order.id }}' }}</button>
+                    </td>
+                    <td>
+                        <div>
+                            <h4 class="product-main-price">{{ '{{ order.currencyPair.baseCurrency.fullName }}' }}/{{ '{{ order.currencyPair.quotedCurrency.fullName }}' }} <small class="text-muted">{{ '{{ order.currencyPair.pairShortName }}' }}</small> </h4>
+                        </div>
+                        <div>{{ '{{ order.statusName }}' }}</div>
+                    </td>
+                    <td>
+                        <div class="row">
+                            <div class="col-4">
+                                <small class="stats-label">{{ 'Limit price'|trans }}</small>
+                                <h4>{{ '{{ order.limitPrice }}' }} <small class="text-muted">{{ '{{ order.currencyPair.quotedCurrency.shortName }}' }}</small></h4>
+                            </div>
+                            <div class="col-4">
+                                <small class="stats-label">{{ 'Volume'|trans }}</small>
+                                <h4>{{ '{{ order.amount }}' }} <small class="text-muted">{{ '{{ order.currencyPair.baseCurrency.shortName }}' }}</small></h4>
+                            </div>
+                            <div class="col-12">
+                                <small class="stats-label">
+                                    {{ 'Filled volume'|trans }}
+                                    {{ '{{ order.amountFilled }}' }} <small class="text-muted">{{ '{{ order.progress }}' }}%</small>
+                                </small>
+                                <div class="progress progress-mini">
+                                    <div style="width: {{ '{{ order.progress }}' }}%;" class="progress-bar"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div ng-if="!userId" class="text-center text-muted">
+            {{ 'No user loaded.'|trans }}
+        </div>
+    </div>
+</div>

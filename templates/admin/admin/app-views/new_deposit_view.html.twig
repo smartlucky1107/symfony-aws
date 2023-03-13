@@ -1,0 +1,43 @@
+<form role="form" ng-controller="NewDepositController">
+    <div ng-if="walletId">
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group">
+                    <label>{{ 'Amount'|trans }} <span class="text-danger">*</span></label><br />
+                    <i><small>Watość depozytu</small></i>
+                    <input type="number" step="0.01" placeholder="0" class="form-control" name="amount" ng-model="depositRequest.amount">
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group">
+                    <label>{{ 'Original amount'|trans }} <span class="text-danger">*</span></label><br />
+                    <i><small>Watość wpłaty klienta</small></i>
+                    <input type="number" step="0.01" placeholder="0" class="form-control" name="amountOriginal" ng-model="depositRequest.amountOriginal">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group">
+                    <label>{{ 'Transaction date'|trans }} <span class="text-danger">*</span></label>
+                    <input class="form-control" name="bankTransactionDate" ng-model="depositRequest.bankTransactionDate">
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group">
+                    <label>{{ 'Transaction ID'|trans }} <span class="text-danger">*</span></label>
+                    <input class="form-control" name="bankTransactionId" ng-model="depositRequest.bankTransactionId">
+                </div>
+            </div>
+        </div>
+        <div>
+            <button ng-click="makeDepositRequest()" class="btn btn-success btn-outline btn-sm" type="button"><i class="fa fa-check"></i> {{ 'Deposit request for wallet'|trans }} {{ '{{ walletId }}' }}</button>
+            <div>
+                <small class="text-danger float-right">* {{ 'required'|trans }}</small>
+            </div>
+        </div>
+    </div>
+    <div ng-if="!walletId" class="text-center text-muted">
+        {{ 'Deposit not allowed. No wallet selected.'|trans }}
+    </div>
+</form>

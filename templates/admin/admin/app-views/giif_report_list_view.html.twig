@@ -1,0 +1,169 @@
+<div class="ibox" ng-controller="GiffController">
+    <div class="ibox-title">
+        <h5>{{ 'List of GIIF reports'|trans }}</h5>
+    </div>
+    <div class="ibox-content">
+        <div>
+            <span ng-if="listManager.options.id" class="label label-info">ID: {{ '{{ listManager.options.id }}' }}</span>
+        </div>
+
+        <table class="table table-stripped">
+            <thead>
+            <tr>
+                <th width="100px">
+                    <span ng-click="setSortBy('id')">ID</span>
+                    <i ng-if="!listManager.isSortByField('id')" class="fa fa-sort"></i>
+                    <i ng-if="listManager.isSortByField('id')" class="fa" ng-class="{'fa-sort-amount-asc': listManager.isSortBy('id', 1), 'fa-sort-amount-desc': listManager.isSortBy('id', 0)}" ></i>
+                </th>
+                <th width="100px">{{ 'Created at'|trans }}</th>
+                <th width="20%">{{ 'User'|trans }}</th>
+                <th width="100px">
+                    <span ng-click="setSortBy('totalAmount')">{{ 'Total PLN amount'|trans }}</span>
+                    <i ng-if="!listManager.isSortByField('totalAmount')" class="fa fa-sort"></i>
+                    <i ng-if="listManager.isSortByField('totalAmount')" class="fa" ng-class="{'fa-sort-amount-asc': listManager.isSortBy('totalAmount', 1), 'fa-sort-amount-desc': listManager.isSortBy('totalAmount', 0)}" ></i>
+                </th>
+                <th>{{ 'Transactions'|trans }}</th>
+                <th width="1" class="text-center">{{ 'Reported'|trans }}</th>
+                <th width="1" class="text-center"></th>
+            </tr>
+            <tr>
+                <th>
+                    <input style="width: 50px;" ng-model="listManager.filters.id" on-enter="search()" />
+                    <button class="btn btn-success btn-xs" ng-click="search()">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="giifReport in results">
+                <td>
+                    {{ '{{ giifReport.id }}' }}
+                </td>
+                <td>{{ '{{ giifReport.createdAt|date:"medium" }}' }}</td>
+                <td>
+                    <div>
+                        <button class="btn btn-success btn-outline btn-xs" ng-click="routing.openUser(giifReport.user.id)">{{ '{{ giifReport.user.id }}' }}</button>
+                        {{ '{{ giifReport.user.firstName }}' }} {{ '{{ giifReport.user.lastName }}' }}
+                    </div>
+                    <br />
+                    <div>
+                        <strong>{{ 'Address'|trans }}</strong><br />
+                        {{ '{{ giifReport.user.street }}' }}, {{ '{{ giifReport.user.building }}' }}, {{ '{{ giifReport.user.apartment }}' }}<br />
+                        {{ '{{ giifReport.user.postalCode }}' }}, {{ '{{ giifReport.user.city }}' }}, {{ '{{ giifReport.user.state }}' }}<br />
+                        {{ '{{ giifReport.user.country.name }}' }}, <br />
+                        <strong>{{ 'Phone'|trans }}</strong>
+                        {{ '{{ giifReport.user.phone }}' }}
+                    </div>
+                </td>
+                <td>{{ '{{ giifReport.totalAmount | number : 2 }}' }}</td>
+                <td>
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th width="1">ID</th>
+                            <th width="100px">Created at</th>
+                            <th>Deposit/Withdrawal details</th>
+                            <th>PLN amount</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-if="giifReport.transactions.length === 0">
+                            <td colspan="4" class="text-center">
+                                <small class="text-muted">No transactions found</small>
+                            </td>
+                        </tr>
+                        <tr ng-repeat="giifReportTransaction in giifReport.transactions">
+                            <td>
+                                {{ '{{ giifReportTransaction.id }}' }}
+                            </td>
+                            <td>
+                                {{ '{{ giifReportTransaction.createdAt|date:"medium" }}' }}
+                            </td>
+                            <td>
+                                <div ng-if="giifReportTransaction.deposit">
+                                    <div ng-if="giifReportTransaction.deposit.isApproved" class="text-navy">
+                                        <i class="fa fa-check-square-o"></i>
+                                        <small>{{ '{{ giifReportTransaction.deposit.statusName }}' }}</small>
+                                    </div>
+                                    <div ng-if="giifReportTransaction.deposit.isRequest">
+                                        <small class="text-warning">{{ '{{ giifReportTransaction.deposit.statusName }}' }}</small>
+                                    </div>
+
+                                    Deposit
+                                    <strong>
+                                        {{ '{{ giifReportTransaction.deposit.amount }}' }}
+                                        {{ '{{ giifReportTransaction.deposit.wallet.currency.shortName }}' }}
+                                    </strong>
+                                    <small class="text-muted">created at</small> {{ '{{ giifReportTransaction.deposit.createdAt|date:"medium" }}' }}
+                                </div>
+                                <div ng-if="giifReportTransaction.withdrawal">
+                                    <div ng-if="giifReportTransaction.withdrawal.isApproved" class="text-navy">
+                                        <i class="fa fa-check-square-o"></i>
+                                        <small>{{ '{{ giifReportTransaction.withdrawal.statusName }}' }}</small>
+                                    </div>
+                                    <div ng-if="giifReportTransaction.withdrawal.isRequest">
+                                        <small class="text-warning">{{ '{{ giifReportTransaction.withdrawal.statusName }}' }}</small>
+                                    </div>
+
+                                    Withdrawal
+                                    <strong>
+                                        {{ '{{ giifReportTransaction.withdrawal.amount }}' }}
+                                        {{ '{{ giifReportTransaction.withdrawal.wallet.currency.shortName }}' }}
+                                    </strong>
+                                    <small class="text-muted">created at</small> {{ '{{ giifReportTransaction.withdrawal.createdAt|date:"medium" }}' }}
+                                </div>
+                            </td>
+                            <td width="1">
+                                {{ '{{ giifReportTransaction.amountPLN | number : 2 }}' }}
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </td>
+                <td class="text-center">
+                    <div ng-if="giifReport.isReported" class="text-navy mt-1">
+                        <i class="fa fa-check-square-o"></i>
+                        <small>{{ 'Yes'|trans }}</small>
+                    </div>
+                    <div ng-if="!giifReport.isReported" class="text-warning mt-1">
+                        <i class="fa fa-square-o"></i>
+                        <small>{{ 'No'|trans }}</small>
+                    </div>
+                </td>
+                <td class="text-center">
+                    <div ng-if="!giifReport.isReported" class="text-warning">
+                        <button ng-click="setReported(giifReport.id)" type="button" class="btn btn-xs btn-outline btn-primary"><i class="fa fa-thumbs-o-up"></i> {{ 'Set reported'|trans }}</button>
+                    </div>
+                </td>
+            </tr>
+            <tr ng-if="results.length === 0">
+                <td colspan="10">
+                    {{ 'Nothing found'|trans }}
+                </td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+                <td colspan="14" class="text-right">
+                    <button ng-click="changePageSize(100)" class="btn btn-info" ng-class="{'active': listManager.isPageSizeActive(100)}">100</button>
+                    <button ng-click="changePageSize(250)" class="btn btn-info" ng-class="{'active': listManager.isPageSizeActive(250)}">250</button>
+                    <button ng-click="changePageSize(500)" class="btn btn-info" ng-class="{'active': listManager.isPageSizeActive(500)}">500</button>
+                    &#160;/&#160;page
+                </td>
+            </tr>
+            <tr>
+                <td colspan="10">
+                    <button ng-click="changePage(page.page)" ng-repeat="page in pages" class="btn btn-success" ng-class="{'active': listManager.isPageActive(page.page)}">{{ '{{ page.page }}' }}</button>
+                </td>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
